@@ -9,7 +9,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 //
-class extends React.Component {
+export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

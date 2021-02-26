@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-class ViewConcept extends React.Component {
+export default class ViewConcept extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

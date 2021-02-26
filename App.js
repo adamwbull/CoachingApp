@@ -5,35 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-const colors = {
-  emerald: '#2ecc71',
-  forest: '#27ae60',
-  clouds: '#ecf0f1',
-  blueGray: '#344150',
-  darkGray: '#23272a',
-  black: '#000000',
-  white: '#ffffff'
-}
 
 const globals = {
   url: "https://api.coachsync.me"
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 // Import Scripts
 import Home from './Scripts/Home.js';
