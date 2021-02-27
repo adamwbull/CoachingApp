@@ -23,7 +23,7 @@ import ViewPrompt from './Scripts/ViewPrompt.js';
 import ViewMessageThread from './Scripts/ViewMessageThread.js';
 import VideoChat from './Scripts/VideoChat.js';
 import Schedule from './Scripts/Schedule.js';
-
+import { colors } from './Scripts/Styles.js';
 // Create navigation controllers
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -59,7 +59,7 @@ function HomeStack() {
     >
         <Tab.Screen name="Home" component={Home} initialParams={globals}/>
         <Tab.Screen name="Prompts" component={Prompts} initialParams={globals}/>
-        <Tab.Screen name="Concepts" component={Concept} initialParams={globals}/>
+        <Tab.Screen name="Concepts" component={Concepts} initialParams={globals}/>
         <Tab.Screen name="Messages" component={Messages} initialParams={globals}/>
     </Tab.Navigator>
   );
@@ -76,6 +76,7 @@ export default class AppContainer extends React.Component {
         <NavigationContainer>
           <Stack.Navigator headerMode='none' initialRouteName='Splash'>
             <Stack.Screen name='Splash' component={Splash} initialParams={globals} />
+            <Stack.Screen name='Main' component={HomeStack} initialParams={globals}/>
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} initialParams={globals} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} initialParams={globals} />
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} initialParams={globals} />

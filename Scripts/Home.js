@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { homeStyles } from './Styles.js';
 //
 export default class Home extends React.Component {
   constructor(props) {
@@ -19,9 +19,10 @@ export default class Home extends React.Component {
 
   render() {
 
-    return (<View style={styles.container}>
+    return (<View style={homeStyles.container}>
       <Text>Test!</Text>
     </View>);
+
   }
 
 }
