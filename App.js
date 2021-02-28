@@ -6,10 +6,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-const globals = {
-  url: "https://api.coachsync.me"
-}
+import { colors } from './Scripts/Styles.js';
 
 // Import Scripts
 import Home from './Scripts/Home.js';
@@ -23,7 +20,7 @@ import ViewPrompt from './Scripts/ViewPrompt.js';
 import ViewMessageThread from './Scripts/ViewMessageThread.js';
 import VideoChat from './Scripts/VideoChat.js';
 import Schedule from './Scripts/Schedule.js';
-import { colors } from './Scripts/Styles.js';
+
 // Create navigation controllers
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -57,10 +54,10 @@ function HomeStack() {
             showLabel: false
         }}
     >
-        <Tab.Screen name="Home" component={Home} initialParams={globals}/>
-        <Tab.Screen name="Prompts" component={Prompts} initialParams={globals}/>
-        <Tab.Screen name="Concepts" component={Concepts} initialParams={globals}/>
-        <Tab.Screen name="Messages" component={Messages} initialParams={globals}/>
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Prompts" component={Prompts} />
+        <Tab.Screen name="Concepts" component={Concepts} />
+        <Tab.Screen name="Messages" component={Messages} />
     </Tab.Navigator>
   );
 }
@@ -74,15 +71,15 @@ export default class AppContainer extends React.Component {
   render() {
     return (
         <NavigationContainer>
-          <Stack.Navigator headerMode='none' initialRouteName='Splash'>
-            <Stack.Screen name='Splash' component={Splash} initialParams={globals} />
-            <Stack.Screen name='Main' component={HomeStack} initialParams={globals}/>
-            <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} initialParams={globals} />
-            <Stack.Screen name='ViewConcept' component={ViewConcept} initialParams={globals} />
-            <Stack.Screen name='ViewPrompt' component={ViewPrompt} initialParams={globals} />
-            <Stack.Screen name='ViewMessageThread' component={ViewMessageThread} initialParams={globals} />
-            <Stack.Screen name='VideoChat' component={VideoChat} initialParams={globals} />
-            <Stack.Screen name='Schedule' component={Schedule} initialParams={globals} />
+          <Stack.Navigator headerMode='none' initialRouteName='OnboardingSurvey'>
+            <Stack.Screen name='Splash' component={Splash} />
+            <Stack.Screen name='Main' component={HomeStack} />
+            <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
+            <Stack.Screen name='ViewConcept' component={ViewConcept} />
+            <Stack.Screen name='ViewPrompt' component={ViewPrompt} />
+            <Stack.Screen name='ViewMessageThread' component={ViewMessageThread} />
+            <Stack.Screen name='VideoChat' component={VideoChat} />
+            <Stack.Screen name='Schedule' component={Schedule} />
           </Stack.Navigator>
         </NavigationContainer>
     );

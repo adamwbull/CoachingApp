@@ -7,6 +7,7 @@ import { TouchableWithoutFeedback, Keyboard, TextInput, Modal, StyleSheet, Text,
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { splashStyles } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
+import { checkOnboardingId } from '../Scripts/API.js';
 
 // Splash screen for checking user status on app load.
 export default class Splash extends React.Component {
@@ -20,7 +21,7 @@ export default class Splash extends React.Component {
     };
   }
 
-  componentDidMount = () => AsyncStorage.getItem('User').then((val) => this.handleValue(val));
+  componentDidMount = () => AsyncStorage.getItem('CoachId').then((val) => this.handleValue(val));
 
   async handleValue(val) {
     if (val !== null) {
@@ -34,22 +35,31 @@ export default class Splash extends React.Component {
     this.setState({inputValue:text,inputStyle:splashStyles.input,inputError:''});
   }
 
-  onSubmit() {
+  async onSubmit() {
 
     // Check if valid Coach ID.
-    if (0) {
-      //
+    var ret = await checkOnboardingId(this.state.inputValue);
+
+    if (ret > 0) {
+      // User entered a correct ID. Associate Coach with client.
+      this.setState({modalVisible:false});
+      await AsyncStorage.setItem('CoachId', ret);
+      this.props.navigation.navigate('OnboardingSurvey');
+
     } else {
       this.setState({inputError:'Incorrect Coach ID!',inputStyle:splashStyles.inputError});
     }
+
   }
 
   showError() {
+
     if (this.state.inputError !== '') {
       return (<Text style={splashStyles.error}>{this.state.inputError}</Text>);
     } else {
       return null;
     }
+
   }
 
   render() {

@@ -24,6 +24,13 @@ export const homeStyles = StyleSheet.create({
   },
 });
 
+export const onboardingStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.clouds
+  },
+});
+
 export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
 export const splashStyles = StyleSheet.create({
   container: {
