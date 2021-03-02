@@ -15,6 +15,14 @@ export const colors = {
   red: '#e74c3c'
 }
 
+export const btnColors = {
+  primary:'#3498db',
+  caution:'#f1c40f',
+  danger:'#e74c3c',
+  success:'#2ecc71',
+  info:'#48dbfb',
+}
+
 export const homeStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,9 +33,137 @@ export const homeStyles = StyleSheet.create({
 });
 
 export const onboardingStyles = StyleSheet.create({
+  trueContainer:{
+    backgroundColor:colors.darkGray
+  },
   container: {
-    flex: 1,
-    backgroundColor: colors.clouds
+    backgroundColor: colors.white,
+    marginTop:20,
+    marginLeft:10,
+    marginRight:10,
+    borderRadius:10
+  },
+  survey: {
+    width:'80%',
+    marginLeft:'10%',
+    justifyContent:'center'
+  },
+  radioButton: {
+    flexDirection:'row',
+    backgroundColor:colors.white,
+    borderRadius:5,
+    marginBottom:10,
+    justifyContent:'flex-start',
+    alignItems:'center',
+    marginLeft:10,
+    marginRight:10
+  },
+  mainTitle: {
+    padding:10,
+    backgroundColor:colors.emerald,
+    margin:20,
+    borderRadius:10
+  },
+  mainTitleText: {
+    fontSize:30,
+    textAlign:'center',
+    color:colors.white,
+  },
+  checkBoxButtonContainer: {
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    marginLeft:10,
+    marginRight:10,
+    backgroundColor:colors.white
+  },
+  radioButtonContainer: {
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    marginLeft:10,
+    marginRight:10,
+    backgroundColor:colors.white,
+    borderRadius:5,
+    borderWidth:1,
+    borderColor:'#ededed'
+  },
+  itemQuestion: {
+    fontSize:20,
+    marginBottom:10,
+    textAlign:'center',
+    color:colors.darkGray,
+    fontWeight:'500'
+  },
+  questionContainer: {
+    marginBottom:25
+  },
+  questionSliderContainer: {
+    marginBottom:45
+  },
+  sliderValue: {
+    textAlign:'center',
+    fontSize:16
+  },
+  sliderSet: {
+    flexDirection:'row',
+    width:'100%'
+  },
+  sliderSetRange: {
+    flex:1,
+    alignItems:'center',
+    textAlign:'center',
+    justifyContent:'center'
+  },
+  sliderSetRangeText: {
+    color:colors.darkGray,
+    fontSize:16
+  },
+  sliderContainer: {
+    flex:8
+  },
+  sliderThumb: {
+    width:25,
+    height:25,
+    backgroundColor:colors.emerald
+  },
+  submitButtonContainer:{
+    width:'60%',
+    marginLeft:'20%',
+    marginBottom:50
+  },
+  submitButton: {
+    backgroundColor:btnColors.primary
+  }
+});
+
+export const radioButtonStyles = StyleSheet.create({
+  touchableArea: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width:'100%',
+    padding:10
+  },
+
+  circle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.darkGray,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  itemText: {
+    fontWeight:'bold',
+    marginLeft:10,
+    marginRight:10
+  },
+
+  checkedCircle: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: colors.emerald,
   },
 });
 
@@ -109,6 +245,6 @@ export const splashStyles = StyleSheet.create({
     width:'40%'
   },
   button: {
-    backgroundColor:colors.forest,
+    backgroundColor:colors.emerald,
   }
 });
