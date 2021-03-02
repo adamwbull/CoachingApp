@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import { TouchableWithoutFeedback, Keyboard, TextInput, Modal, StyleSheet, Text, View, AsyncStorage, Image } from 'react-native';
+import { Animated, TouchableWithoutFeedback, Keyboard, TextInput, Modal, StyleSheet, Text, View, AsyncStorage, Image } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { splashStyles } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
@@ -17,15 +17,16 @@ export default class Splash extends React.Component {
       modalVisible: false,
       inputValue:'',
       inputStyle:splashStyles.input,
-      inputError:''
+      inputError:'',
+      opacity: new Animated.Value(0)
     };
   }
 
-  componentDidMount = () => AsyncStorage.getItem('CoachId').then((val) => this.handleValue(val));
+  componentDidMount = () => AsyncStorage.getItem('Coach').then((val) => this.handleValue(val));
 
   async handleValue(val) {
     if (val !== null) {
-      this.props.navigation.navigate('Main');
+      this.props.navigation.navigate('Welcome');
     } else {
       this.setState({modalVisible:true});
     }
@@ -40,10 +41,11 @@ export default class Splash extends React.Component {
     // Check if valid Coach ID.
     var ret = await checkOnboardingId(this.state.inputValue);
 
-    if (ret > 0) {
+    if (ret != null) {
       // User entered a correct ID. Associate Coach with client.
       this.setState({modalVisible:false});
-      await AsyncStorage.setItem('CoachId', ret);
+      console.log(ret);
+      await AsyncStorage.setItem('Coach', ret);
       this.props.navigation.navigate('OnboardingSurvey');
 
     } else {
@@ -62,6 +64,14 @@ export default class Splash extends React.Component {
 
   }
 
+  onLoad = () => {
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }
+
   render() {
 
     const submitRef = React.createRef();
@@ -74,8 +84,21 @@ export default class Splash extends React.Component {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={splashStyles.modalContainer}>
-            <Image
-              style={splashStyles.image}
+            <Animated.Image
+              style={[
+                {
+                  opacity: this.state.opacity,
+                  transform: [
+                    {
+                      scale: this.state.opacity.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.85, 1],
+                      })
+                    },
+                  ],
+                },
+                splashStyles.image
+              ]}
               source={require('../assets/splash.png')}
               resizeMode="contain"
             />

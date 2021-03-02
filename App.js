@@ -20,6 +20,8 @@ import ViewPrompt from './Scripts/ViewPrompt.js';
 import ViewMessageThread from './Scripts/ViewMessageThread.js';
 import VideoChat from './Scripts/VideoChat.js';
 import Schedule from './Scripts/Schedule.js';
+import Welcome from './Scripts/Welcome.js';
+import Register from './Scripts/Register.js';
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -71,8 +73,10 @@ export default class AppContainer extends React.Component {
   render() {
     return (
         <NavigationContainer>
-          <Stack.Navigator headerMode='none' initialRouteName='OnboardingSurvey'>
+          <Stack.Navigator headerMode='none' initialRouteName='Splash'>
             <Stack.Screen name='Splash' component={Splash} />
+            <Stack.Screen name='Welcome' component={Welcome} />
+            <Stack.Screen name='Register' component={Register} />
             <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />

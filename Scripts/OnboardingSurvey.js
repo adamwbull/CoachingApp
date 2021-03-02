@@ -24,10 +24,11 @@ export default class OnboardingSurvey extends React.Component {
   }
 
   async componentDidMount() {
-    var coachId, items;
+    var coach, coachId, items;
     try {
       // Get CoachId and Coach's Onboarding Survey.
-      coachId = await AsyncStorage.getItem('CoachId');
+      coach = JSON.parse(await AsyncStorage.getItem('Coach'));
+      coachId = coach.Id;
       items = await getSurveyArray(coachId);
     } finally {
       var res = [];

@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 export const windowWidth = Dimensions.get('window').width;
 export const windowHeight = Dimensions.get('window').height;
 export const logoRatio = windowWidth/1600;
+export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
 
 export const colors = {
   emerald: '#2ecc71',
@@ -31,6 +32,77 @@ export const homeStyles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export const registerStyles = StyleSheet.create({
+  trueContainer:{
+    backgroundColor:colors.darkGray,
+    height:'100%'
+  },
+  container: {
+    backgroundColor: colors.white,
+    marginTop:windowHeight*0.28,
+    marginLeft:20,
+    marginRight:20,
+    borderRadius:10,
+    padding:20
+  },
+})
+
+export const welcomeStyles = StyleSheet.create({
+  trueContainer:{
+    backgroundColor:colors.darkGray,
+    height:'100%'
+  },
+  container: {
+    backgroundColor: colors.white,
+    marginTop:windowHeight*0.31,
+    marginLeft:20,
+    marginRight:20,
+    borderRadius:10,
+    padding:20
+  },
+  image: {
+    position: 'absolute',
+    top: windowHeight*0.05,
+    left: logoLeft,
+    bottom: 0,
+    right: 0,
+    flex:1,
+    width:'90%',
+    height:'30%'
+  },
+  mainTitle: {
+    fontSize:30,
+    textAlign:'center',
+    marginBottom:0
+  },
+  submitButtonContainer:{
+    width:'80%',
+    marginLeft:'10%',
+    borderRadius:25,
+    marginBottom:40
+  },
+  submitButton: {
+    backgroundColor:btnColors.success,
+    padding:15
+  },
+  inputContainer: {
+    marginLeft:10,
+    marginRight:7
+  },
+  inputContainerEmail: {
+    marginLeft:5,
+    marginRight:6
+  },
+  registerText: {
+    textAlign:'center',
+    color:colors.darkGray
+  },
+  registerLink: {
+    textDecorationLine: 'underline',
+    color:btnColors.primary
+  }
+})
 
 export const onboardingStyles = StyleSheet.create({
   trueContainer:{
@@ -128,10 +200,12 @@ export const onboardingStyles = StyleSheet.create({
   submitButtonContainer:{
     width:'60%',
     marginLeft:'20%',
-    marginBottom:50
+    marginBottom:50,
+    borderRadius:25
   },
   submitButton: {
-    backgroundColor:btnColors.primary
+    backgroundColor:btnColors.primary,
+    padding:15
   }
 });
 
@@ -167,11 +241,10 @@ export const radioButtonStyles = StyleSheet.create({
   },
 });
 
-export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
 export const splashStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.darkGray,
     alignItems: 'center',
     justifyContent: 'center',
   },

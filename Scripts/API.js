@@ -53,7 +53,7 @@ export async function checkOnboardingId(id) {
 
 export async function checkOnboardingId(id) {
 
-  var ret = 0;
+  var ret = null;
 
   console.log('Checking OnboardingId...');
   const res = await fetch(url + '/user/onboarding-id/' + id + '/' + key, {
@@ -64,7 +64,7 @@ export async function checkOnboardingId(id) {
 
   if (payload.length == 1) {
     console.log('OnboardingId passed!');
-    ret = JSON.stringify(payload[0]['Id']);
+    ret = JSON.stringify(payload[0]);
   }
 
   return ret;
