@@ -59,7 +59,7 @@ export const welcomeStyles = StyleSheet.create({
   mainTitle: {
     fontSize:35,
     textAlign:'center',
-    marginBottom:20
+    marginBottom:5
   },
   submitButtonContainer:{
     width:'80%',
@@ -104,6 +104,12 @@ export const welcomeStyles = StyleSheet.create({
   dateTimeBox: {
     width:"80%",
     height:100
+  },
+  errorText: {
+    textAlign:'center',
+    color:btnColors.danger,
+    marginBottom:15,
+    fontSize:16
   }
 });
 
@@ -134,7 +140,7 @@ export const registerStyles = StyleSheet.create({
   mainTitle: {
     fontSize:35,
     textAlign:'center',
-    marginBottom:20
+    marginBottom:5
   },
   submitButtonContainer:{
     width:'80%',
@@ -189,7 +195,9 @@ export const registerStyles = StyleSheet.create({
     borderBottomWidth: 1,
     alignItems: 'center',
     borderColor: '#86939e',
-    marginBottom:25
+    marginBottom:25,
+    marginLeft:10,
+    marginRight:10
   },
   dobIconContainer: {
     height: 40,
@@ -211,6 +219,14 @@ export const registerStyles = StyleSheet.create({
     fontWeight:'bold',
     fontSize:16,
     marginLeft:10
+  },
+  errorsContainer: {
+    marginBottom:15
+  },
+  errorText: {
+    textAlign:'center',
+    color:btnColors.danger,
+    fontSize:16
   }
 });
 

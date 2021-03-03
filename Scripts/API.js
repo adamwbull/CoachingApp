@@ -32,6 +32,20 @@ export function parseSimpleDateText(date) {
     return dateText;
 }
 
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function containsSpecialCharacters(str){
+    var regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
+	return regex.test(str);
+}
+
+function hasUpperCase(str) {
+    return (/[A-Z]/.test(str));
+}
+
 // API Access Functions
 /* Example
 export async function checkOnboardingId(id) {

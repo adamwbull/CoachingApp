@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { registerStyles, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
-import { loginCheck, parseSimpleDateText } from '../Scripts/API.js';
+import { loginCheck, parseSimpleDateText, validateEmail, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -26,7 +26,8 @@ export default class Register extends React.Component {
       dob:'',
       dobText: 'Set birth date...',
       dobTextStyle:registerStyles.dobTextPlaceholder,
-      modalVisible:false
+      modalVisible:false,
+      errors:[]
     };
   }
 
@@ -53,24 +54,49 @@ export default class Register extends React.Component {
 
   onChange(input, text) {
     if (input == 0) {
-      this.setState({email:text});
+      this.setState({email:text,errors:[]});
     } else if (input == 1) {
-      this.setState({password:text});
+      this.setState({password:text,errors:[]});
     } else if (input == 2) {
-      this.setState({confirmPassword:text});
+      this.setState({confirmPassword:text,errors:[]});
     }
   }
 
   async handlePress () {
 
-    // Check login info.
     var email = this.state.email;
-    var password = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        this.state.password
-      );
+    var password = this.state.password;
+    var confirmPassword = this.state.password;
+    var dob = this.state.dob;
+    var errors = [];
 
-    var passed = await loginCheck(email, password);
+    // Verify email.
+    if (!validateEmail(email)) {
+      errors.push("Invalid email supplied.")
+    }
+
+    // Check if email is already taken.
+    if (emailTaken(email)) {
+      errors.push('Email is already taken.');
+    }
+
+    // Verify password safety.
+    if (password.length < 10 || !containsSpecialCharacters(password) || !hasUpperCase(password)) {
+      errors.push('Password must be 10+ characters in length, contain at least one special character, and one uppercase character.');
+    }
+
+    // Verify passwords match.
+    if (password != confirmPassword) {
+      errors.push('Passwords must match!');
+    }
+
+    // Create user.
+    var password = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
+    );
+
+    var passed = null;
 
     if (passed == null) {
       console.log('Login failed.');
@@ -126,6 +152,10 @@ export default class Register extends React.Component {
       />
       <View style={registerStyles.container}>
         <Text style={registerStyles.mainTitle}>Register Account</Text>
+        <View style={registerStyles.errorsContainer}>
+        {this.state.errors.map((error) => {
+          return (<Text style={registerStyles.errorText}>{error}</Text>)
+        })}</View>
         <Input
           onChangeText={text => this.onChange(0, text)}
           label='Email Address'
@@ -160,7 +190,7 @@ export default class Register extends React.Component {
           onPress={() => this.showModal()}
           style={registerStyles.dobContainer}>
           <View style={registerStyles.dobIconContainer}>
-            <Icon style={{marginLeft:18,marginRight:7}} name='calendar' size={20} color={colors.darkGray} />
+            <Icon style={{marginLeft:10,marginRight:6}} name='calendar' size={20} color={colors.darkGray} />
           </View>
           <Text style={this.state.dobTextStyle}>{this.state.dobText}</Text>
         </TouchableOpacity>

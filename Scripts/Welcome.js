@@ -19,7 +19,8 @@ export default class Welcome extends React.Component {
       refreshing : false,
       opacity: new Animated.Value(0),
       email: '',
-      password: ''
+      password: '',
+      errorText: ''
     };
   }
 
@@ -46,9 +47,9 @@ export default class Welcome extends React.Component {
 
   onChange(input, text) {
     if (input == 0) {
-      this.setState({email:text});
+      this.setState({email:text,errorText:''});
     } else {
-      this.setState({password:text});
+      this.setState({password:text,errorText:''});
     }
   }
 
@@ -65,7 +66,7 @@ export default class Welcome extends React.Component {
 
     if (passed == null) {
       console.log('Login failed.');
-      // Print error to page.
+      this.setState({errorText:'Incorrect email or password.'});
     } else {
       var client = JSON.parse(passed);
       if (client.Type == 0) {
@@ -100,7 +101,8 @@ export default class Welcome extends React.Component {
         ]}
       />
       <View style={welcomeStyles.container}>
-        <Text style={welcomeStyles.mainTitle}>Welcome!</Text>
+        <Text style={welcomeStyles.mainTitle}>Sign In</Text>
+        <Text style={welcomeStyles.errorText}>{this.state.errorText}</Text>
         <Input
           onChangeText={text => this.onChange(0, text)}
           label='Email Address'
@@ -121,7 +123,7 @@ export default class Welcome extends React.Component {
           keyboardType='default'
         />
         <Button
-        title='Sign In'
+        title='Submit'
         buttonStyle={welcomeStyles.submitButton}
         containerStyle={welcomeStyles.submitButtonContainer}
         onPress={() => this.handlePress()} />
