@@ -33,21 +33,6 @@ export const homeStyles = StyleSheet.create({
   },
 });
 
-export const registerStyles = StyleSheet.create({
-  trueContainer:{
-    backgroundColor:colors.darkGray,
-    height:'100%'
-  },
-  container: {
-    backgroundColor: colors.white,
-    marginTop:windowHeight*0.28,
-    marginLeft:20,
-    marginRight:20,
-    borderRadius:10,
-    padding:20
-  },
-})
-
 export const welcomeStyles = StyleSheet.create({
   trueContainer:{
     backgroundColor:colors.darkGray,
@@ -55,7 +40,7 @@ export const welcomeStyles = StyleSheet.create({
   },
   container: {
     backgroundColor: colors.white,
-    marginTop:windowHeight*0.31,
+    marginTop:windowHeight*0.23,
     marginLeft:20,
     marginRight:20,
     borderRadius:10,
@@ -69,12 +54,12 @@ export const welcomeStyles = StyleSheet.create({
     right: 0,
     flex:1,
     width:'90%',
-    height:'30%'
+    height:'20%'
   },
   mainTitle: {
-    fontSize:30,
+    fontSize:35,
     textAlign:'center',
-    marginBottom:0
+    marginBottom:20
   },
   submitButtonContainer:{
     width:'80%',
@@ -100,9 +85,134 @@ export const welcomeStyles = StyleSheet.create({
   },
   registerLink: {
     textDecorationLine: 'underline',
-    color:btnColors.primary
+    color:btnColors.primary,
+    textAlign:'center',
+    marginBottom:10
+  },
+  dateTimeWrapper: {
+    marginTop:20,
+    marginBottom:20,
+    paddingTop:10,
+    paddingBottom:10,
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:colors.lightGrey,
+    height:100,
+    textAlign:'center'
+  },
+  dateTimeBox: {
+    width:"80%",
+    height:100
   }
-})
+});
+
+export const registerStyles = StyleSheet.create({
+  trueContainer:{
+    backgroundColor:colors.darkGray,
+    height:'100%'
+  },
+  container: {
+    backgroundColor: colors.white,
+    marginTop:windowHeight*0.23,
+    marginLeft:20,
+    marginRight:20,
+    borderRadius:10,
+    padding:20,
+    marginBottom:50
+  },
+  image: {
+    position: 'absolute',
+    top: windowHeight*0.05,
+    left: logoLeft,
+    bottom: 0,
+    right: 0,
+    flex:1,
+    width:'90%',
+    height:'15%'
+  },
+  mainTitle: {
+    fontSize:35,
+    textAlign:'center',
+    marginBottom:20
+  },
+  submitButtonContainer:{
+    width:'80%',
+    marginLeft:'10%',
+    borderRadius:25,
+    marginBottom:40
+  },
+  submitButton: {
+    backgroundColor:btnColors.success,
+    padding:15
+  },
+  inputContainer: {
+    marginLeft:10,
+    marginRight:7
+  },
+  inputContainerEmail: {
+    marginLeft:5,
+    marginRight:6
+  },
+  inputContainerCalendar: {
+    marginLeft:9,
+    marginRight:6
+  },
+  registerText: {
+    textAlign:'center',
+    color:colors.darkGray
+  },
+  registerLink: {
+    textDecorationLine: 'underline',
+    color:btnColors.primary,
+    textAlign:'center',
+    marginBottom:10
+  },
+  dateTimeWrapper: {
+    marginTop:20,
+    marginBottom:20,
+    paddingTop:10,
+    paddingBottom:10,
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:colors.lightGrey,
+    height:100,
+    textAlign:'center'
+  },
+  dateTimeBox: {
+    width:"100%",
+    height:100
+  },
+  dobContainer: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    alignItems: 'center',
+    borderColor: '#86939e',
+    marginBottom:25
+  },
+  dobIconContainer: {
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 4,
+    marginVertical: 4
+  },
+  dobTextPlaceholder: {
+    color:'#86939e',
+    fontSize:18
+  },
+  dobTextMain: {
+    color:colors.darkGray,
+    fontSize:18
+  },
+  dobLabel: {
+    color:'#86939e',
+    fontWeight:'bold',
+    fontSize:16,
+    marginLeft:10
+  }
+});
 
 export const onboardingStyles = StyleSheet.create({
   trueContainer:{
@@ -260,7 +370,7 @@ export const splashStyles = StyleSheet.create({
   },
   image: {
     position: 'absolute',
-    top: windowHeight*0.09,
+    top: windowHeight*0.06,
     left: logoLeft,
     bottom: 0,
     right: 0,
@@ -268,7 +378,7 @@ export const splashStyles = StyleSheet.create({
     height:800*logoRatio,
     flex:1,
     width:'90%',
-    height:'20%'
+    height:'32%'
   },
   title: {
     fontSize:30,
@@ -315,9 +425,10 @@ export const splashStyles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop:20,
-    width:'40%'
+    width:'40%',
+    borderRadius:50
   },
   button: {
-    backgroundColor:colors.emerald,
+    backgroundColor:colors.forest,
   }
 });

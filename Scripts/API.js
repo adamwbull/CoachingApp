@@ -26,14 +26,9 @@ export function parseDateText(date) {
 export function parseSimpleDateText(date) {
 
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0'+minutes : minutes;
     const dateText = months[date.getMonth()] +
-                          " " + date.getDate();
+                          " " + date.getDate() +
+                          ", " + date.getFullYear();
     return dateText;
 }
 
@@ -50,6 +45,27 @@ export async function checkOnboardingId(id) {
 
 }
 */
+
+// Returns Id, FirstName, LastName, Email, Avatar, DOB, Created on success.
+export async function loginCheck(email, password) {
+
+  ret = null;
+
+  console.log('Attempting login...');
+  const res = await fetch(url + '/user/login-check/' + email + '/' + password + '/' + key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length == 1) {
+    console.log('Login check passed!');
+    ret = JSON.stringify(payload[0]);
+  }
+
+  return ret;
+
+}
 
 export async function checkOnboardingId(id) {
 

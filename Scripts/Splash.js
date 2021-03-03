@@ -44,9 +44,8 @@ export default class Splash extends React.Component {
     if (ret != null) {
       // User entered a correct ID. Associate Coach with client.
       this.setState({modalVisible:false});
-      console.log(ret);
       await AsyncStorage.setItem('Coach', ret);
-      this.props.navigation.navigate('OnboardingSurvey');
+      this.props.navigation.navigate('Welcome');
 
     } else {
       this.setState({inputError:'Incorrect Coach ID!',inputStyle:splashStyles.inputError});
@@ -85,6 +84,9 @@ export default class Splash extends React.Component {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={splashStyles.modalContainer}>
             <Animated.Image
+              onLoad={this.onLoad}
+              source={require('../assets/splash.png')}
+              resizeMode="contain"
               style={[
                 {
                   opacity: this.state.opacity,
@@ -99,8 +101,6 @@ export default class Splash extends React.Component {
                 },
                 splashStyles.image
               ]}
-              source={require('../assets/splash.png')}
-              resizeMode="contain"
             />
             <Text style={splashStyles.title}>Enter Coach ID:</Text>
             <Input

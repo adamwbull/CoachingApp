@@ -73,9 +73,9 @@ export default class AppContainer extends React.Component {
   render() {
     return (
         <NavigationContainer>
-          <Stack.Navigator headerMode='none' initialRouteName='Splash'>
-            <Stack.Screen name='Splash' component={Splash} />
+          <Stack.Navigator headerMode='none' initialRouteName='Welcome'>
             <Stack.Screen name='Welcome' component={Welcome} />
+            <Stack.Screen name='Splash' component={Splash} />
             <Stack.Screen name='Register' component={Register} />
             <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />

@@ -9,8 +9,10 @@ import { Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } fro
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { welcomeStyles, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
+import * as Crypto from 'expo-crypto';
+import { loginCheck } from '../Scripts/API.js';
 
-export default class Messages extends React.Component {
+export default class Welcome extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -19,6 +21,19 @@ export default class Messages extends React.Component {
       email: '',
       password: ''
     };
+  }
+
+  componentDidMount = () => AsyncStorage.getItem('Client').then((val) => this.handleValue(val));
+
+  async handleValue(val) {
+    if (val !== null) {
+      var client = JSON.parse(val);
+      if (client.OnboardingCompleted == 0) {
+        this.props.navigation.navigate('OnboardingSurvey');
+      } else {
+        this.props.navigation.navigate('Main');
+      }
+    }
   }
 
   onLoad = () => {
@@ -31,9 +46,34 @@ export default class Messages extends React.Component {
 
   onChange(input, text) {
     if (input == 0) {
-      this.setState({email:input});
+      this.setState({email:text});
     } else {
-      this.setState({password:input});
+      this.setState({password:text});
+    }
+  }
+
+  async handlePress () {
+
+    // Check login info.
+    var email = this.state.email;
+    var password = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        this.state.password
+      );
+
+    var passed = await loginCheck(email, password);
+
+    if (passed == null) {
+      console.log('Login failed.');
+      // Print error to page.
+    } else {
+      var client = JSON.parse(passed);
+      if (client.Type == 0) {
+        await AsyncStorage.setItem('Client', passed);
+        console.log("Login completed.");
+      } else {
+        // Print error to page: coach can't log in to app.
+      }
     }
   }
 
@@ -60,6 +100,7 @@ export default class Messages extends React.Component {
         ]}
       />
       <View style={welcomeStyles.container}>
+        <Text style={welcomeStyles.mainTitle}>Welcome!</Text>
         <Input
           onChangeText={text => this.onChange(0, text)}
           label='Email Address'
@@ -76,7 +117,7 @@ export default class Messages extends React.Component {
           placeholder='Password...'
           leftIconContainerStyle={welcomeStyles.inputContainer}
           value={this.state.password}
-          secureTextEntry='true'
+          secureTextEntry={true}
           keyboardType='default'
         />
         <Button
@@ -85,12 +126,12 @@ export default class Messages extends React.Component {
         containerStyle={welcomeStyles.submitButtonContainer}
         onPress={() => this.handlePress()} />
         <Text style={welcomeStyles.registerText}>
-          No account?&nbsp;
-          <Text
-          onPress={() => this.props.navigation.navigate('Register')}
-          style={welcomeStyles.registerLink}>
-          Register here!
-          </Text>
+          No account?
+        </Text>
+        <Text
+        onPress={() => this.props.navigation.navigate('Register')}
+        style={welcomeStyles.registerLink}>
+        Take onboarding survey here!
         </Text>
       </View>
     </ScrollView>);
