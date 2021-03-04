@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { registerStyles, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
-import { loginCheck, parseSimpleDateText, validateEmail, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
+import { key, createAccount, parseDateText, parseSimpleDateText, validateEmail, emailCheck, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -20,6 +20,8 @@ export default class Register extends React.Component {
     this.state = {
       refreshing : false,
       opacity: new Animated.Value(0),
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -59,11 +61,17 @@ export default class Register extends React.Component {
       this.setState({password:text,errors:[]});
     } else if (input == 2) {
       this.setState({confirmPassword:text,errors:[]});
+    } else if (input == 3) {
+      this.setState({firstName:text,errors:[]});
+    } else if (input == 4) {
+      this.setState({lastName:text,errors:[]});
     }
   }
 
   async handlePress () {
 
+    var firstName = this.state.firstName;
+    var lastName = this.state.lastName;
     var email = this.state.email;
     var password = this.state.password;
     var confirmPassword = this.state.password;
@@ -73,16 +81,23 @@ export default class Register extends React.Component {
     // Verify email.
     if (!validateEmail(email)) {
       errors.push("Invalid email supplied.")
-    }
-
-    // Check if email is already taken.
-    if (emailTaken(email)) {
-      errors.push('Email is already taken.');
+    } else {
+      // Check if email is already taken.
+      var emailTaken = await emailCheck(email);
+      console.log(emailTaken);
+      if (emailTaken == true) {
+        errors.push('Email is already taken.');
+      }
     }
 
     // Verify password safety.
     if (password.length < 10 || !containsSpecialCharacters(password) || !hasUpperCase(password)) {
       errors.push('Password must be 10+ characters in length, contain at least one special character, and one uppercase character.');
+    }
+
+    // Verify dob and name field are set.
+    if (dob === '' || firstName === '' || lastName === '' || email === '') {
+      errors.push('Please fill out all fields.');
     }
 
     // Verify passwords match.
@@ -91,25 +106,46 @@ export default class Register extends React.Component {
     }
 
     // Create user.
-    var password = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      password
-    );
+    if (errors.length == 0) {
 
-    var passed = null;
+      // Create secure hashes.
+      var password = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        password
+      );
 
-    if (passed == null) {
-      console.log('Login failed.');
-      // Print error to page.
-    } else {
-      var client = JSON.parse(passed);
-      if (client.Type == 0) {
-        await AsyncStorage.setItem('Client', passed);
-        console.log("Login completed.");
+      var created = new Date();
+
+      var token = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        password + parseDateText(created)
+      );
+
+      var avatarBackgroundColors = ['2ecc71', '3498db', 'e74c3c', 'f1c40f', '48dbfb', 'a29bfe'];
+      var randomNumber = Math.floor(Math.random()*avatarBackgroundColors.length);
+      var avatar = 'https://ui-avatars.com/api/?size=128&font-size=0.6&background=' + avatarBackgroundColors[randomNumber] + '&name=' + firstName + '+' + lastName;
+
+      var client = {Token:token, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
+
+      var passed = await createAccount(client);
+
+      if (passed == null) {
+        console.log('Creation failed.');
+        errors.push('Server connection failed. Please try again.');
+        this.setState({errors:errors});
       } else {
-        // Print error to page: coach can't log in to app.
+        var client = JSON.parse(passed);
+        await AsyncStorage.setItem('Client', JSON.stringify(client));
+        console.log("Creation completed.");
+        this.props.navigation.navigate('CoachIdCheck');
       }
+
+    } else {
+
+      this.setState({errors:errors});
+
     }
+
   }
 
   handleDateConfirm(date) {
@@ -153,9 +189,27 @@ export default class Register extends React.Component {
       <View style={registerStyles.container}>
         <Text style={registerStyles.mainTitle}>Register Account</Text>
         <View style={registerStyles.errorsContainer}>
-        {this.state.errors.map((error) => {
-          return (<Text style={registerStyles.errorText}>{error}</Text>)
+        {this.state.errors.map((error, index) => {
+          return (<Text key={index} style={registerStyles.errorText}>{error}</Text>)
         })}</View>
+        <Input
+          onChangeText={text => this.onChange(3, text)}
+          label='First Name'
+          leftIcon={{ type: 'font-awesome', name: 'user-circle', color:colors.darkGray }}
+          placeholder='First...'
+          leftIconContainerStyle={registerStyles.inputContainerName}
+          value={this.state.firstName}
+          keyboardType='default'
+        />
+        <Input
+          onChangeText={text => this.onChange(4, text)}
+          label='Last Name'
+          leftIcon={{ type: 'font-awesome', name: 'user-circle', color:colors.darkGray }}
+          placeholder='Last...'
+          leftIconContainerStyle={registerStyles.inputContainerName}
+          value={this.state.lastName}
+          keyboardType='default'
+        />
         <Input
           onChangeText={text => this.onChange(0, text)}
           label='Email Address'

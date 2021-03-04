@@ -120,7 +120,7 @@ export const registerStyles = StyleSheet.create({
   },
   container: {
     backgroundColor: colors.white,
-    marginTop:windowHeight*0.23,
+    marginTop:windowHeight*0.25,
     marginLeft:20,
     marginRight:20,
     borderRadius:10,
@@ -135,7 +135,7 @@ export const registerStyles = StyleSheet.create({
     right: 0,
     flex:1,
     width:'90%',
-    height:'15%'
+    height:'13%'
   },
   mainTitle: {
     fontSize:35,
@@ -163,6 +163,10 @@ export const registerStyles = StyleSheet.create({
   inputContainerCalendar: {
     marginLeft:9,
     marginRight:6
+  },
+  inputContainerName: {
+    marginLeft:4,
+    marginRight:5
   },
   registerText: {
     textAlign:'center',
@@ -226,7 +230,8 @@ export const registerStyles = StyleSheet.create({
   errorText: {
     textAlign:'center',
     color:btnColors.danger,
-    fontSize:16
+    fontSize:16,
+    marginBottom:10
   }
 });
 

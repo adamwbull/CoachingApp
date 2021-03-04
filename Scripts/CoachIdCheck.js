@@ -10,7 +10,7 @@ import { Button, Input } from 'react-native-elements';
 import { checkOnboardingId } from '../Scripts/API.js';
 
 // Splash screen for checking user status on app load.
-export default class Splash extends React.Component {
+export default class CoachIdCheck extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

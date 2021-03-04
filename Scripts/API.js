@@ -2,8 +2,8 @@ import React from 'react';
 import { AsyncStorage } from 'react-native';
 
 // Useful variables
-const url = 'https://api.coachsync.me';
-const key = 'donthackme,imjustadevelopertryingmybest!';
+export const url = 'https://api.coachsync.me';
+export const key = 'donthackme,imjustadevelopertryingmybest!';
 
 // Helper Functions
 export function parseDateText(date) {
@@ -32,17 +32,17 @@ export function parseSimpleDateText(date) {
     return dateText;
 }
 
-function validateEmail(email) {
+export function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
 
-function containsSpecialCharacters(str){
+export function containsSpecialCharacters(str){
     var regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
 	return regex.test(str);
 }
 
-function hasUpperCase(str) {
+export function hasUpperCase(str) {
     return (/[A-Z]/.test(str));
 }
 
@@ -60,10 +60,61 @@ export async function checkOnboardingId(id) {
 }
 */
 
+// Create client account.
+export async function createAccount(client) {
+
+  var ret = null;
+
+  console.log('Attempting account creation...');
+  const res = await fetch(url + '/user/client/create', {
+    method:'POST',
+    body: JSON.stringify(client),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Creation passed!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+// Check if email is taken.
+export async function emailCheck(email) {
+
+  var ret = true;
+
+  if (email === '') {
+    email = 'blankEmail';
+  }
+
+  console.log('Checking for existing email...');
+  const res = await fetch(url + '/user/email/' + email + '/' + key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length === 0) {
+    console.log('Email not taken!');
+    ret = false;
+  }
+
+  return ret;
+
+}
+
 // Returns Id, FirstName, LastName, Email, Avatar, DOB, Created on success.
 export async function loginCheck(email, password) {
 
-  ret = null;
+  var ret = null;
 
   console.log('Attempting login...');
   const res = await fetch(url + '/user/login-check/' + email + '/' + password + '/' + key, {

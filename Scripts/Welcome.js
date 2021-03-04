@@ -73,7 +73,7 @@ export default class Welcome extends React.Component {
         await AsyncStorage.setItem('Client', passed);
         console.log("Login completed.");
       } else {
-        // Print error to page: coach can't log in to app.
+        this.setState({errorText:'Coaches cannot log in to the client app.'});
       }
     }
   }

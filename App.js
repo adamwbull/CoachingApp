@@ -13,7 +13,7 @@ import Home from './Scripts/Home.js';
 import Prompts from './Scripts/Prompts.js';
 import Concepts from './Scripts/Concepts.js';
 import Messages from './Scripts/Messages.js';
-import Splash from './Scripts/Splash.js';
+import CoachIdCheck from './Scripts/CoachIdCheck.js';
 import OnboardingSurvey from './Scripts/OnboardingSurvey.js';
 import ViewConcept from './Scripts/ViewConcept.js';
 import ViewPrompt from './Scripts/ViewPrompt.js';
@@ -75,8 +75,8 @@ export default class AppContainer extends React.Component {
         <NavigationContainer>
           <Stack.Navigator headerMode='none' initialRouteName='Welcome'>
             <Stack.Screen name='Welcome' component={Welcome} />
-            <Stack.Screen name='Splash' component={Splash} />
             <Stack.Screen name='Register' component={Register} />
+            <Stack.Screen name='CoachIdCheck' component={CoachIdCheck} />
             <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
