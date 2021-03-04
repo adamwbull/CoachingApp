@@ -72,7 +72,7 @@ export default class Register extends React.Component {
 
     var firstName = this.state.firstName;
     var lastName = this.state.lastName;
-    var email = this.state.email;
+    var email = this.state.email.toLowerCase();
     var password = this.state.password;
     var confirmPassword = this.state.password;
     var dob = this.state.dob;
@@ -84,7 +84,6 @@ export default class Register extends React.Component {
     } else {
       // Check if email is already taken.
       var emailTaken = await emailCheck(email);
-      console.log(emailTaken);
       if (emailTaken == true) {
         errors.push('Email is already taken.');
       }
@@ -134,10 +133,9 @@ export default class Register extends React.Component {
         errors.push('Server connection failed. Please try again.');
         this.setState({errors:errors});
       } else {
-        var client = JSON.parse(passed);
         await AsyncStorage.setItem('Client', JSON.stringify(client));
         console.log("Creation completed.");
-        this.props.navigation.navigate('CoachIdCheck');
+        this.props.navigation.navigate('CoachIdCheck', { name: firstName });
       }
 
     } else {

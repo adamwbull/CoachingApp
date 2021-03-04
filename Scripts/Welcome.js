@@ -30,7 +30,7 @@ export default class Welcome extends React.Component {
     if (val !== null) {
       var client = JSON.parse(val);
       if (client.OnboardingCompleted == 0) {
-        this.props.navigation.navigate('OnboardingSurvey');
+        this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName });
       } else {
         this.props.navigation.navigate('Main');
       }
@@ -56,7 +56,7 @@ export default class Welcome extends React.Component {
   async handlePress () {
 
     // Check login info.
-    var email = this.state.email;
+    var email = this.state.email.toLowerCase();
     var password = await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
         this.state.password
@@ -72,6 +72,11 @@ export default class Welcome extends React.Component {
       if (client.Type == 0) {
         await AsyncStorage.setItem('Client', passed);
         console.log("Login completed.");
+        if (client.OnboardingCompleted == 0) {
+          this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName });
+        } else {
+          this.props.navigation.navigate('Main');
+        }
       } else {
         this.setState({errorText:'Coaches cannot log in to the client app.'});
       }

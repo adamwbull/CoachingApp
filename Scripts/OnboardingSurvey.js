@@ -39,7 +39,7 @@ export default class OnboardingSurvey extends React.Component {
           res[index] = [-1, ''];
         } else if (item.Type == 1) {
           // This item is a Slider.
-          res[index] = [-1, '1.0'];
+          res[index] = [-1, 1];
         } else if (item.Type == 2) {
           // This item is a CheckBox group.
           var boxesLength = item.BoxOptionsArray.split(',').length;
@@ -95,7 +95,6 @@ export default class OnboardingSurvey extends React.Component {
     } else {
       res[item.index][1] = item;
     }
-    console.log(res[item.index][1]);
     this.setState({responses:res});
   };
 
@@ -109,7 +108,7 @@ export default class OnboardingSurvey extends React.Component {
               onChangeText={text => this.onChange(item.Id, index, text)}
               value={this.state.responses[index][1]}
               keyboardType={item.KeyboardType}
-              multiline='true'
+              multiline={true}
               textAlign='center'
             />
           </View>);

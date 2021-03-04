@@ -241,9 +241,10 @@ export const onboardingStyles = StyleSheet.create({
   },
   container: {
     backgroundColor: colors.white,
-    marginTop:20,
-    marginLeft:10,
-    marginRight:10,
+    marginTop:30,
+    marginLeft:20,
+    marginRight:20,
+    marginBottom:30,
     borderRadius:10
   },
   survey: {
@@ -402,15 +403,20 @@ export const splashStyles = StyleSheet.create({
     height:'32%'
   },
   title: {
-    fontSize:30,
+    fontSize:25,
     color:colors.darkGray,
     width:'100%',
-    height:30,
     justifyContent:'center',
     alignItems:'center',
     textAlign:'center',
     marginBottom:20,
-    marginTop:800*logoRatio+windowHeight*0.13
+  },
+  welcome: {
+    marginTop:800*logoRatio+windowHeight*0.10,
+    fontSize:30,
+    color:colors.darkGray,
+    marginBottom:10,
+    textAlign:'center'
   },
   error: {
     color:colors.red,

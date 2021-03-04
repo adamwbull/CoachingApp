@@ -26,7 +26,7 @@ export default class CoachIdCheck extends React.Component {
 
   async handleValue(val) {
     if (val !== null) {
-      this.props.navigation.navigate('Welcome');
+      this.props.navigation.navigate('OnboardingSurvey');
     } else {
       this.setState({modalVisible:true});
     }
@@ -45,7 +45,7 @@ export default class CoachIdCheck extends React.Component {
       // User entered a correct ID. Associate Coach with client.
       this.setState({modalVisible:false});
       await AsyncStorage.setItem('Coach', ret);
-      this.props.navigation.navigate('Welcome');
+      this.props.navigation.navigate('OnboardingSurvey');
 
     } else {
       this.setState({inputError:'Incorrect Coach ID!',inputStyle:splashStyles.inputError});
@@ -102,6 +102,7 @@ export default class CoachIdCheck extends React.Component {
                 splashStyles.image
               ]}
             />
+            <Text style={splashStyles.welcome}>Welcome, {this.props.route.params.name}!</Text>
             <Text style={splashStyles.title}>Enter Coach ID:</Text>
             <Input
               containerStyle={this.state.inputStyle}
