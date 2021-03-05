@@ -17,19 +17,18 @@ export default class OnboardingSurvey extends React.Component {
     super(props)
     this.state = {
       refreshing : false,
-      coachId:0,
+      coach:[],
       surveyItems: [],
       responses: []
     };
   }
 
   async componentDidMount() {
-    var coach, coachId, items;
+    var coach, items;
     try {
       // Get CoachId and Coach's Onboarding Survey.
       coach = JSON.parse(await AsyncStorage.getItem('Coach'));
-      coachId = coach.Id;
-      items = await getSurveyArray(coachId);
+      items = await getSurveyArray(coach.Id);
     } finally {
       var res = [];
       // Build responses array.
@@ -54,7 +53,7 @@ export default class OnboardingSurvey extends React.Component {
           res[index] = [-1, -1];
         }
       });
-      this.setState({coachId:coachId,surveyItems:items,responses:res});
+      this.setState({coach:coach,surveyItems:items,responses:res});
     }
   }
 
@@ -194,6 +193,9 @@ export default class OnboardingSurvey extends React.Component {
     if (uploadCompleted == 1) {
       console.log('Survey responses uploaded!');
       // Check for contract signing and paywall.
+      if (coach.Id == 2) {
+        // Coach is a standard client and could have a paywall.
+      }
     }
   }
 
