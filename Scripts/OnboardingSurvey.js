@@ -102,7 +102,7 @@ export default class OnboardingSurvey extends React.Component {
     return (<View style={onboardingStyles.survey}>
       {this.state.surveyItems.map((item, index) => {
         if (item.Type == 0) {
-          return (<View style={onboardingStyles.questionContainer}>
+          return (<View key={index} style={onboardingStyles.questionContainer}>
             <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
             <Input
               onChangeText={text => this.onChange(item.Id, index, text)}
@@ -114,7 +114,7 @@ export default class OnboardingSurvey extends React.Component {
           </View>);
         } else if (item.Type == 1) {
           var range = item.SliderRange.split(',');
-          return (<View style={onboardingStyles.questionSliderContainer}>
+          return (<View key={index} style={onboardingStyles.questionSliderContainer}>
             <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
             <View style={onboardingStyles.sliderSet}>
               <View style={onboardingStyles.sliderSetRange}>
@@ -143,7 +143,7 @@ export default class OnboardingSurvey extends React.Component {
           </View>);
         } else if (item.Type == 2) {
           var boxes = item.BoxOptionsArray.split(',');
-          return (<View style={onboardingStyles.questionContainer}>
+          return (<View key={index} style={onboardingStyles.questionContainer}>
             <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
             {
               boxes.map((box, boxIndex) => {
@@ -165,7 +165,7 @@ export default class OnboardingSurvey extends React.Component {
             var text = boxes[i];
             options[i] = {key:i, text:text, index:index};
           }
-          return (<View style={onboardingStyles.questionContainer}>
+          return (<View key={index} style={onboardingStyles.questionContainer}>
             <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
             <View>
               <RadioButton
@@ -178,6 +178,23 @@ export default class OnboardingSurvey extends React.Component {
         }
       })}
     </View>)
+  }
+
+  async handlePress() {
+    var responses = this.state.responses;
+    var check;
+    var uploadCompleted = 1;
+    responses.map((res) => {
+      check = await createResponse(res[0], res[1].toString());
+      if (check == 0) {
+        console.log('response create error');
+        uploadCompleted = 0;
+      }
+    });
+    if (uploadCompleted == 1) {
+      console.log('Survey responses uploaded!');
+      // Check for contract signing and paywall.
+    }
   }
 
   render() {
