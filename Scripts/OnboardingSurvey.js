@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { onboardingStyles, colors } from '../Scripts/Styles.js';
-import { getSurveyArray, uploadResponses } from '../Scripts/API.js';
+import { getSurveyArray, uploadResponses, updateOnboardingCompleted } from '../Scripts/API.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
 
@@ -39,10 +39,10 @@ export default class OnboardingSurvey extends React.Component {
       items.map((item, index) => {
         if (item.Type == 0) {
           // This item is a Input.
-          res[index] = [-1, '', client.Id];
+          res[index] = [-1, '', client.Id, 0];
         } else if (item.Type == 1) {
           // This item is a Slider.
-          res[index] = [-1, 1, client.Id];
+          res[index] = [-1, 1, client.Id, 0];
         } else if (item.Type == 2) {
           // This item is a CheckBox group.
           var boxesLength = item.BoxOptionsArray.split(',').length;
@@ -51,10 +51,10 @@ export default class OnboardingSurvey extends React.Component {
           for (i = 0;i < boxesLength;i++) {
             arr[i] = false;
           }
-          res[index] = [-1, arr, client.Id];
+          res[index] = [-1, arr, client.Id, 0];
         } else if (item.Type == 3) {
           // This item is a RadioButton group.
-          res[index] = [-1, '', client.Id, null];
+          res[index] = [-1, '', client.Id, null, 0];
         }
       });
       this.setState({coach:coach,surveyItems:items,responses:res,clientToken:client.Token,clientId:client.Id});
@@ -64,13 +64,13 @@ export default class OnboardingSurvey extends React.Component {
   // These methods add responses as a SurveyItem Id and the response value pairs.
   onChange(id, index, text) {
     var res = this.state.responses;
-    res[index] = [id, text, res[index][2]];
+    res[index] = [id, text, res[index][2], 1];
     this.setState({responses:res});
   }
 
   onChangeSlider(id, index, text) {
     var res = this.state.responses;
-    res[index] = [id, parseFloat(text.toFixed(2)), res[index][2]];
+    res[index] = [id, parseFloat(text.toFixed(2)), res[index][2], 1];
     this.setState({responses:res});
   }
 
@@ -78,7 +78,7 @@ export default class OnboardingSurvey extends React.Component {
     var res = this.state.responses;
     var newArr = res[index][1];
     newArr[boxIndex] = !res[index][1][boxIndex];
-    res[index] = [id, newArr, res[index][2]];
+    res[index] = [id, newArr, res[index][2], 1];
     this.setState({responses:res});
   }
 
@@ -89,10 +89,12 @@ export default class OnboardingSurvey extends React.Component {
       res[item.index][3] = null;
       res[item.index][1] = '';
       res[item.index][0] = item.id;
+      res[item.index][4] = 1;
     } else {
       res[item.index][3] = item;
       res[item.index][1] = item.text;
       res[item.index][0] = item.id;
+      res[item.index][4] = 1;
     }
     this.setState({responses:res});
   };
@@ -185,30 +187,58 @@ export default class OnboardingSurvey extends React.Component {
     </View>)
   }
 
+  checkResponses(responses) {
+    var ret = true;
+    responses.map((response) => {
+      if (typeof response[4] === 'undefined') {
+        // does not exist
+        if (response[3] === 0) {
+          ret = false;
+        }
+      } else {
+        // exists
+        if (response[4] === 0) {
+          ret = false;
+        }
+      }
+    });
+    return ret;
+  }
+
   async handlePress() {
     var responses = this.state.responses;
     var token = this.state.clientToken;
     var id = this.state.clientId;
     console.log("Res: "+ responses + "\nToken: " + token);
-    var uploaded = await uploadResponses(responses, token);
-    if (uploaded) {
-      // Update OnboardingCompleted for Client.
-      var update = await updateOnboardingCompleted();
-      // Decide where to go next.
-      var coach = this.state.coach;
-      if (coach.OnboardingType == 0) {
-        this.props.navigation.navigate('Main');
-      } else if (coach.OnboardingType == 1) {
-        this.props.navigation.navigate('Contract');
-      } else if (coach.OnboardingType == 2) {
-        this.props.navigation.navigate('Payment');
-      } else if (coach.OnboardingType == 3) {
-        this.props.navigation.navigate('Contract');
+    var everythingFilled = this.checkResponses(responses);
+    if (everythingFilled) {
+      var uploaded = await uploadResponses(responses, token);
+      if (uploaded) {
+        // Update OnboardingCompleted for Client.
+        var updateSuccess = await updateOnboardingCompleted(id, token);
+        if (updateSuccess) {
+          // Update local storage with new client.
+          var client = await AsyncStorage.getItem('Client');
+          client = JSON.parse(client);
+          client.OnboardingId = 1;
+          await AsyncStorage.setItem('Client', JSON.stringify(client));
+          // Decide where to go next.
+          var coach = this.state.coach;
+          if (coach.OnboardingType == 0) {
+            this.props.navigation.navigate('Main');
+          } else if (coach.OnboardingType == 1) {
+            this.props.navigation.navigate('Contract');
+          } else if (coach.OnboardingType == 2) {
+            this.props.navigation.navigate('Payment');
+          } else if (coach.OnboardingType == 3) {
+            this.props.navigation.navigate('Contract');
+          }
+        }
+      } else {
+        console.log("Error uploading!");
+        // Let user know they need to resubmit
+        this.setState({errorText:'There was an error uploading your answers. Try hitting submit again!'});
       }
-    } else {
-      console.log("Error uploading!");
-      // Let user know they need to resubmit
-      this.setState({errorText:'There was an error uploading your answers. Try hitting submit again!'});
     }
   }
 

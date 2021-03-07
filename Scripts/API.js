@@ -49,7 +49,7 @@ export function hasUpperCase(str) {
 
 // API Access Functions
 /* Example
-export async function checkOnboardingId(id) {
+export async function check() {
 
   var ret = false;
 
@@ -69,6 +69,32 @@ export async function checkOnboardingId(id) {
 
 }
 */
+
+export async function updateOnboardingCompleted(id, token) {
+
+  var ret = false;
+  var arr = {Id:id, Token:token};
+
+  console.log('Updating OnboardingCompleted...');
+  const res = await fetch(url + '/user/client/complete-onboarding', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload) {
+    console.log('Updated successfully!');
+    ret = true;
+  }
+
+  return ret;
+
+}
 
 // Upload survey responses.
 export async function uploadResponses(responses, token) {
