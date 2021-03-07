@@ -133,9 +133,10 @@ export default class Register extends React.Component {
         errors.push('Server connection failed. Please try again.');
         this.setState({errors:errors});
       } else {
+        client.Id = passed;
         await AsyncStorage.setItem('Client', JSON.stringify(client));
         console.log("Creation completed.");
-        this.props.navigation.navigate('CoachIdCheck', { name: firstName });
+        this.props.navigation.navigate('CoachIdCheck', { name: firstName, id: passed, token: token });
       }
 
     } else {

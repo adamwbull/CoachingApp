@@ -7,7 +7,7 @@ import { Animated, TouchableWithoutFeedback, Keyboard, TextInput, Modal, StyleSh
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { splashStyles } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
-import { checkOnboardingId } from '../Scripts/API.js';
+import { checkOnboardingId, userInPair, createPair } from '../Scripts/API.js';
 
 // Splash screen for checking user status on app load.
 export default class CoachIdCheck extends React.Component {
@@ -40,13 +40,16 @@ export default class CoachIdCheck extends React.Component {
 
     // Check if valid Coach ID.
     var ret = await checkOnboardingId(this.state.inputValue);
-
     if (ret != null) {
       // User entered a correct ID. Associate Coach with client.
       this.setState({modalVisible:false});
-      await AsyncStorage.setItem('Coach', ret);
-      this.props.navigation.navigate('OnboardingSurvey');
-
+      var notInPair = await userInPair(JSON.parse(ret).Id, this.props.route.params.id, this.props.route.params.token);
+      if (notInPair) {
+        console.log(JSON.parse(ret).Id+ ' ' +this.props.route.params.id+ ' ' +this.props.route.params.token);
+        var pairCreated = await createPair(JSON.parse(ret).Id, this.props.route.params.id, this.props.route.params.token);
+        await AsyncStorage.setItem('Coach', ret);
+        this.props.navigation.navigate('OnboardingSurvey');
+      }
     } else {
       this.setState({inputError:'Incorrect Coach ID!',inputStyle:splashStyles.inputError});
     }

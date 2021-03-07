@@ -30,7 +30,7 @@ export default class Welcome extends React.Component {
     if (val !== null) {
       var client = JSON.parse(val);
       if (client.OnboardingCompleted == 0) {
-        this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName });
+        this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
       } else {
         this.props.navigation.navigate('Main');
       }
@@ -73,7 +73,7 @@ export default class Welcome extends React.Component {
         await AsyncStorage.setItem('Client', passed);
         console.log("Login completed.");
         if (client.OnboardingCompleted == 0) {
-          this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName });
+          this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token});
         } else {
           this.props.navigation.navigate('Main');
         }

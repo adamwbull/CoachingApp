@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 // Useful variables
 export const url = 'https://api.coachsync.me';
+export const uploadUrl = 'https://db.coachsync.me';
 export const key = 'donthackme,imjustadevelopertryingmybest!';
 
 // Helper Functions
@@ -50,6 +51,8 @@ export function hasUpperCase(str) {
 /* Example
 export async function checkOnboardingId(id) {
 
+  var ret = false;
+
   console.log('');
   const res = await fetch(url + '', {
     method:''
@@ -57,8 +60,43 @@ export async function checkOnboardingId(id) {
 
   const payload = await res.json();
 
+  if (payload) {
+    console.log('');
+    ret = true;
+  }
+
+  return ret;
+
 }
 */
+
+// Upload survey responses.
+export async function uploadResponses(responses, token) {
+
+  var ret = false;
+
+  var body = {Token:token, Responses:responses};
+
+  console.log(JSON.stringify(body));
+  const res = await fetch(url + '/survey-item-responses/create', {
+    method:'POST',
+    body: JSON.stringify(body),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.Success === 1) {
+    console.log('Creation passed!');
+    ret = true;
+  }
+
+  return ret;
+
+}
 
 // Create client account.
 export async function createAccount(client) {
@@ -77,9 +115,9 @@ export async function createAccount(client) {
 
   const payload = await res.json();
 
-  if (payload.affectedRows == 1) {
+  if (payload.hasOwnProperty('insertId')) {
     console.log('Creation passed!');
-    ret = true;
+    ret = payload.insertId;
   }
 
   return ret;
@@ -126,6 +164,51 @@ export async function loginCheck(email, password) {
   if (payload.length == 1) {
     console.log('Login check passed!');
     ret = JSON.stringify(payload[0]);
+  }
+
+  return ret;
+
+}
+
+export async function createPair(coachId, clientId, token) {
+
+  var ret = false;
+  var arr = {Token:token, CoachId:coachId, Id:clientId};
+
+  console.log('Attempting to create pair...');
+  const res = await fetch(url + '/user/client/create-pair', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.rowsAffected == 1) {
+    console.log("User updated!");
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function userInPair(coachId, clientId, token) {
+
+  var ret = false;
+  console.log('Checking if user is in pair...');
+  const res = await fetch(url + '/user/client/pair/' + coachId + '/' + clientId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length == 0) {
+    console.log('User is not in pair!');
+    ret = true;
   }
 
   return ret;

@@ -338,6 +338,13 @@ export const onboardingStyles = StyleSheet.create({
   submitButton: {
     backgroundColor:btnColors.primary,
     padding:15
+  },
+  errorText: {
+    textAlign:'center',
+    color:btnColors.danger,
+    width:'80%',
+    marginLeft:'10%',
+    marginBottom:25
   }
 });
 
@@ -348,7 +355,6 @@ export const radioButtonStyles = StyleSheet.create({
     width:'100%',
     padding:10
   },
-
   circle: {
     height: 20,
     width: 20,
@@ -358,19 +364,17 @@ export const radioButtonStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   itemText: {
     fontWeight:'bold',
     marginLeft:10,
     marginRight:10
   },
-
   checkedCircle: {
     width: 14,
     height: 14,
     borderRadius: 7,
     backgroundColor: colors.emerald,
-  },
+  }
 });
 
 export const splashStyles = StyleSheet.create({
