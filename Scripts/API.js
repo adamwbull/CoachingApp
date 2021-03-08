@@ -70,6 +70,76 @@ export async function check() {
 }
 */
 
+export async function getOnboardingContract(coachId) {
+
+  var ret = false;
+
+  console.log('');
+  const res = await fetch(url + '', {
+    method:''
+  });
+
+  const payload = await res.json();
+
+  if (payload) {
+    console.log('');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function getOnboardingPayment(coachId) {
+
+  var ret = false;
+
+  const surveyRes = await fetch(url + '/survey/onboarding/' + coachId + '/' + key, {
+    method:'GET'
+  });
+
+  const surveyPayload = await surveyRes.json();
+
+  var paymentId = JSON.stringify(surveyPayload[0]['PaymentId']);
+
+  console.log('Retrieving payment info for Id: ' + paymentId);
+  const res = await fetch(url + '/payment/'+paymentId+'/'+key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length === 1) {
+    console.log('Payment prompt found. Give to user...');
+    ret = payload[0];
+  }
+
+  return ret;
+
+}
+
+export async function checkSurveyCompleted(clientId, token) {
+
+  var ret = false;
+
+  console.log('Checking if survey was completed already...');
+  const res = await fetch(url + '/survey-item-responses/' + clientId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length === 1) {
+    console.log('Survey was completed already!');
+    ret = true;
+  } else {
+    console.log('Survey has not been completed.');
+  }
+
+  return ret;
+
+}
+
 export async function updateOnboardingCompleted(id, token) {
 
   var ret = false;
@@ -87,7 +157,7 @@ export async function updateOnboardingCompleted(id, token) {
 
   const payload = await res.json();
 
-  if (payload) {
+  if (payload.affectedRows === 1) {
     console.log('Updated successfully!');
     ret = true;
   }
@@ -231,10 +301,12 @@ export async function userInPair(coachId, clientId, token) {
   });
 
   const payload = await res.json();
-
-  if (payload.length == 0) {
+  console.log(payload[0]["CoachId"]);
+  if (payload[0]["CoachId"] === -1) {
     console.log('User is not in pair!');
     ret = true;
+  } else {
+    console.log('User is in pair!');
   }
 
   return ret;
@@ -244,6 +316,10 @@ export async function userInPair(coachId, clientId, token) {
 export async function checkOnboardingId(id) {
 
   var ret = null;
+
+  if (id == '') {
+    id = 'blabla';
+  }
 
   console.log('Checking OnboardingId...');
   const res = await fetch(url + '/user/onboarding-id/' + id + '/' + key, {
@@ -255,6 +331,8 @@ export async function checkOnboardingId(id) {
   if (payload.length == 1) {
     console.log('OnboardingId passed!');
     ret = JSON.stringify(payload[0]);
+  } else {
+    console.log('OnboardingId does not exist.');
   }
 
   return ret;
