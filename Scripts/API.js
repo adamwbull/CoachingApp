@@ -74,19 +74,20 @@ export async function getOnboardingContract(coachId) {
 
   var ret = false;
 
-  console.log('');
-  const res = await fetch(url + '', {
-    method:''
+  console.log('Retrieving contract info for Id: ' + contractId);
+  const res = await fetch(url + '/contract/' + coachId + '/1/' + key, {
+    method:'GET'
   });
 
   const payload = await res.json();
 
-  if (payload) {
-    console.log('');
-    ret = true;
+  if (payload.length === 1) {
+    console.log('Contract found. Give to user...');
+    ret = payload[0];
   }
 
   return ret;
+
 
 }
 
@@ -128,8 +129,7 @@ export async function checkSurveyCompleted(clientId, token) {
   });
 
   const payload = await res.json();
-
-  if (payload.length === 1) {
+  if (payload.length >= 1) {
     console.log('Survey was completed already!');
     ret = true;
   } else {
@@ -173,7 +173,7 @@ export async function uploadResponses(responses, token) {
 
   var body = {Token:token, Responses:responses};
 
-  console.log(JSON.stringify(body));
+  console.log('Uploading survey responses...')
   const res = await fetch(url + '/survey-item-responses/create', {
     method:'POST',
     body: JSON.stringify(body),
@@ -186,7 +186,7 @@ export async function uploadResponses(responses, token) {
   const payload = await res.json();
 
   if (payload.Success === 1) {
-    console.log('Creation passed!');
+    console.log('Responses uploaded!');
     ret = true;
   }
 
@@ -301,7 +301,7 @@ export async function userInPair(coachId, clientId, token) {
   });
 
   const payload = await res.json();
-  console.log(payload[0]["CoachId"]);
+
   if (payload[0]["CoachId"] === -1) {
     console.log('User is not in pair!');
     ret = true;

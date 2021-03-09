@@ -22,6 +22,8 @@ import VideoChat from './Scripts/VideoChat.js';
 import Schedule from './Scripts/Schedule.js';
 import Welcome from './Scripts/Welcome.js';
 import Register from './Scripts/Register.js';
+import Contract from './Scripts/Contract.js';
+import Payment from './Scripts/Payment.js';
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -77,8 +79,10 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='Welcome' component={Welcome} />
             <Stack.Screen name='Register' component={Register} />
             <Stack.Screen name='CoachIdCheck' component={CoachIdCheck} />
-            <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
+            <Stack.Screen name='Contract' component={Contract} />
+            <Stack.Screen name='Payment' component={Payment} />
+            <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} />
             <Stack.Screen name='ViewMessageThread' component={ViewMessageThread} />

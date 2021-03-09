@@ -29,7 +29,7 @@ export default class Welcome extends React.Component {
   async handleValue(val) {
     if (val !== null) {
       var client = JSON.parse(val);
-      if (client.OnboardingCompleted == 0) {
+      if (client.OnboardingCompleted === 0) {
         this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
       } else {
         this.props.navigation.navigate('Main');

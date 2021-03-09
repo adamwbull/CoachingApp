@@ -36,7 +36,11 @@ export default class OnboardingSurvey extends React.Component {
       if (surveyCompleted) {
         if (coach.OnboardingType == 0) {
           // Update OnboardingCompleted for Client.
-          var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
+          if (client.OnboardingCompleted === 0) {
+            var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
+            client.OnboardingCompleted = 1;
+            await AsyncStorage.setItem('Client', JSON.stringify(client));
+          }
           this.props.navigation.navigate('Main');
         } else if (coach.OnboardingType == 1) {
           var contract = await getOnboardingContract(coach.Id);
@@ -56,10 +60,10 @@ export default class OnboardingSurvey extends React.Component {
       items.map((item, index) => {
         if (item.Type == 0) {
           // This item is a Input.
-          res[index] = [-1, '', client.Id, 0];
+          res[index] = [-1, '', client.Id];
         } else if (item.Type == 1) {
           // This item is a Slider.
-          res[index] = [-1, 1, client.Id, 0];
+          res[index] = [-1, 1, client.Id];
         } else if (item.Type == 2) {
           // This item is a CheckBox group.
           var boxesLength = item.BoxOptionsArray.split(',').length;
@@ -68,10 +72,10 @@ export default class OnboardingSurvey extends React.Component {
           for (i = 0;i < boxesLength;i++) {
             arr[i] = false;
           }
-          res[index] = [-1, arr, client.Id, 0];
+          res[index] = [-1, arr, client.Id];
         } else if (item.Type == 3) {
           // This item is a RadioButton group.
-          res[index] = [-1, '', client.Id, null, 0];
+          res[index] = [-1, '', client.Id, null];
         }
       });
       this.setState({coach:coach,surveyItems:items,responses:res,clientToken:client.Token,clientId:client.Id});
@@ -81,13 +85,13 @@ export default class OnboardingSurvey extends React.Component {
   // These methods add responses as a SurveyItem Id and the response value pairs.
   onChange(id, index, text) {
     var res = this.state.responses;
-    res[index] = [id, text, res[index][2], 1];
+    res[index] = [id, text, res[index][2]];
     this.setState({responses:res});
   }
 
   onChangeSlider(id, index, text) {
     var res = this.state.responses;
-    res[index] = [id, parseFloat(text.toFixed(2)), res[index][2], 1];
+    res[index] = [id, parseFloat(text.toFixed(2)), res[index][2]];
     this.setState({responses:res});
   }
 
@@ -95,7 +99,7 @@ export default class OnboardingSurvey extends React.Component {
     var res = this.state.responses;
     var newArr = res[index][1];
     newArr[boxIndex] = !res[index][1][boxIndex];
-    res[index] = [id, newArr, res[index][2], 1];
+    res[index] = [id, newArr, res[index][2]];
     this.setState({responses:res});
   }
 
@@ -106,12 +110,10 @@ export default class OnboardingSurvey extends React.Component {
       res[item.index][3] = null;
       res[item.index][1] = '';
       res[item.index][0] = item.id;
-      res[item.index][4] = 1;
     } else {
       res[item.index][3] = item;
       res[item.index][1] = item.text;
       res[item.index][0] = item.id;
-      res[item.index][4] = 1;
     }
     this.setState({responses:res});
   };
@@ -132,11 +134,6 @@ export default class OnboardingSurvey extends React.Component {
           </View>);
         } else if (item.Type == 1) {
           var range = item.SliderRange.split(',');
-          var responses = this.state.responses;
-          responses[index] = [item.Id, 1, responses[index][2]];
-          () => {
-            this.setState({responses:responses});
-          }
           return (<View key={item.Id} style={onboardingStyles.questionSliderContainer}>
             <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
             <View style={onboardingStyles.sliderSet}>
@@ -207,16 +204,8 @@ export default class OnboardingSurvey extends React.Component {
   checkResponses(responses) {
     var ret = true;
     responses.map((response) => {
-      if (typeof response[4] === 'undefined') {
-        // does not exist
-        if (response[3] === 0) {
-          ret = false;
-        }
-      } else {
-        // exists
-        if (response[4] === 0) {
-          ret = false;
-        }
+      if (response[0] === -1) {
+        ret = false;
       }
     });
     return ret;
@@ -226,21 +215,19 @@ export default class OnboardingSurvey extends React.Component {
     var responses = this.state.responses;
     var token = this.state.clientToken;
     var id = this.state.clientId;
-    console.log("Res: "+ responses + "\nToken: " + token);
     var everythingFilled = this.checkResponses(responses);
     if (everythingFilled) {
       var uploaded = await uploadResponses(responses, token);
       if (uploaded) {
         // Update local storage with new client.
-        var client = await AsyncStorage.getItem('Client');
-        client = JSON.parse(client);
+        var client = JSON.parse(await AsyncStorage.getItem('Client'));
         client.OnboardingId = 1;
         await AsyncStorage.setItem('Client', JSON.stringify(client));
         // Decide where to go next.
         var coach = this.state.coach;
         if (coach.OnboardingType == 0) {
           // Update OnboardingCompleted for Client.
-          var updateSuccess = await updateOnboardingCompleted(client.Id, token);
+          var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
           this.props.navigation.navigate('Main');
         } else if (coach.OnboardingType == 1) {
           var contract = await getOnboardingContract(coach.Id);
@@ -249,8 +236,8 @@ export default class OnboardingSurvey extends React.Component {
           var payment = await getOnboardingPayment(coach.Id);
           this.props.navigation.navigate('Payment', { Payment:payment });
         } else if (coach.OnboardingType == 3) {
-          var contract = await getOnboardingContract(coach.Id);
-          this.props.navigation.navigate('Contract', { Contract:contract });
+          var payment = await getOnboardingPayment(coach.Id);
+          this.props.navigation.navigate('Payment', { Payment:payment });
         }
       } else {
         console.log("Error uploading!");
