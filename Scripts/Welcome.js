@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { welcomeStyles, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
-import { loginCheck } from '../Scripts/API.js';
+import { loginCheck, getCoach } from '../Scripts/API.js';
 
 export default class Welcome extends React.Component {
   constructor(props) {
@@ -32,6 +32,8 @@ export default class Welcome extends React.Component {
       if (client.OnboardingCompleted === 0) {
         this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
       } else {
+        var coach = await getCoach(client.CoachId, client.Token);
+        await AsyncStorage.setItem('Coach', JSON.stringify(coach));
         this.props.navigation.navigate('Main');
       }
     }
@@ -75,6 +77,8 @@ export default class Welcome extends React.Component {
         if (client.OnboardingCompleted == 0) {
           this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token});
         } else {
+          var coach = await getCoach(client.CoachId, client.Token);
+          await AsyncStorage.setItem('Coach', JSON.stringify(coach));
           this.props.navigation.navigate('Main');
         }
       } else {

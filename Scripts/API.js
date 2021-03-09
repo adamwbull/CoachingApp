@@ -245,7 +245,28 @@ export async function emailCheck(email) {
 
 }
 
-// Returns Id, FirstName, LastName, Email, Avatar, DOB, Created on success.
+// Return basic info about a coach.
+export async function getCoach(coachId, token) {
+
+  var ret = false;
+
+  console.log('Getting coach info...');
+  const res = await fetch(url + '/user/coach/' + coachId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length === 1) {
+    console.log('Coach info returned!');
+    ret = payload[0];
+  }
+
+  return ret;
+
+}
+
+// Returns all info about client on success.
 export async function loginCheck(email, password) {
 
   var ret = null;

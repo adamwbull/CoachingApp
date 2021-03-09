@@ -24,13 +24,84 @@ export const btnColors = {
   info:'#48dbfb',
 }
 
+export const navStyles = StyleSheet.create({
+  nav: {
+    width:'100%',
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    backgroundColor:colors.white,
+    padding:10,
+    borderBottomWidth:2,
+    borderBottomColor:colors.forest,
+    marginBottom:25
+  },
+  image: {
+    flex: 1,
+    width: 100,
+    height: 50,
+    resizeMode: 'contain'
+  },
+  left: {
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  center: {
+    flex:6,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  right: {
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+  }
+});
+
 export const homeStyles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: colors.clouds,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  mainContainer: {
+    backgroundColor:colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'100%',
+    marginBottom:500
+  },
+  avatarContainer: {
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  image: {
+    width:'40%',
+    borderRadius:500,
+    height:undefined,
+    aspectRatio:1,
+    backgroundColor:colors.darkGray
+  },
+  coachTitle: {
+    color:colors.darkGray,
+    textAlign:'center',
+    marginBottom:10,
+    fontSize:40
+  },
+  nameTitle: {
+    color:colors.darkGray,
+    textAlign:'center',
+    marginTop:10,
+    fontSize:30
+  },
+  bio: {
+    color:colors.darkGray,
+    marginTop:10,
+    fontSize:16,
+    marginBottom:25,
+    textAlign:'center'
+  }
 });
 
 export const welcomeStyles = StyleSheet.create({

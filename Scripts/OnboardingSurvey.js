@@ -49,8 +49,8 @@ export default class OnboardingSurvey extends React.Component {
           var payment = await getOnboardingPayment(coach.Id);
           this.props.navigation.navigate('Payment', { Payment:payment });
         } else if (coach.OnboardingType == 3) {
-          var contract = await getOnboardingContract(coach.Id);
-          this.props.navigation.navigate('Contract', { Contract:contract });
+          var payment = await getOnboardingPayment(coach.Id);
+          this.props.navigation.navigate('Payment', { Payment:payment });
         }
       }
     } finally {

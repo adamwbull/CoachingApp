@@ -53,9 +53,13 @@ function HomeStack() {
             }
         })}
         tabBarOptions={{
-            activeTintColor: colors.vikingBlue,
-            inactiveTintColor: 'gray',
-            showLabel: false
+            activeTintColor: colors.forest,
+            inactiveTintColor: colors.blueGray,
+            showLabel: false,
+            style: {
+              borderTopWidth:2,
+              borderTopColor:colors.forest
+            }
         }}
     >
         <Tab.Screen name="Home" component={Home} />
@@ -66,6 +70,12 @@ function HomeStack() {
   );
 }
 
+const MyTheme = {
+  colors: {
+    background:colors.white
+  }
+};
+
 // Main class for app. Responsible for rendering app container.
 export default class AppContainer extends React.Component {
 
@@ -74,7 +84,7 @@ export default class AppContainer extends React.Component {
   //        I found that React Navigation creates problems when trying to pass along state.
   render() {
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={MyTheme}>
           <Stack.Navigator headerMode='none' initialRouteName='Welcome'>
             <Stack.Screen name='Welcome' component={Welcome} />
             <Stack.Screen name='Register' component={Register} />
