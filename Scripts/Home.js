@@ -33,6 +33,14 @@ export default class Home extends React.Component {
     }).start();
   }
 
+  linkItems() {
+    //
+    return (<View style={homeStyles.linkItems}>
+    
+    </View>);
+
+  }
+
   render() {
 
     var coach = this.state.coach;
@@ -64,6 +72,7 @@ export default class Home extends React.Component {
           <Text style={homeStyles.nameTitle}>{coach.FirstName + ' ' + coach.LastName}</Text>
           <Text style={homeStyles.bio}>{coach.Bio}</Text>
         </View>
+        {this.linkItems()}
       </View>
     </ScrollView>);
 
