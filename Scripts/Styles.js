@@ -31,6 +31,7 @@ export const navStyles = StyleSheet.create({
     justifyContent:'flex-start',
     backgroundColor:colors.white,
     padding:10,
+    paddingTop:15,
     borderBottomWidth:2,
     borderBottomColor:colors.forest,
     marginBottom:25
@@ -69,7 +70,7 @@ export const homeStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width:'100%',
-    marginBottom:500
+    marginBottom:25
   },
   avatarContainer: {
     flexDirection:'column',
@@ -101,6 +102,62 @@ export const homeStyles = StyleSheet.create({
     fontSize:16,
     marginBottom:25,
     textAlign:'center'
+  },
+  buttonContainer:{
+    borderRadius:25,
+    marginBottom:15
+  },
+  button: {
+    backgroundColor:colors.forest,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  feed: {
+    width:'90%'
+  },
+  feedPost: {
+    backgroundColor:colors.white,
+    width:'100%',
+    padding:10
+  },
+  feedHeaderText: {
+    textAlign:'center',
+    fontSize:30,
+    color:colors.darkGray,
+    marginBottom:20,
+    marginTop:20
+  },
+  feedHeader: {
+    borderBottomWidth:1,
+    borderBottomColor:'#dedede',
+    marginBottom:10,
+    paddingBottom:10,
+    flexDirection:'row'
+  },
+  feedAvatarContainer: {
+    flex:1,
+  },
+  feedAvatar: {
+    width:'100%',
+    borderRadius:500,
+    height:undefined,
+    aspectRatio:1,
+    backgroundColor:colors.darkGray
+  },
+  feedInfoContainer: {
+    flex:7,
+    marginLeft:10,
+    flexDirection:'column',
+    justifyContent:'center'
+  },
+  feedCoachName: {
+    fontSize:17
+  },
+  feedPostCreated: {
+    fontWeight:'300'
   }
 });
 

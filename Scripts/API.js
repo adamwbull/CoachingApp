@@ -7,6 +7,11 @@ export const uploadUrl = 'https://db.coachsync.me';
 export const key = 'donthackme,imjustadevelopertryingmybest!';
 
 // Helper Functions
+export function sqlToJsDate(sqlDate){
+  var t = sqlDate.split(/[-:T.Z]/);
+  return new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5], t[6]));
+}
+
 export function parseDateText(date) {
 
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -25,6 +30,10 @@ export function parseDateText(date) {
 }
 
 export function parseSimpleDateText(date) {
+
+    if (!Object.prototype.toString.call(date) === "[object Date]") {
+      date = Date.parse(date);
+    }
 
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const dateText = months[date.getMonth()] +
@@ -69,6 +78,47 @@ export async function check() {
 
 }
 */
+
+export async function getFeed(coachId) {
+
+  var ret = false;
+
+  console.log('Getting coach feed...');
+  console.log(url + '/feed/all/' + coachId + '/' + key);
+  const res = await fetch(url + '/feed/all/' + coachId + '/' + key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Feed retrieved!');
+    ret = JSON.parse(JSON.stringify(payload));
+  }
+
+  return ret;
+
+}
+
+export async function getLinkItems(coachId) {
+
+  var ret = false;
+
+  console.log('Getting coach links...');
+  const res = await fetch(url + '/link-item/' + coachId + '/' + key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Links retrieved!');
+    ret = JSON.parse(JSON.stringify(payload));
+  }
+
+  return ret;
+
+}
 
 export async function getOnboardingContract(coachId) {
 
