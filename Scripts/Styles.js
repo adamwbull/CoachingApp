@@ -59,6 +59,21 @@ export const navStyles = StyleSheet.create({
   }
 });
 
+export const promptsStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContainer: {
+    backgroundColor:colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'100%',
+    marginBottom:25
+  },
+});
+
 export const homeStyles = StyleSheet.create({
   container: {
     backgroundColor: colors.clouds,

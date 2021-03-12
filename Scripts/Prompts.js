@@ -7,6 +7,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavProfileRight } from './TopNav.js';
+import { getPrompts } from '../Scripts/API.js';
 
 //
 export default class Prompts extends React.Component {
@@ -19,7 +21,8 @@ export default class Prompts extends React.Component {
 
   render() {
 
-    return (<View style={styles.container}>
+    return (<View style={promptsStyles.container}>
+      <NavProfileRight />
       <Text>Test!</Text>
     </View>);
   }
