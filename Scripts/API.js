@@ -78,6 +78,25 @@ export async function check() {
 
 }
 */
+export async function getPrompts(coachId, clientId) {
+
+  var ret = false;
+
+  console.log('Getting prompts for client...');
+  const res = await fetch(url + '/prompt-assoc/both/' + clientId + '/' + coachId + '/' + key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Prompts received!');
+    ret = payload;
+  }
+
+  return ret;
+
+}
 
 export async function getFeed(coachId) {
 

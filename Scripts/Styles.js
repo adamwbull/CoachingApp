@@ -40,7 +40,8 @@ export const navStyles = StyleSheet.create({
     flex: 1,
     width: 100,
     height: 50,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
+    tintColor:colors.forest
   },
   left: {
     flex:1,
@@ -59,6 +60,21 @@ export const navStyles = StyleSheet.create({
   }
 });
 
+export const viewPromptStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContainer: {
+    backgroundColor:colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'100%',
+    marginBottom:25
+  },
+})
+
 export const promptsStyles = StyleSheet.create({
   container: {
     backgroundColor: colors.clouds,
@@ -72,6 +88,59 @@ export const promptsStyles = StyleSheet.create({
     width:'100%',
     marginBottom:25
   },
+  promptsTitle: {
+    color:colors.darkGray,
+    textAlign:'center',
+    marginBottom:15,
+    fontSize:40
+  },
+  promptsContainer: {
+    width:'100%',
+  },
+  prompt: {
+    backgroundColor:colors.white,
+    flexDirection:'row',
+    width:'94%',
+    marginLeft:'3%',
+    borderRadius:25,
+    padding:10,
+    marginBottom:15
+  },
+  promptIconContainer: {
+    flex:2,
+    justifyContent:'center',
+    alignItems:'center',
+    borderRightColor:colors.clouds,
+    borderRightWidth:1,
+    marginRight:10,
+    padding:5
+  },
+  promptBodyContainer: {
+    flex:8,
+    justifyContent:'center'
+  },
+  promptOpenIcon: {
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  promptHeader: {
+    color:colors.darkGray,
+    fontWeight:'500'
+  },
+  promptInfo: {
+    color:colors.darkGray,
+    fontWeight:'300'
+  },
+  promptInfoCompleted: {
+    color:btnColors.success
+  },
+  overdueText: {
+    color:btnColors.danger,
+    fontWeight:'500',
+    textAlign:'center',
+    fontSize:12
+  }
 });
 
 export const homeStyles = StyleSheet.create({

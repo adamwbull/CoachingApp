@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Animated, Image, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navStyles, colors } from './Styles.js';
+import { useNavigation } from '@react-navigation/native';
 
 export class NavProfileRight extends React.Component {
   constructor(props) {

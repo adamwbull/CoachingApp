@@ -42,11 +42,11 @@ function HomeStack() {
                     ? 'ios-home'
                     : 'ios-home';
                 } else if (route.name === 'Prompts') {
-                  iconName = focused ? 'compass-outline' : 'compass';
+                  iconName = focused ? 'compass' : 'compass';
                 } else if (route.name === 'Concepts') {
-                  iconName = focused ? 'book-outline' : 'book';
+                  iconName = focused ? 'book' : 'book';
                 } else if (route.name === 'Messages') {
-                  iconName = focused ? 'chatbubbles-outline' : 'chatbubbles';
+                  iconName = focused ? 'chatbubbles' : 'chatbubbles';
                 }
 
                 return <IonIcon name={iconName} size={size} color={color} />;

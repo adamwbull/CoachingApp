@@ -76,7 +76,6 @@ export default class Home extends React.Component {
       </View>);
     } else {
       var coach = this.state.coach;
-      console.log(coach);
       return (<View style={homeStyles.feed}>
         <Text style={homeStyles.feedHeaderText}>Feed</Text>
         {feed.map((post) => {
