@@ -17,6 +17,7 @@ import CoachIdCheck from './Scripts/CoachIdCheck.js';
 import OnboardingSurvey from './Scripts/OnboardingSurvey.js';
 import ViewConcept from './Scripts/ViewConcept.js';
 import ViewPrompt from './Scripts/ViewPrompt.js';
+import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';
 import ViewMessageThread from './Scripts/ViewMessageThread.js';
 import VideoChat from './Scripts/VideoChat.js';
 import Schedule from './Scripts/Schedule.js';
@@ -95,6 +96,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} />
+            <Stack.Screen name='ViewPromptSurvey' component={ViewPromptSurvey} />
             <Stack.Screen name='ViewMessageThread' component={ViewMessageThread} />
             <Stack.Screen name='VideoChat' component={VideoChat} />
             <Stack.Screen name='Schedule' component={Schedule} />

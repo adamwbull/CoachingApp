@@ -29,7 +29,11 @@ export default class Prompts extends React.Component {
   }
 
   openPrompt(prompt) {
-    this.props.navigation.navigate('ViewPrompt', { prompt:prompt });
+    if (prompt.Type == 1) {
+      this.props.navigation.navigate('ViewPromptSurvey', { prompt:prompt });
+    } else if (prompt.Type == 0) {
+      this.props.navigation.navigate('ViewPrompt', { prompt:prompt });
+    }
   }
 
   showPrompts(prompts) {

@@ -21,7 +21,6 @@ export default class ViewPrompt extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.route.params.prompt);
     this.setState({promptAssoc:this.props.route.params.prompt});
   }
 
@@ -66,9 +65,7 @@ export default class ViewPrompt extends React.Component {
           <IonIcon name='person' size={25} color={colors.blueGray} />
         </View>
       </View>
-      <View style={viewPromptStyles.promptContainer}>
-        {this.getPrompt()}
-      </View>
+      <Text>Test2!</Text>
     </ScrollView>);
   }
 
