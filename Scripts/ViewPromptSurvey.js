@@ -15,13 +15,14 @@ export default class ViewPrompt extends React.Component {
     super(props)
     this.state = {
       refreshing : false,
-      promptAssoc: [],
+      prompt: [],
       opacity: new Animated.Value(0)
     };
   }
 
   componentDidMount() {
-    this.setState({promptAssoc:this.props.route.params.prompt});
+    const prompt = this.props.route.params.prompt;
+    this.setState({prompt:prompt});
   }
 
   onLoad = () => {
@@ -32,41 +33,89 @@ export default class ViewPrompt extends React.Component {
     }).start();
   }
 
+  showSurvey() {
+    return (<View><Text>lol</Text></View>);
+  }
+
   render() {
 
-    return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
-      <View style={navStyles.nav}>
-        <View style={navStyles.left}>
-          <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
-            name='chevron-back' size={35}
-            color={colors.blueGray} />
+    var prompt = this.state.prompt;
+
+    if (prompt === false) {
+      return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
+        <View style={navStyles.nav}>
+          <View style={navStyles.left}>
+            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
+              name='chevron-back' size={35}
+              color={colors.blueGray} />
+          </View>
+          <View style={navStyles.center}>
+            <Animated.Image
+              onLoad={this.onLoad}
+              source={require('../assets/nav-logo.png')}
+              style={[
+                {
+                  opacity: this.state.opacity,
+                  transform: [
+                    {
+                      scale: this.state.opacity.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.85, 1],
+                      })
+                    },
+                  ],
+                },
+                navStyles.image
+              ]}
+            />
+          </View>
+          <View style={navStyles.right}>
+            <IonIcon name='person' size={25} color={colors.blueGray} />
+          </View>
         </View>
-        <View style={navStyles.center}>
-          <Animated.Image
-            onLoad={this.onLoad}
-            source={require('../assets/nav-logo.png')}
-            style={[
-              {
-                opacity: this.state.opacity,
-                transform: [
-                  {
-                    scale: this.state.opacity.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.85, 1],
-                    })
-                  },
-                ],
-              },
-              navStyles.image
-            ]}
-          />
+        <View style={viewPromptStyles.promptContainer}>
+          <ActivityIndicator size="large" color={colors.forest} />
         </View>
-        <View style={navStyles.right}>
-          <IonIcon name='person' size={25} color={colors.blueGray} />
+      </ScrollView>);
+    } else {
+      return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
+        <View style={navStyles.nav}>
+          <View style={navStyles.left}>
+            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
+              name='chevron-back' size={35}
+              color={colors.blueGray} />
+          </View>
+          <View style={navStyles.center}>
+            <Animated.Image
+              onLoad={this.onLoad}
+              source={require('../assets/nav-logo.png')}
+              style={[
+                {
+                  opacity: this.state.opacity,
+                  transform: [
+                    {
+                      scale: this.state.opacity.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.85, 1],
+                      })
+                    },
+                  ],
+                },
+                navStyles.image
+              ]}
+            />
+          </View>
+          <View style={navStyles.right}>
+            <IonIcon name='person' size={25} color={colors.blueGray} />
+          </View>
         </View>
-      </View>
-      <Text>Test2!</Text>
-    </ScrollView>);
+        <View style={viewPromptStyles.promptContainer}>
+          {this.showSurvey(prompt)}
+        </View>
+      </ScrollView>);
+
+    }
+
   }
 
 }

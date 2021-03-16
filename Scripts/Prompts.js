@@ -62,12 +62,9 @@ export default class Prompts extends React.Component {
           if (prompt.Prompt[0][0].PromptType == 0) {
             // Prompt is Text only.
             prompt.IconName = 'create';
-          } else if (prompt.Prompt[0][0].PromptType == 1 || prompt.Prompt[0][0].PromptType == 3) {
+          } else if (prompt.Prompt[0][0].PromptType == 1 || prompt.Prompt[0][0].PromptType == 2 || prompt.Prompt[0][0].PromptType == 3) {
             // Prompt includes Video.
             prompt.IconName = 'film';
-          } else if (prompt.Prompt[0][0].PromptType == 2 || prompt.Prompt[0][0].PromptType == 4) {
-            // Prompt includes Voice.
-            prompt.IconName = 'headset';
           }
         } else if (prompt.Type == 1) {
           // Item is a Survey.

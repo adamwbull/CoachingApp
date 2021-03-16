@@ -4,7 +4,7 @@ export const windowWidth = Dimensions.get('window').width;
 export const windowHeight = Dimensions.get('window').height;
 export const logoRatio = windowWidth/1600;
 export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
-
+export const feedMediaWidth = parseInt(windowWidth-(windowWidth*0.1));
 export const colors = {
   emerald: '#2ecc71',
   forest: '#27ae60',
@@ -33,8 +33,7 @@ export const navStyles = StyleSheet.create({
     padding:10,
     paddingTop:15,
     borderBottomWidth:2,
-    borderBottomColor:colors.forest,
-    marginBottom:25
+    borderBottomColor:colors.forest
   },
   image: {
     flex: 1,
@@ -67,11 +66,42 @@ export const viewPromptStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   mainContainer: {
-    backgroundColor:colors.clouds,
+    backgroundColor:colors.white,
     alignItems: 'center',
     justifyContent: 'center',
-    width:'100%',
+    width:'90%',
+    marginLeft:'5%',
+    marginRight:'5%',
     marginBottom:25
+  },
+  promptContainer: {
+    width:'100%'
+  },
+  promptInput: {
+    width:'100%',
+    textAlign:'center',
+    marginTop:20
+  },
+  promptTitle: {
+    marginTop:25,
+    color:colors.darkGray,
+    textAlign:'center',
+    marginBottom:15,
+    fontSize:27
+  },
+  promptText: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:15
+  },
+  submitButtonContainer:{
+    width:'60%',
+    marginBottom:50,
+    borderRadius:25
+  },
+  submitButton: {
+    backgroundColor:btnColors.primary,
+    padding:15
   },
 })
 
@@ -89,6 +119,7 @@ export const promptsStyles = StyleSheet.create({
     marginBottom:25
   },
   promptsTitle: {
+    marginTop:25,
     color:colors.darkGray,
     textAlign:'center',
     marginBottom:15,
@@ -104,7 +135,7 @@ export const promptsStyles = StyleSheet.create({
     marginLeft:'3%',
     borderRadius:25,
     padding:10,
-    marginBottom:15
+    marginBottom:20
   },
   promptIconContainer: {
     flex:2,
@@ -169,6 +200,7 @@ export const homeStyles = StyleSheet.create({
     backgroundColor:colors.darkGray
   },
   coachTitle: {
+    marginTop:25,
     color:colors.darkGray,
     textAlign:'center',
     marginBottom:10,
@@ -205,7 +237,10 @@ export const homeStyles = StyleSheet.create({
   feedPost: {
     backgroundColor:colors.white,
     width:'100%',
-    padding:10
+    padding:0,
+    marginBottom:20,
+    borderRadius:25,
+    overflow:'hidden'
   },
   feedHeaderText: {
     textAlign:'center',
@@ -214,12 +249,17 @@ export const homeStyles = StyleSheet.create({
     marginBottom:20,
     marginTop:20
   },
+  feedHeaderContainer: {
+    marginBottom:10,
+    paddingTop:10,
+    paddingLeft:10,
+    paddingRight:10
+  },
   feedHeader: {
     borderBottomWidth:1,
     borderBottomColor:'#dedede',
-    marginBottom:10,
-    paddingBottom:10,
-    flexDirection:'row'
+    flexDirection:'row',
+    paddingBottom:10
   },
   feedAvatarContainer: {
     flex:1,
@@ -242,6 +282,36 @@ export const homeStyles = StyleSheet.create({
   },
   feedPostCreated: {
     fontWeight:'300'
+  },
+  feedBody: {
+    paddingLeft:10,
+    paddingRight:10,
+    paddingBottom:10
+  },
+  feedBodyText: {
+    fontWeight:'400'
+  },
+  feedPhotoContainer: {
+    flex: 1,
+    flexDirection:'row',
+    justifyContent: 'center',
+    backgroundColor:colors.white,
+  },
+  feedPhoto: {
+    flex:1,
+    width:null,
+    height:null,
+    resizeMode:'contain'
+  },
+  feedEmbedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor:colors.white
+  },
+  feedVideoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor:colors.white
   }
 });
 

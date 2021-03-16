@@ -5,9 +5,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { WebView, ScrollView, Animated, AsyncStorage, Linking, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, Animated, AsyncStorage, Linking, StyleSheet, Text, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { homeStyles } from './Styles.js';
+import { homeStyles, feedMediaWidth } from './Styles.js';
 import { NavProfileRight } from './TopNav.js';
 import { getLinkItems, getFeed, sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
 import { Button } from 'react-native-elements';
@@ -19,7 +20,7 @@ export default class Home extends React.Component {
     this.state = {
       refreshing: false,
       opacity: new Animated.Value(0),
-      coach:[],
+      coach:{FirstName:'Loading',LastName:'Coach...'},
       links:[],
       feed:[]
     };
@@ -42,12 +43,45 @@ export default class Home extends React.Component {
 
   showMedia(post) {
 
+    var feedMediaHeight = 0;
+    if (post.ImageSize == 0) {
+      feedMediaHeight = parseInt(feedMediaWidth*(9/16));
+    } else {
+      feedMediaHeight = feedMediaWidth;
+    }
+
     if (post.Type == 1) {
-      return (<View style={homeStyles.feedPhotoContainer}></View>);
+      return (<View style={homeStyles.feedPhotoContainer}>
+          <Animated.Image
+            onLoad={this.onLoad}
+            source={{ uri: post.Image }}
+            resizeMode="cover"
+            style={{
+              opacity: this.state.opacity,
+              flex:1,
+              width:feedMediaWidth,
+              height:feedMediaHeight,
+              borderBottomLeftRadius:25,
+              borderBottomRightRadius:25,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            }}
+          />
+        </View>);
     } else if (post.Type == 2) {
       return (<View style={homeStyles.feedEmbedContainer}>
         <WebView
-            style={{flex:1}}
+            style={{flex:1,
+            width:feedMediaWidth,
+            height:feedMediaHeight,
+            borderBottomLeftRadius:25,
+            borderBottomRightRadius:25}}
             javaScriptEnabled={true}
             source={{uri: post.Video}}
         />
@@ -55,8 +89,11 @@ export default class Home extends React.Component {
     } else if (post.Type == 3) {
       return (<View style={homeStyles.feedVideoContainer}>
         <Video
-          ref={video}
-          style={{flex:1}}
+          style={{flex:1,
+          width:feedMediaWidth,
+          height:feedMediaHeight,
+          borderBottomLeftRadius:25,
+          borderBottomRightRadius:25}}
           source={{
             uri: post.Video,
           }}
@@ -81,37 +118,39 @@ export default class Home extends React.Component {
         {feed.map((post) => {
           var date = sqlToJsDate(post.Created);
           return (<View key={post.Id} style={homeStyles.feedPost}>
-            <View style={homeStyles.feedHeader}>
-              <View style={homeStyles.feedAvatarContainer}>
-              <Animated.Image
-                onLoad={this.onLoad}
-                source={{ uri: coach.Avatar }}
-                resizeMode="contain"
-                style={[
-                  {
-                    opacity: this.state.opacity,
-                    transform: [
+            <View style={homeStyles.feedHeaderContainer}>
+              <View style={homeStyles.feedHeader}>
+                <View style={homeStyles.feedAvatarContainer}>
+                  <Animated.Image
+                    onLoad={this.onLoad}
+                    source={{ uri: coach.Avatar }}
+                    resizeMode="contain"
+                    style={[
                       {
-                        scale: this.state.opacity.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [0.85, 1],
-                        })
+                        opacity: this.state.opacity,
+                        transform: [
+                          {
+                            scale: this.state.opacity.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0.85, 1],
+                            })
+                          },
+                        ],
                       },
-                    ],
-                  },
-                  homeStyles.feedAvatar
-                ]}
-              />
-              </View>
-              <View style={homeStyles.feedInfoContainer}>
-                <Text style={homeStyles.feedCoachName}>{coach.FirstName + ' ' + coach.LastName}</Text>
-                <Text style={homeStyles.feedPostCreated}>{parseSimpleDateText(date)}</Text>
+                      homeStyles.feedAvatar
+                    ]}
+                  />
+                </View>
+                <View style={homeStyles.feedInfoContainer}>
+                  <Text style={homeStyles.feedCoachName}>{coach.FirstName + ' ' + coach.LastName}</Text>
+                  <Text style={homeStyles.feedPostCreated}>{parseSimpleDateText(date)}</Text>
+                </View>
               </View>
             </View>
             <View style={homeStyles.feedBody}>
               <Text style={homeStyles.feedBodyText}>{post.Text}</Text>
-              {this.showMedia(post)}
             </View>
+            {this.showMedia(post)}
           </View>);
         })}
       </View>);
