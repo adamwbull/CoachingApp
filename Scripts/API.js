@@ -78,6 +78,76 @@ export async function check() {
 
 }
 */
+export async function getPromptResponse(id, clientId, token) {
+
+  var ret = false;
+
+  console.log('Getting prompt response...');
+  const res = await fetch(url + '/prompt-response/' + id + '/' + clientId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length == 1) {
+    console.log('Found prompt response!');
+    ret = payload;
+  }
+
+  return ret;
+
+}
+
+export async function updatePromptResponse(id, promptAssocId, text) {
+
+  var ret = false;
+  var arr = {Token:key, Id:id, PromptAssocId:promptAssocId, Text:text};
+  console.log('Updating prompt response...');
+  const res = await fetch(url + '/prompt-response/update', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows === 1) {
+    console.log('Updated successfully!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function createPromptResponse(promptAssocId, text) {
+
+  var ret = false;
+  var arr = {Token:key, PromptAssocId: promptAssocId, Text:text};
+  console.log('Uploading prompt response...');
+  const res = await fetch(url + '/prompt-response/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows === 1) {
+    console.log('Created successfully!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function getPrompts(coachId, clientId) {
 
   var ret = false;

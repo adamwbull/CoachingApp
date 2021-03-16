@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ScrollView, Animated, AsyncStorage, Linking, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, Animated, AsyncStorage, Linking, StyleSheet, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { homeStyles, feedMediaWidth } from './Styles.js';

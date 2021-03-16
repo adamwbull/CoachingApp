@@ -5,27 +5,36 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, Alert, ActivityIndicator, Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { viewPromptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
-import { sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
+import { sqlToJsDate, parseSimpleDateText, createPromptResponse, updatePromptResponse, getPromptResponse } from '../Scripts/API.js';
 import { Input, Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
+
 export default class ViewPrompt extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       refreshing : false,
       prompt: false,
+      responseArr: false,
       opacity: new Animated.Value(0),
       response: ''
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const prompt = this.props.route.params.prompt;
-    this.setState({prompt:prompt});
+    var promptArr = false;
+    var response = '';
+    var client = JSON.parse(await AsyncStorage.getItem('Client'));
+    if (prompt.Completed == 1) {
+      promptArr = await getPromptResponse(prompt.Id, client.Id, client.Token);
+      response = promptArr[0].Text;
+    }
+    this.setState({prompt:prompt,promptArr:promptArr,response:response});
   }
 
   onLoad = () => {
@@ -37,7 +46,6 @@ export default class ViewPrompt extends React.Component {
   }
 
   showPrompt(prompt) {
-    console.log(prompt);
     if (prompt.Prompt[0][0].PromptType == 0) {
       // Prompt is Text.
       return (<View style={viewPromptStyles.promptContainer}>
@@ -119,12 +127,22 @@ export default class ViewPrompt extends React.Component {
   }
 
   onTextChange(text) {
-    console.log(text);
     this.setState({response:text});
   }
 
-  handlePress() {
-    console.log('State:',this.state.response);
+  async handlePress(prompt) {
+    var promptArr = this.state.promptArr;
+    var response = this.state.response;
+    if (prompt.Completed == 0) {
+      var inserted = await createPromptResponse(prompt.Id, response);
+      if (inserted == true) {
+        this.props.navigation.navigate('Prompts');
+      } else {
+        Alert.alert('There was a problem uploading your response! Please try again.');
+      }
+    } else {
+      var updated = await updatePromptResponse(promptArr[0].Id, prompt.Id, response);
+    }
   }
 
   render() {
@@ -164,10 +182,16 @@ export default class ViewPrompt extends React.Component {
           </View>
         </View>
         <View style={viewPromptStyles.promptContainer}>
-          <ActivityIndicator size="large" color={colors.forest} />
+          <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </View>
       </ScrollView>);
     } else {
+      var buttonTitle = '';
+      if (prompt.Completed == 0) {
+        buttonTitle = 'Submit';
+      } else {
+        buttonTitle = 'Update';
+      }
       return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
@@ -211,10 +235,10 @@ export default class ViewPrompt extends React.Component {
             style={viewPromptStyles.promptInput}
           />
           <Button
-          title='Submit'
+          title={buttonTitle}
           buttonStyle={viewPromptStyles.submitButton}
           containerStyle={viewPromptStyles.submitButtonContainer}
-          onPress={() => this.handlePress()}/>
+          onPress={() => this.handlePress(prompt)}/>
         </View>
       </ScrollView>);
     }
