@@ -57,10 +57,10 @@ export default class Concepts extends React.Component {
           if (concept.Concept[0][0].Type == 0) {
             // Concept is Text only.
             concept.IconName = 'bulb';
-          } else if (concept.Concept[0][0].Type == 2 || concept.Concept[0][0].Type == 4) {
+          } else if (concept.Concept[0][0].Type == 3 || concept.Concept[0][0].Type == 6) {
             // Concept includes File.
             concept.IconName = 'document';
-          } else if (concept.Concept[0][0].Type == 1 || concept.Concept[0][0].Type == 3) {
+          } else if (concept.Concept[0][0].Type == 1 || concept.Concept[0][0].Type == 2 || concept.Concept[0][0].Type == 4 || concept.Concept[0][0].Type == 5) {
             // Concept includes Video.
             concept.IconName = 'film';
           }

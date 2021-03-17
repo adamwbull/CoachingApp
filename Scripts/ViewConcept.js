@@ -9,6 +9,14 @@ import { ActivityIndicator, ScrollView, Animated, StyleSheet, Text, View } from 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { viewConceptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
 import { WebView } from 'react-native-webview';
+import { Video, AVPlaybackStatus } from 'expo-av';
+
+const webViewScript = `
+  setTimeout(function() {
+    window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight);
+  }, 500);
+  true;
+`;
 
 export default class ViewConcept extends React.Component {
   constructor(props) {
@@ -16,6 +24,7 @@ export default class ViewConcept extends React.Component {
     this.state = {
       refreshing : true,
       opacity: new Animated.Value(0),
+      webHeight:100,
     };
   }
 
@@ -35,28 +44,170 @@ export default class ViewConcept extends React.Component {
   showConcept(concept) {
     if (concept.Concept[0][0].Type == 0) {
       // Text Only
-      console.log(concept.Concept[0][0].RichText);
-      return (<View style={{marginTop:30}}>
-        <WebView style={{flex:1,
-        width:feedMediaWidth,
-        marginBottom:10}}
-        originWhitelist={['*']}
-        source={{
-          html: `<head>
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          </head>
-          <body>${concept.Concept[0][0].RichText}</body>
-          </html>`
-        }}/>
+      return (<View style={viewConceptStyles.mainContainer}>
+        <View style={viewConceptStyles.conceptContainer}>
+          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+          <View style={{height: this.state.webHeight}}>
+            <WebView style={{flex:1,
+            width:feedMediaWidth,
+            marginBottom:10}}
+            originWhitelist={['*']}
+            scrollEnabled={false}
+            onMessage={event => {
+              this.setState({webHeight: parseInt(event.nativeEvent.data)});
+            }}
+            javaScriptEnabled={true}
+            useWebKit={true}
+            injectedJavaScript ={webViewScript}
+            domStorageEnabled={true}
+            source={{
+              html: `<head>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              </head>
+              <body>${concept.Concept[0][0].RichText}</body>
+              </html>`
+            }}/>
+          </View>
+        </View>
       </View>);
     } else if (concept.Concept[0][0].Type == 1) {
-      // Video Only
+      // YT Video Only
+      var feedMediaHeight = parseInt(feedMediaWidth*(9/16));
+      return (<View style={viewConceptStyles.videoMainContainer}>
+        <View style={viewConceptStyles.conceptContainer}>
+          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+          <WebView
+              style={{flex:1,
+              width:feedMediaWidth,
+              height:feedMediaHeight}}
+              javaScriptEnabled={true}
+              source={{uri: concept.Concept[0][0].Video}}
+          />
+        </View>
+      </View>);
     } else if (concept.Concept[0][0].Type == 2) {
-      // File Only
+      // Upload Video Only
+      var feedMediaHeight = parseInt(feedMediaWidth*(9/16));
+      return (<View style={viewConceptStyles.videoMainContainer}>
+        <View style={viewConceptStyles.conceptContainer}>
+          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+          <Video
+            style={{flex:1,
+            width:feedMediaWidth,
+            height:feedMediaHeight}}
+            source={{uri: concept.Concept[0][0].Video}}
+            useNativeControls
+            resizeMode="contain"
+            isLooping
+          />
+        </View>
+      </View>);
     } else if (concept.Concept[0][0].Type == 3) {
-      // Text/Video
+      // File Only
     } else if (concept.Concept[0][0].Type == 4) {
+      // Text/YT Video
+      var feedMediaHeight = parseInt(feedMediaWidth*(9/16));
+      return (<View style={viewConceptStyles.mainContainer}>
+        <View style={viewConceptStyles.conceptContainer}>
+          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+          <WebView
+              style={{flex:1,
+              width:feedMediaWidth,
+              height:feedMediaHeight}}
+              javaScriptEnabled={true}
+              source={{uri: concept.Concept[0][0].Video}}
+          />
+          <View style={{height: this.state.webHeight}}>
+            <WebView style={{flex:1,
+            width:feedMediaWidth,
+            marginBottom:10}}
+            originWhitelist={['*']}
+            scrollEnabled={false}
+            onMessage={event => {
+              this.setState({webHeight: parseInt(event.nativeEvent.data)});
+            }}
+            javaScriptEnabled={true}
+            useWebKit={true}
+            injectedJavaScript ={webViewScript}
+            domStorageEnabled={true}
+            source={{
+              html: `<head>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              </head>
+              <body>${concept.Concept[0][0].RichText}</body>
+              </html>`
+            }}/>
+          </View>
+        </View>
+      </View>);
+    } else if (concept.Concept[0][0].Type == 5) {
+      // Text/Upload Video
+      var feedMediaHeight = parseInt(feedMediaWidth*(9/16));
+      return (<View style={viewConceptStyles.mainContainer}>
+        <View style={viewConceptStyles.conceptContainer}>
+          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+          <Video
+            style={{flex:1,
+            width:feedMediaWidth,
+            height:feedMediaHeight}}
+            source={{
+              uri: concept.Concept[0][0].Video,
+            }}
+            useNativeControls
+            resizeMode="contain"
+            isLooping
+          />
+          <View style={{height: this.state.webHeight}}>
+            <WebView style={{flex:1,
+            width:feedMediaWidth,
+            marginBottom:10}}
+            originWhitelist={['*']}
+            scrollEnabled={false}
+            onMessage={event => {
+              this.setState({webHeight: parseInt(event.nativeEvent.data)});
+            }}
+            javaScriptEnabled={true}
+            useWebKit={true}
+            injectedJavaScript ={webViewScript}
+            domStorageEnabled={true}
+            source={{
+              html: `<head>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              </head>
+              <body>${concept.Concept[0][0].RichText}</body>
+              </html>`
+            }}/>
+          </View>
+        </View>
+      </View>);
+    } else if (concept.Concept[0][0].Type == 6) {
       // Text/File
+      return (<View style={viewConceptStyles.mainContainer}>
+        <View style={viewConceptStyles.conceptContainer}>
+          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+          <View style={{height: this.state.webHeight}}>
+            <WebView style={{flex:1,
+            width:feedMediaWidth,
+            marginBottom:10}}
+            originWhitelist={['*']}
+            scrollEnabled={false}
+            onMessage={event => {
+              this.setState({webHeight: parseInt(event.nativeEvent.data)});
+            }}
+            javaScriptEnabled={true}
+            useWebKit={true}
+            injectedJavaScript ={webViewScript}
+            domStorageEnabled={true}
+            source={{
+              html: `<head>
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              </head>
+              <body>${concept.Concept[0][0].RichText}</body>
+              </html>`
+            }}/>
+          </View>
+        </View>
+      </View>);
     }
   }
 
@@ -64,7 +215,7 @@ export default class ViewConcept extends React.Component {
 
     if (this.state.refreshing == false) {
       var concept = this.state.concept;
-      return (<ScrollView componentContainerStyle={viewConceptStyles.container}>
+      return (<ScrollView contentContainerStyle={viewConceptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
             <IonIcon onPress={() => this.props.navigation.navigate('Concepts')}
@@ -94,13 +245,10 @@ export default class ViewConcept extends React.Component {
           <View style={navStyles.right}>
           </View>
         </View>
-        <View style={viewConceptStyles.mainContainer}>
-          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
-          {this.showConcept(concept)}
-        </View>
+        {this.showConcept(concept)}
       </ScrollView>);
     } else {
-      return (<ScrollView componentContainerStyle={viewConceptStyles.container}>
+      return (<ScrollView contentContainerStyle={viewConceptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
             <IonIcon onPress={() => this.props.navigation.navigate('Concepts')}

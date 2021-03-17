@@ -5,6 +5,7 @@ export const windowHeight = Dimensions.get('window').height;
 export const logoRatio = windowWidth/1600;
 export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
 export const feedMediaWidth = parseInt(windowWidth-(windowWidth*0.1));
+export const windowHeightConceptVideo = windowHeight - (windowHeight*0.5);
 export const colors = {
   emerald: '#2ecc71',
   forest: '#27ae60',
@@ -62,8 +63,7 @@ export const navStyles = StyleSheet.create({
 export const viewConceptStyles = StyleSheet.create({
   container: {
     backgroundColor: colors.clouds,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingBottom:75
   },
   mainContainer: {
     backgroundColor:colors.white,
@@ -72,21 +72,33 @@ export const viewConceptStyles = StyleSheet.create({
     width:'90%',
     marginLeft:'5%',
     marginRight:'5%',
-    marginBottom:25
+    marginBottom:25,
+    marginTop:30,
+    borderRadius:30,
+    overflow:'hidden'
+  },
+  videoMainContainer: {
+    backgroundColor:colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'90%',
+    marginLeft:'5%',
+    marginRight:'5%',
+    marginBottom:windowHeightConceptVideo,
+    marginTop:30,
+    borderRadius:30,
+    overflow:'hidden'
   },
   conceptContainer: {
-    width:'100%'
-  },
-  conceptInput: {
-    width:'100%',
-    textAlign:'center',
-    marginTop:20
+    backgroundColor:colors.white,
+    borderRadius:25,
+    paddingTop:10
   },
   conceptTitle: {
-    marginTop:85,
     color:colors.darkGray,
     textAlign:'center',
-    fontSize:27
+    fontSize:22,
+    marginBottom:10
   },
   conceptText: {
     textAlign:'center',
