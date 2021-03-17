@@ -25,6 +25,11 @@ export default class ViewPrompt extends React.Component {
     this.setState({prompt:prompt});
   }
 
+  handleBack() {
+    this.props.route.params.onGoBack();
+    this.props.navigation.navigate('Prompts');
+  }
+
   onLoad = () => {
     Animated.timing(this.state.opacity, {
       toValue: 1,
@@ -45,7 +50,7 @@ export default class ViewPrompt extends React.Component {
       return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
-            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
+            <IonIcon onPress={() => this.handleBack()}
               name='chevron-back' size={35}
               color={colors.blueGray} />
           </View>
@@ -70,7 +75,6 @@ export default class ViewPrompt extends React.Component {
             />
           </View>
           <View style={navStyles.right}>
-            <IonIcon name='person' size={25} color={colors.blueGray} />
           </View>
         </View>
         <View style={viewPromptStyles.promptContainer}>
@@ -81,7 +85,7 @@ export default class ViewPrompt extends React.Component {
       return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
-            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
+            <IonIcon onPress={() => this.handleBack()}
               name='chevron-back' size={35}
               color={colors.blueGray} />
           </View>
@@ -106,7 +110,6 @@ export default class ViewPrompt extends React.Component {
             />
           </View>
           <View style={navStyles.right}>
-            <IonIcon name='person' size={25} color={colors.blueGray} />
           </View>
         </View>
         <View style={viewPromptStyles.promptContainer}>

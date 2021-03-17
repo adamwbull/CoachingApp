@@ -5,10 +5,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Alert, ScrollView, Animated, AsyncStorage, Linking, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, Animated, AsyncStorage, Linking, StyleSheet, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { homeStyles, feedMediaWidth } from './Styles.js';
+import { homeStyles, feedMediaWidth, windowHeight, colors } from './Styles.js';
 import { NavProfileRight } from './TopNav.js';
 import { getLinkItems, getFeed, sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
 import { Button } from 'react-native-elements';
@@ -18,7 +18,7 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      refreshing: false,
+      refreshing: true,
       opacity: new Animated.Value(0),
       coach:{FirstName:'Loading',LastName:'Coach...'},
       links:[],
@@ -30,7 +30,7 @@ export default class Home extends React.Component {
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
     var links = await getLinkItems(coach.Id);
     var feed = await getFeed(coach.Id);
-    this.setState({coach:coach,links:links,feed:feed});
+    this.setState({coach:coach,links:links,feed:feed,refreshing:false});
   }
 
   onLoad = () => {
@@ -198,41 +198,56 @@ export default class Home extends React.Component {
 
   }
 
+  getCoach(coach) {
+
+    return (<View style={homeStyles.mainContainer}>
+      <View style={homeStyles.avatarContainer}>
+        <Animated.Image
+          onLoad={this.onLoad}
+          source={{ uri: coach.Avatar }}
+          resizeMode="contain"
+          style={[
+            {
+              opacity: this.state.opacity,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            },
+            homeStyles.image
+          ]}
+        />
+        <Text style={homeStyles.nameTitle}>{coach.FirstName + ' ' + coach.LastName}</Text>
+        <Text style={homeStyles.bio}>{coach.Bio}</Text>
+      </View>
+      {this.linkItems()}
+      {this.feed()}
+    </View>);
+
+  }
+
   render() {
 
     var coach = this.state.coach;
 
-    return (<ScrollView contentContainerStyle={homeStyles.container}>
-      <NavProfileRight />
-      <View style={homeStyles.mainContainer}>
-        <View style={homeStyles.avatarContainer}>
-          <Text style={homeStyles.coachTitle}>Your Coach</Text>
-          <Animated.Image
-            onLoad={this.onLoad}
-            source={{ uri: coach.Avatar }}
-            resizeMode="contain"
-            style={[
-              {
-                opacity: this.state.opacity,
-                transform: [
-                  {
-                    scale: this.state.opacity.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.85, 1],
-                    })
-                  },
-                ],
-              },
-              homeStyles.image
-            ]}
-          />
-          <Text style={homeStyles.nameTitle}>{coach.FirstName + ' ' + coach.LastName}</Text>
-          <Text style={homeStyles.bio}>{coach.Bio}</Text>
-        </View>
-        {this.linkItems()}
-        {this.feed()}
-      </View>
-    </ScrollView>);
+    if (this.state.refreshing == true) {
+      return (<ScrollView contentContainerStyle={{alignItems: 'center',
+      justifyContent: 'center',backgroundColor:colors.clouds,paddingBottom:windowHeight}}>
+        <NavProfileRight />
+        <Text style={homeStyles.coachTitle}>Your Coach</Text>
+        <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
+      </ScrollView>);
+    } else {
+      return (<ScrollView contentContainerStyle={homeStyles.container}>
+        <NavProfileRight />
+        <Text style={homeStyles.coachTitle}>Your Coach</Text>
+        {this.getCoach(coach)}
+      </ScrollView>);
+    }
 
   }
 

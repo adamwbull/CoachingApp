@@ -7,24 +7,27 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from './Scripts/Styles.js';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.']);
 
 // Import Scripts
-import Home from './Scripts/Home.js';
-import Prompts from './Scripts/Prompts.js';
-import Concepts from './Scripts/Concepts.js';
-import Messages from './Scripts/Messages.js';
-import CoachIdCheck from './Scripts/CoachIdCheck.js';
-import OnboardingSurvey from './Scripts/OnboardingSurvey.js';
-import ViewConcept from './Scripts/ViewConcept.js';
-import ViewPrompt from './Scripts/ViewPrompt.js';
-import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';
-import ViewMessageThread from './Scripts/ViewMessageThread.js';
-import VideoChat from './Scripts/VideoChat.js';
-import Schedule from './Scripts/Schedule.js';
-import Welcome from './Scripts/Welcome.js';
-import Register from './Scripts/Register.js';
-import Contract from './Scripts/Contract.js';
-import Payment from './Scripts/Payment.js';
+import Home from './Scripts/Home.js';                           // Working
+import Prompts from './Scripts/Prompts.js';                     // Working
+import Concepts from './Scripts/Concepts.js';                   // Working
+import Messages from './Scripts/Messages.js';                   //
+import CoachIdCheck from './Scripts/CoachIdCheck.js';           // Working
+import OnboardingSurvey from './Scripts/OnboardingSurvey.js';   // Working
+import ViewConcept from './Scripts/ViewConcept.js';             //
+import ViewPrompt from './Scripts/ViewPrompt.js';               // Working
+import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';   //
+import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
+import VideoChat from './Scripts/VideoChat.js';                 //
+import Schedule from './Scripts/Schedule.js';                   //
+import Welcome from './Scripts/Welcome.js';                     // Working
+import Register from './Scripts/Register.js';                   // Working
+import Contract from './Scripts/Contract.js';                   //
+import Payment from './Scripts/Payment.js';                     //
+                                                                // Working 8/16
 
 // Create navigation controllers
 const Stack = createStackNavigator();

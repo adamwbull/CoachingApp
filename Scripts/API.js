@@ -78,6 +78,26 @@ export async function check() {
 
 }
 */
+export async function getConcepts(coachId, clientId) {
+
+  var ret = false;
+
+  console.log('Getting concepts...');
+  const res = await fetch(url + '/concept-assoc/both/' + clientId + '/' + coachId + '/' + key, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Prompts received!');
+    ret = payload;
+  }
+
+  return ret;
+
+}
+
 export async function getPromptResponse(id, clientId, token) {
 
   var ret = false;

@@ -45,6 +45,11 @@ export default class ViewPrompt extends React.Component {
     }).start();
   }
 
+  handleBack() {
+    this.props.route.params.onGoBack();
+    this.props.navigation.navigate('Prompts');
+  }
+
   showPrompt(prompt) {
     if (prompt.Prompt[0][0].PromptType == 0) {
       // Prompt is Text.
@@ -136,12 +141,13 @@ export default class ViewPrompt extends React.Component {
     if (prompt.Completed == 0) {
       var inserted = await createPromptResponse(prompt.Id, response);
       if (inserted == true) {
-        this.props.navigation.navigate('Prompts');
+        this.handleBack();
       } else {
         Alert.alert('There was a problem uploading your response! Please try again.');
       }
     } else {
       var updated = await updatePromptResponse(promptArr[0].Id, prompt.Id, response);
+      this.handleBack();
     }
   }
 
@@ -153,7 +159,7 @@ export default class ViewPrompt extends React.Component {
       return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
-            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
+            <IonIcon onPress={() => this.handleBack()}
               name='chevron-back' size={35}
               color={colors.blueGray} />
           </View>
@@ -178,7 +184,6 @@ export default class ViewPrompt extends React.Component {
             />
           </View>
           <View style={navStyles.right}>
-            <IonIcon name='person' size={25} color={colors.blueGray} />
           </View>
         </View>
         <View style={viewPromptStyles.promptContainer}>
@@ -220,7 +225,6 @@ export default class ViewPrompt extends React.Component {
             />
           </View>
           <View style={navStyles.right}>
-            <IonIcon name='person' size={25} color={colors.blueGray} />
           </View>
         </View>
         <View style={viewPromptStyles.mainContainer}>

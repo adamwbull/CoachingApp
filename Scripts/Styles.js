@@ -59,6 +59,107 @@ export const navStyles = StyleSheet.create({
   }
 });
 
+export const viewConceptStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContainer: {
+    backgroundColor:colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'90%',
+    marginLeft:'5%',
+    marginRight:'5%',
+    marginBottom:25
+  },
+  conceptContainer: {
+    width:'100%'
+  },
+  conceptInput: {
+    width:'100%',
+    textAlign:'center',
+    marginTop:20
+  },
+  conceptTitle: {
+    marginTop:85,
+    color:colors.darkGray,
+    textAlign:'center',
+    fontSize:27
+  },
+  conceptText: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:15
+  },
+});
+
+export const conceptsStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  conceptsTitle: {
+    marginTop:25,
+    color:colors.darkGray,
+    textAlign:'center',
+    marginBottom:15,
+    fontSize:40
+  },
+  emptyText: {
+    textAlign:'center',
+    fontSize:20,
+    color:colors.darkGray
+  },
+  conceptsTitle: {
+    marginTop:25,
+    color:colors.darkGray,
+    textAlign:'center',
+    marginBottom:15,
+    fontSize:40
+  },
+  conceptsContainer: {
+    width:'100%',
+  },
+  concept: {
+    backgroundColor:colors.white,
+    flexDirection:'row',
+    width:'94%',
+    marginLeft:'3%',
+    borderRadius:25,
+    padding:10,
+    marginBottom:20
+  },
+  conceptIconContainer: {
+    flex:2,
+    justifyContent:'center',
+    alignItems:'center',
+    borderRightColor:colors.clouds,
+    borderRightWidth:1,
+    marginRight:10,
+    padding:5
+  },
+  conceptBodyContainer: {
+    flex:8,
+    justifyContent:'center'
+  },
+  conceptOpenIcon: {
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  conceptHeader: {
+    color:colors.darkGray,
+    fontWeight:'500'
+  },
+  conceptInfo: {
+    color:colors.darkGray,
+    fontWeight:'300'
+  },
+})
+
 export const viewPromptStyles = StyleSheet.create({
   container: {
     backgroundColor: colors.clouds,
@@ -117,6 +218,11 @@ export const promptsStyles = StyleSheet.create({
     justifyContent: 'center',
     width:'100%',
     marginBottom:25
+  },
+  emptyText: {
+    textAlign:'center',
+    fontSize:20,
+    color:colors.darkGray
   },
   promptsTitle: {
     marginTop:25,
