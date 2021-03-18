@@ -187,7 +187,7 @@ export const viewPromptStyles = StyleSheet.create({
   container: {
     backgroundColor: colors.clouds,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   mainContainer: {
     backgroundColor:colors.white,
@@ -196,7 +196,9 @@ export const viewPromptStyles = StyleSheet.create({
     width:'90%',
     marginLeft:'5%',
     marginRight:'5%',
-    marginBottom:25
+    marginBottom:125,
+    marginTop:25,
+    borderRadius:25,
   },
   promptContainer: {
     width:'100%'
@@ -207,10 +209,10 @@ export const viewPromptStyles = StyleSheet.create({
     marginTop:20
   },
   promptTitle: {
-    marginTop:25,
     color:colors.darkGray,
     textAlign:'center',
     marginBottom:15,
+    marginTop:15,
     fontSize:27
   },
   promptText: {
