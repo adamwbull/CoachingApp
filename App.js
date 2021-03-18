@@ -17,7 +17,7 @@ import Concepts from './Scripts/Concepts.js';                   // Working
 import Messages from './Scripts/Messages.js';                   //
 import CoachIdCheck from './Scripts/CoachIdCheck.js';           // Working
 import OnboardingSurvey from './Scripts/OnboardingSurvey.js';   // Working
-import ViewConcept from './Scripts/ViewConcept.js';             // 
+import ViewConcept from './Scripts/ViewConcept.js';             //
 import ViewPrompt from './Scripts/ViewPrompt.js';               // Working
 import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';   //
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
@@ -76,7 +76,7 @@ function HomeStack() {
 
 const MyTheme = {
   colors: {
-    background:colors.white
+    background:colors.clouds
   }
 };
 

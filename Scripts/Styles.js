@@ -34,7 +34,8 @@ export const navStyles = StyleSheet.create({
     paddingBottom:10,
     paddingTop:15,
     borderBottomWidth:2,
-    borderBottomColor:colors.forest
+    borderBottomColor:colors.forest,
+    height:60
   },
   image: {
     flex: 1,
@@ -102,8 +103,7 @@ export const viewConceptStyles = StyleSheet.create({
     overflow:'hidden'
   },
   fileConceptContainer: {
-    backgroundColor:colors.white,
-    paddingTop:10
+    backgroundColor:colors.white
   },
   conceptTitle: {
     color:colors.darkGray,
@@ -314,7 +314,7 @@ export const homeStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width:'100%',
-    marginBottom:25
+    marginBottom:75
   },
   avatarContainer: {
     flexDirection:'column',

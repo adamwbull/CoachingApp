@@ -122,13 +122,15 @@ export default class Prompts extends React.Component {
       width:'100%',
       marginBottom:margin};
     }
-    return (<ScrollView contentContainerStyle={promptsStyles.container}>
-      <View style={mainContainerStyle}>
-        <NavProfileRight />
-        <Text style={promptsStyles.promptsTitle}>Prompts</Text>
-        {this.showPrompts(prompts)}
-      </View>
-    </ScrollView>);
+    return (<View>
+      <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
+      <ScrollView contentContainerStyle={promptsStyles.container}>
+        <View style={mainContainerStyle}>
+          <Text style={promptsStyles.promptsTitle}>Prompts</Text>
+          {this.showPrompts(prompts)}
+        </View>
+      </ScrollView>
+    </View>);
   }
 
 }

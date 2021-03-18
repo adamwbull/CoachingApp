@@ -9,6 +9,7 @@ import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { viewPromptStyles, navStyles, colors } from '../Scripts/Styles.js';
 import { sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
+import { NavProfileBack } from './TopNav.js';
 
 export default class ViewPrompt extends React.Component {
   constructor(props) {
@@ -47,75 +48,23 @@ export default class ViewPrompt extends React.Component {
     var prompt = this.state.prompt;
 
     if (prompt === false) {
-      return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
-        <View style={navStyles.nav}>
-          <View style={navStyles.left}>
-            <IonIcon onPress={() => this.handleBack()}
-              name='chevron-back' size={35}
-              color={colors.blueGray} />
-          </View>
-          <View style={navStyles.center}>
-            <Animated.Image
-              onLoad={this.onLoad}
-              source={require('../assets/nav-logo.png')}
-              style={[
-                {
-                  opacity: this.state.opacity,
-                  transform: [
-                    {
-                      scale: this.state.opacity.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.85, 1],
-                      })
-                    },
-                  ],
-                },
-                navStyles.image
-              ]}
-            />
-          </View>
-          <View style={navStyles.right}>
-          </View>
-        </View>
+      return (<View>
+        <NavProfileBack goBack={() => this.props.navigation.navigate('Prompts')} />
+        <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={viewPromptStyles.promptContainer}>
           <ActivityIndicator size="large" color={colors.forest} />
         </View>
-      </ScrollView>);
+      </ScrollView>
+      </View>);
     } else {
-      return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
-        <View style={navStyles.nav}>
-          <View style={navStyles.left}>
-            <IonIcon onPress={() => this.handleBack()}
-              name='chevron-back' size={35}
-              color={colors.blueGray} />
-          </View>
-          <View style={navStyles.center}>
-            <Animated.Image
-              onLoad={this.onLoad}
-              source={require('../assets/nav-logo.png')}
-              style={[
-                {
-                  opacity: this.state.opacity,
-                  transform: [
-                    {
-                      scale: this.state.opacity.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.85, 1],
-                      })
-                    },
-                  ],
-                },
-                navStyles.image
-              ]}
-            />
-          </View>
-          <View style={navStyles.right}>
-          </View>
-        </View>
+      return (<View>
+        <NavProfileBack goBack={() => this.props.navigation.navigate('Prompts')} />
+        <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={viewPromptStyles.promptContainer}>
           {this.showSurvey(prompt)}
         </View>
-      </ScrollView>);
+      </ScrollView>
+      </View>);
 
     }
 

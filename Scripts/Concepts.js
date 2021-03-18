@@ -57,7 +57,7 @@ export default class Concepts extends React.Component {
           if (concept.Concept[0][0].Type == 0) {
             // Concept is Text only.
             concept.IconName = 'bulb';
-          } else if (concept.Concept[0][0].Type == 3 || concept.Concept[0][0].Type == 6) {
+          } else if (concept.Concept[0][0].Type == 3) {
             // Concept includes File.
             concept.IconName = 'document';
           } else if (concept.Concept[0][0].Type == 1 || concept.Concept[0][0].Type == 2 || concept.Concept[0][0].Type == 4 || concept.Concept[0][0].Type == 5) {
@@ -102,13 +102,15 @@ export default class Concepts extends React.Component {
       width:'100%',
       marginBottom:margin};
     }
-    return (<ScrollView contentContainerStyle={conceptsStyles.container}>
-      <View style={mainContainerStyle}>
-        <NavProfileRight />
-        <Text style={conceptsStyles.conceptsTitle}>Concepts</Text>
-        {this.showConcepts(concepts)}
-      </View>
-    </ScrollView>);
+    return (<View>
+      <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
+      <ScrollView contentContainerStyle={conceptsStyles.container}>
+        <View style={mainContainerStyle}>
+          <Text style={conceptsStyles.conceptsTitle}>Concepts</Text>
+          {this.showConcepts(concepts)}
+        </View>
+      </ScrollView>
+    </View>);
   }
 
 }

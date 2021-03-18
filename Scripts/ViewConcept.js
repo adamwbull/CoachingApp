@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { windowWidth, windowHeight, viewConceptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
 import { WebView } from 'react-native-webview';
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { NavProfileBack } from './TopNav.js';
 
 const webViewScript = `
   setTimeout(function() {
@@ -111,7 +112,6 @@ export default class ViewConcept extends React.Component {
         var adjustedHeight = windowHeight - 25 - 1 - 22 - 20;
         return (<View style={viewConceptStyles.fileMainContainer}>
           <View style={viewConceptStyles.fileConceptContainer}>
-            <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
             <View style={{height: adjustedHeight}}>
               <WebView style={{flex:1,
               width:windowWidth,
@@ -204,34 +204,6 @@ export default class ViewConcept extends React.Component {
           </View>
         </View>
       </View>);
-    } else if (concept.Concept[0][0].Type == 6) {
-      // Text/File
-      return (<View style={viewConceptStyles.mainContainer}>
-        <View style={viewConceptStyles.conceptContainer}>
-          <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
-          <View style={{height: this.state.webHeight}}>
-            <WebView style={{flex:1,
-            width:feedMediaWidth,
-            marginBottom:10}}
-            originWhitelist={['*']}
-            scrollEnabled={false}
-            onMessage={event => {
-              this.setState({webHeight: parseInt(event.nativeEvent.data)});
-            }}
-            javaScriptEnabled={true}
-            useWebKit={true}
-            injectedJavaScript ={webViewScript}
-            domStorageEnabled={true}
-            source={{
-              html: `<head>
-              <meta name="viewport" content="width=device-width, initial-scale=1">
-              </head>
-              <body>${concept.Concept[0][0].RichText}</body>
-              </html>`
-            }}/>
-          </View>
-        </View>
-      </View>);
     }
   }
 
@@ -239,77 +211,25 @@ export default class ViewConcept extends React.Component {
 
     if (this.state.refreshing == false) {
       var concept = this.state.concept;
-      var scrollStyle = {};
+      var scrollStyle = {marginBottom:0,paddingBottom:0};
       if (concept.Concept[0][0].Type != 3 && concept.Concept[0][0].Type != 6) {
         scrollStyle = viewConceptStyles.container;
       }
-      return (<ScrollView contentContainerStyle={scrollStyle}>
-        <View style={navStyles.nav}>
-          <View style={navStyles.left}>
-            <IonIcon onPress={() => this.props.navigation.navigate('Concepts')}
-              name='chevron-back' size={35}
-              color={colors.blueGray} />
-          </View>
-          <View style={navStyles.center}>
-            <Animated.Image
-              onLoad={this.onLoad}
-              source={require('../assets/nav-logo.png')}
-              style={[
-                {
-                  opacity: this.state.opacity,
-                  transform: [
-                    {
-                      scale: this.state.opacity.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.85, 1],
-                      })
-                    },
-                  ],
-                },
-                navStyles.image
-              ]}
-            />
-          </View>
-          <View style={navStyles.right}>
-          </View>
-        </View>
+      return (<View>
+        <NavProfileBack goBack={() => this.props.navigation.navigate('Concepts')} />
+        <ScrollView contentContainerStyle={viewConceptStyles.container}>
         {this.showConcept(concept)}
-      </ScrollView>);
+      </ScrollView>
+      </View>);
     } else {
-      return (<ScrollView contentContainerStyle={viewConceptStyles.container}>
-        <View style={navStyles.nav}>
-          <View style={navStyles.left}>
-            <IonIcon onPress={() => this.props.navigation.navigate('Concepts')}
-              name='chevron-back' size={35}
-              color={colors.blueGray} />
-          </View>
-          <View style={navStyles.center}>
-            <Animated.Image
-              onLoad={this.onLoad}
-              source={require('../assets/nav-logo.png')}
-              style={[
-                {
-                  opacity: this.state.opacity,
-                  transform: [
-                    {
-                      scale: this.state.opacity.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.85, 1],
-                      })
-                    },
-                  ],
-                },
-                navStyles.image
-              ]}
-            />
-          </View>
-          <View style={navStyles.right}>
-          </View>
-        </View>
+      return (<View>
+        <NavProfileBack goBack={() => this.props.navigation.navigate('Concepts')} />
+        <ScrollView contentContainerStyle={viewConceptStyles.container}>
         <View style={viewConceptStyles.mainContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </View>
-      </ScrollView>);
+      </ScrollView>
+      </View>);
     }
 
   }

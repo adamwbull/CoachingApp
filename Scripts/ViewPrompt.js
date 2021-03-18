@@ -12,6 +12,7 @@ import { sqlToJsDate, parseSimpleDateText, createPromptResponse, updatePromptRes
 import { Input, Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
+import { NavProfileBack } from './TopNav.js';
 
 export default class ViewPrompt extends React.Component {
   constructor(props) {
@@ -197,54 +198,28 @@ export default class ViewPrompt extends React.Component {
       } else {
         buttonTitle = 'Update';
       }
-      return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
-        <View style={navStyles.nav}>
-          <View style={navStyles.left}>
-            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
-              name='chevron-back' size={35}
-              color={colors.blueGray} />
-          </View>
-          <View style={navStyles.center}>
-            <Animated.Image
-              onLoad={this.onLoad}
-              source={require('../assets/nav-logo.png')}
-              style={[
-                {
-                  opacity: this.state.opacity,
-                  transform: [
-                    {
-                      scale: this.state.opacity.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0.85, 1],
-                      })
-                    },
-                  ],
-                },
-                navStyles.image
-              ]}
+      return (<View>
+        <NavProfileBack goBack={() => this.props.navigation.navigate('Prompts')} />
+        <ScrollView componentContainerStyle={viewPromptStyles.container}>
+          <View style={viewPromptStyles.mainContainer}>
+            <Text style={viewPromptStyles.promptTitle}>{prompt.Prompt[0][0].Title}</Text>
+            {this.showPrompt(prompt)}
+            <Input
+              onChangeText={text => this.onTextChange(text)}
+              placeholder='Enter response here...'
+              value={this.state.response}
+              keyboardType='default'
+              multiline={true}
+              style={viewPromptStyles.promptInput}
             />
+            <Button
+            title={buttonTitle}
+            buttonStyle={viewPromptStyles.submitButton}
+            containerStyle={viewPromptStyles.submitButtonContainer}
+            onPress={() => this.handlePress(prompt)}/>
           </View>
-          <View style={navStyles.right}>
-          </View>
-        </View>
-        <View style={viewPromptStyles.mainContainer}>
-          <Text style={viewPromptStyles.promptTitle}>{prompt.Prompt[0][0].Title}</Text>
-          {this.showPrompt(prompt)}
-          <Input
-            onChangeText={text => this.onTextChange(text)}
-            placeholder='Enter response here...'
-            value={this.state.response}
-            keyboardType='default'
-            multiline={true}
-            style={viewPromptStyles.promptInput}
-          />
-          <Button
-          title={buttonTitle}
-          buttonStyle={viewPromptStyles.submitButton}
-          containerStyle={viewPromptStyles.submitButtonContainer}
-          onPress={() => this.handlePress(prompt)}/>
-        </View>
-      </ScrollView>);
+        </ScrollView>
+      </View>);
     }
   }
 
