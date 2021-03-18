@@ -31,7 +31,7 @@ export const navStyles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'flex-start',
     backgroundColor:colors.white,
-    padding:10,
+    paddingBottom:10,
     paddingTop:15,
     borderBottomWidth:2,
     borderBottomColor:colors.forest
@@ -92,6 +92,17 @@ export const viewConceptStyles = StyleSheet.create({
   conceptContainer: {
     backgroundColor:colors.white,
     borderRadius:25,
+    paddingTop:10
+  },
+  fileMainContainer: {
+    backgroundColor:colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:'100%',
+    overflow:'hidden'
+  },
+  fileConceptContainer: {
+    backgroundColor:colors.white,
     paddingTop:10
   },
   conceptTitle: {

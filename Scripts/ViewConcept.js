@@ -7,14 +7,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ActivityIndicator, ScrollView, Animated, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { viewConceptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
+import { windowWidth, windowHeight, viewConceptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
 import { WebView } from 'react-native-webview';
 import { Video, AVPlaybackStatus } from 'expo-av';
 
 const webViewScript = `
   setTimeout(function() {
     window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight);
-  }, 500);
+  }, 100s);
   true;
 `;
 
@@ -104,6 +104,30 @@ export default class ViewConcept extends React.Component {
       </View>);
     } else if (concept.Concept[0][0].Type == 3) {
       // File Only
+      var file = concept.Concept[0][0].File;
+      var fileType = file.split(/[#?]/)[0].split('.').pop().trim();;
+      if (fileType.toLowerCase() == 'pdf') {
+        var url = 'https://drive.google.com/viewerng/viewer?embedded=true&url=' + file;
+        var adjustedHeight = windowHeight - 25 - 1 - 22 - 20;
+        return (<View style={viewConceptStyles.fileMainContainer}>
+          <View style={viewConceptStyles.fileConceptContainer}>
+            <Text style={viewConceptStyles.conceptTitle}>{concept.Concept[0][0].Title}</Text>
+            <View style={{height: adjustedHeight}}>
+              <WebView style={{flex:1,
+              width:windowWidth,
+              height:adjustedHeight,
+              marginBottom:10}}
+              originWhitelist={['*']}
+              scrollEnabled={false}
+              javaScriptEnabled={true}
+              domStorageEnabled={true}
+              source={{
+                uri: url
+              }}/>
+            </View>
+          </View>
+        </View>);
+      }
     } else if (concept.Concept[0][0].Type == 4) {
       // Text/YT Video
       var feedMediaHeight = parseInt(feedMediaWidth*(9/16));
@@ -215,7 +239,11 @@ export default class ViewConcept extends React.Component {
 
     if (this.state.refreshing == false) {
       var concept = this.state.concept;
-      return (<ScrollView contentContainerStyle={viewConceptStyles.container}>
+      var scrollStyle = {};
+      if (concept.Concept[0][0].Type != 3 && concept.Concept[0][0].Type != 6) {
+        scrollStyle = viewConceptStyles.container;
+      }
+      return (<ScrollView contentContainerStyle={scrollStyle}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
             <IonIcon onPress={() => this.props.navigation.navigate('Concepts')}
