@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { onboardingStyles, colors } from '../Scripts/Styles.js';
-import { getSurveyArray, uploadResponses, updateOnboardingCompleted, checkSurveyCompleted, getOnboardingPayment, getOnboardingContract } from '../Scripts/API.js';
+import { getOnboardingSurveyArray, uploadResponses, updateOnboardingCompleted, checkSurveyCompleted, getOnboardingPayment, getOnboardingContract } from '../Scripts/API.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
 
@@ -32,7 +32,7 @@ export default class OnboardingSurvey extends React.Component {
       // Get CoachId and Coach's Onboarding Survey.
       coach = JSON.parse(await AsyncStorage.getItem('Coach'));
       client = JSON.parse(await AsyncStorage.getItem('Client'));
-      surveyCompleted = await checkSurveyCompleted(client.Id, client.Token);
+      surveyCompleted = await checkOnboardingSurveyCompleted(client.Id, client.Token);
       if (surveyCompleted) {
         if (coach.OnboardingType == 0) {
           // Update OnboardingCompleted for Client.
@@ -54,7 +54,7 @@ export default class OnboardingSurvey extends React.Component {
         }
       }
     } finally {
-      items = await getSurveyArray(coach.Id);
+      items = await getOnboardingSurveyArray(coach.Id);
       var res = [];
       // Build responses array.
       items.map((item, index) => {
@@ -221,7 +221,7 @@ export default class OnboardingSurvey extends React.Component {
       if (uploaded) {
         // Update local storage with new client.
         var client = JSON.parse(await AsyncStorage.getItem('Client'));
-        client.OnboardingId = 1;
+        client.OnboardingCompleted = 1;
         await AsyncStorage.setItem('Client', JSON.stringify(client));
         // Decide where to go next.
         var coach = this.state.coach;

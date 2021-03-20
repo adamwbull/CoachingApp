@@ -183,6 +183,41 @@ export const conceptsStyles = StyleSheet.create({
   },
 })
 
+export const viewPromptSurveyStyles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.clouds,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  promptContainer: {
+    width:'100%'
+  },
+  survey: {
+    marginLeft:'5%',
+    marginRight:'5%',
+    width:'90%',
+    marginTop:25,
+    marginBottom:100,
+    borderRadius:25,
+    backgroundColor:colors.white,
+    paddingLeft:10,
+    paddingRight:10,
+    paddingTop:10,
+    paddingBottom:10
+  },
+  completedTextView: {
+    backgroundColor:colors.forest,
+    borderRadius:25,
+    padding:10,
+    marginBottom:15
+  },
+  completedText: {
+    color:colors.white,
+    textAlign:'center',
+    fontSize:18,
+  }
+});
+
 export const viewPromptStyles = StyleSheet.create({
   container: {
     backgroundColor: colors.clouds,
@@ -213,7 +248,8 @@ export const viewPromptStyles = StyleSheet.create({
     textAlign:'center',
     marginBottom:15,
     marginTop:15,
-    fontSize:27
+    fontSize:28,
+    fontWeight:'500'
   },
   promptText: {
     textAlign:'center',
@@ -228,7 +264,7 @@ export const viewPromptStyles = StyleSheet.create({
   submitButton: {
     backgroundColor:btnColors.primary,
     padding:15
-  },
+  }
 })
 
 export const promptsStyles = StyleSheet.create({

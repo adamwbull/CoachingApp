@@ -27,7 +27,8 @@ import Welcome from './Scripts/Welcome.js';                     // Working
 import Register from './Scripts/Register.js';                   // Working
 import Contract from './Scripts/Contract.js';                   //
 import Payment from './Scripts/Payment.js';                     //
-                                                                // Working 8/16
+import ClientProfile from './Scripts/ClientProfile.js';         //
+                                                                // Working 8/17
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -103,6 +104,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='ViewMessageThread' component={ViewMessageThread} />
             <Stack.Screen name='VideoChat' component={VideoChat} />
             <Stack.Screen name='Schedule' component={Schedule} />
+            <Stack.Screen name='ClientProfile' component={ClientProfile} />
           </Stack.Navigator>
         </NavigationContainer>
     );

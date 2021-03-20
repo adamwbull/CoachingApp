@@ -78,6 +78,52 @@ export async function check() {
 
 }
 */
+
+export async function getSurveyResponses(surveyId, clientId, token) {
+
+  var ret = false;
+
+  console.log('Getting previous responses...');
+  const res = await fetch(url + '/survey-item-responses/' + surveyId + '/' + clientId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Responses received!');
+    ret = payload;
+  }
+
+  return ret;
+
+}
+export async function updatePromptAssoc(token, clientId, coachId, promptId) {
+
+  var ret = false;
+  var arr = {Token: token, ClientId:clientId, CoachId:coachId, Id:promptId};
+
+  console.log('Setting PromptAssoc as completed...');
+  const res = await fetch(url + '/prompt-assoc/mark-as-complete', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Set as completed!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function getConcepts(coachId, clientId) {
 
   var ret = false;
@@ -278,7 +324,7 @@ export async function getOnboardingPayment(coachId) {
 
 }
 
-export async function checkSurveyCompleted(clientId, token) {
+export async function checkOnboardingSurveyCompleted(clientId, token) {
 
   var ret = false;
 
@@ -519,7 +565,28 @@ export async function checkOnboardingId(id) {
 
 }
 
-export async function getSurveyArray(coachId) {
+export async function getSurveyArray(surveyId) {
+
+  var ret = false;
+
+  console.log('Getting survey items...');
+  const itemsRes = await fetch(url + '/survey-items/' + surveyId + '/' + key, {
+    method:'GET'
+  });
+
+  const itemsPayload = await itemsRes.json();
+
+  if (itemsPayload.length > 0) {
+    console.log('Items found!');
+    ret = JSON.parse(JSON.stringify(itemsPayload));
+  }
+
+
+  return ret;
+
+}
+
+export async function getOnboardingSurveyArray(coachId) {
 
   const surveyRes = await fetch(url + '/survey/onboarding/' + coachId + '/' + key, {
     method:'GET'
