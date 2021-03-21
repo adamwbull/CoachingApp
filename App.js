@@ -14,21 +14,24 @@ LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'
 import Home from './Scripts/Home.js';                           // Working
 import Prompts from './Scripts/Prompts.js';                     // Working
 import Concepts from './Scripts/Concepts.js';                   // Working
-import Messages from './Scripts/Messages.js';                   //
 import CoachIdCheck from './Scripts/CoachIdCheck.js';           // Working
 import OnboardingSurvey from './Scripts/OnboardingSurvey.js';   // Working
-import ViewConcept from './Scripts/ViewConcept.js';             //
+import ViewConcept from './Scripts/ViewConcept.js';             // Working
 import ViewPrompt from './Scripts/ViewPrompt.js';               // Working
-import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';   //
-import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
-import VideoChat from './Scripts/VideoChat.js';                 //
-import Schedule from './Scripts/Schedule.js';                   //
+import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';   // Working
 import Welcome from './Scripts/Welcome.js';                     // Working
 import Register from './Scripts/Register.js';                   // Working
+import ClientProfile from './Scripts/ClientProfile.js';         //
+import UpdateAvatar from './Scripts/UpdateAvatar.js';           //
+import ChangePassword from './Scripts/ChangePassword.js';       //
+import DeleteAccount from './Scripts/DeleteAccount.js';         //
+import Schedule from './Scripts/Schedule.js';                   //
 import Contract from './Scripts/Contract.js';                   //
 import Payment from './Scripts/Payment.js';                     //
-import ClientProfile from './Scripts/ClientProfile.js';         //
-                                                                // Working 8/17
+import Messages from './Scripts/Messages.js';                   //
+import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
+import VideoChat from './Scripts/VideoChat.js';                 //
+                                                                // Working 10/20
 
 // Create navigation controllers
 const Stack = createStackNavigator();
