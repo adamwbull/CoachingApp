@@ -79,6 +79,34 @@ export async function check() {
 }
 */
 
+export async function createBugReport(token, clientId, pageText, description) {
+
+  var ret = false;
+  var arr = {Token:token, ClientId:clientId, PageText:pageText, Description:description};
+
+  console.log(JSON.stringify(arr));
+  
+  console.log('Attempting bug report upload...');
+  const res = await fetch(url + '/bug-report/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Bug report uploaded.');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function getSurveyResponses(surveyId, clientId, token) {
 
   var ret = false;

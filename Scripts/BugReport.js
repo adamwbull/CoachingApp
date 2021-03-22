@@ -10,6 +10,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Button, Input, Icon } from 'react-native-elements';
 import { NavBack } from './TopNav.js';
 import { bugReport, colors } from '../Scripts/Styles.js';
+import { createBugReport } from '../Scripts/API.js';
+
 export default class extends React.Component {
   constructor(props) {
     super(props)
@@ -35,8 +37,8 @@ export default class extends React.Component {
   async handlePress() {
     var pageText = this.state.pageText;
     var description = this.state.description;
-    var client = JSON.parse(AsyncStorage.getItem('Client'));
-    var upload = createBugReport(client.Id, pageText, description);
+    var client = JSON.parse(await AsyncStorage.getItem('Client'));
+    var upload = await createBugReport(client.Token, client.Id, pageText, description);
     if (upload == true) {
       var message = 'Thank you for your help with CoachSync development, ' + client.FirstName + '!';
       Alert.alert(

@@ -21,12 +21,12 @@ import ViewPrompt from './Scripts/ViewPrompt.js';               // Working
 import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';   // Working
 import Welcome from './Scripts/Welcome.js';                     // Working
 import Register from './Scripts/Register.js';                   // Working
-import ClientProfile from './Scripts/ClientProfile.js';         //
+import ClientProfile from './Scripts/ClientProfile.js';         // Working
 import UpdateAvatar from './Scripts/UpdateAvatar.js';           //
 import ChangePassword from './Scripts/ChangePassword.js';       //
 import DeleteAccount from './Scripts/DeleteAccount.js';         //
 import Trophies from './Scripts/Trophies.js';                   //
-import BugReport from './Scripts/BugReport.js';                 //
+import BugReport from './Scripts/BugReport.js';                 // Working
 import FeatureRequest from './Scripts/FeatureRequest.js';       //
 import Schedule from './Scripts/Schedule.js';                   //
 import Contract from './Scripts/Contract.js';                   //
@@ -34,7 +34,7 @@ import Payment from './Scripts/Payment.js';                     //
 import Messages from './Scripts/Messages.js';                   //
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 10/23
+                                                                // Working 12/23
 
 // Create navigation controllers
 const Stack = createStackNavigator();
