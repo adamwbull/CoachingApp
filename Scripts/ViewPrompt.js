@@ -12,7 +12,7 @@ import { sqlToJsDate, parseSimpleDateText, createPromptResponse, updatePromptRes
 import { Input, Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
-import { NavProfileBack } from './TopNav.js';
+import { NavBack } from './TopNav.js';
 
 export default class ViewPrompt extends React.Component {
   constructor(props) {
@@ -199,7 +199,7 @@ export default class ViewPrompt extends React.Component {
         buttonTitle = 'Update';
       }
       return (<View>
-        <NavProfileBack goBack={() => this.props.navigation.navigate('Prompts')} />
+        <NavBack goBack={() => this.props.navigation.navigate('Prompts')} />
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
           <View style={viewPromptStyles.mainContainer}>
             <Text style={viewPromptStyles.promptTitle}>{prompt.Prompt[0][0].Title}</Text>

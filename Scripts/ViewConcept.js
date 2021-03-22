@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { windowWidth, windowHeight, viewConceptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
 import { WebView } from 'react-native-webview';
 import { Video, AVPlaybackStatus } from 'expo-av';
-import { NavProfileBack } from './TopNav.js';
+import { NavBack } from './TopNav.js';
 
 const webViewScript = `
   setTimeout(function() {
@@ -216,14 +216,14 @@ export default class ViewConcept extends React.Component {
         scrollStyle = viewConceptStyles.container;
       }
       return (<View>
-        <NavProfileBack goBack={() => this.props.navigation.navigate('Concepts')} />
+        <NavBack goBack={() => this.props.navigation.navigate('Concepts')} />
         <ScrollView contentContainerStyle={viewConceptStyles.container}>
         {this.showConcept(concept)}
       </ScrollView>
       </View>);
     } else {
       return (<View>
-        <NavProfileBack goBack={() => this.props.navigation.navigate('Concepts')} />
+        <NavBack goBack={() => this.props.navigation.navigate('Concepts')} />
         <ScrollView contentContainerStyle={viewConceptStyles.container}>
         <View style={viewConceptStyles.mainContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />

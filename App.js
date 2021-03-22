@@ -25,13 +25,16 @@ import ClientProfile from './Scripts/ClientProfile.js';         //
 import UpdateAvatar from './Scripts/UpdateAvatar.js';           //
 import ChangePassword from './Scripts/ChangePassword.js';       //
 import DeleteAccount from './Scripts/DeleteAccount.js';         //
+import Trophies from './Scripts/Trophies.js';                   //
+import BugReport from './Scripts/BugReport.js';                 //
+import FeatureRequest from './Scripts/FeatureRequest.js';       //
 import Schedule from './Scripts/Schedule.js';                   //
 import Contract from './Scripts/Contract.js';                   //
 import Payment from './Scripts/Payment.js';                     //
 import Messages from './Scripts/Messages.js';                   //
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 10/20
+                                                                // Working 10/23
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -108,6 +111,12 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='VideoChat' component={VideoChat} />
             <Stack.Screen name='Schedule' component={Schedule} />
             <Stack.Screen name='ClientProfile' component={ClientProfile} />
+            <Stack.Screen name='UpdateAvatar' component={UpdateAvatar} />
+            <Stack.Screen name='ChangePassword' component={ChangePassword} />
+            <Stack.Screen name='DeleteAccount' component={DeleteAccount} />
+            <Stack.Screen name='Trophies' component={Trophies} />
+            <Stack.Screen name='BugReport' component={BugReport} />
+            <Stack.Screen name='FeatureRequest' component={FeatureRequest} />
           </Stack.Navigator>
         </NavigationContainer>
     );

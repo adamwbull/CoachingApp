@@ -120,9 +120,7 @@ export default class Register extends React.Component {
         password + parseDateText(created)
       );
 
-      var avatarBackgroundColors = ['2ecc71', '3498db', 'e74c3c', 'f1c40f', '48dbfb', 'a29bfe'];
-      var randomNumber = Math.floor(Math.random()*avatarBackgroundColors.length);
-      var avatar = 'https://ui-avatars.com/api/?size=128&font-size=0.6&background=' + avatarBackgroundColors[randomNumber] + '&name=' + firstName + '+' + lastName;
+      var avatar = 'https://coachsync.me/assets/img/default.png';
 
       var client = {Token:token, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
 

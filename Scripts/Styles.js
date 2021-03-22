@@ -25,6 +25,67 @@ export const btnColors = {
   info:'#48dbfb',
 }
 
+export const defaultClientLevels = [
+  {
+    title: ''
+  },
+];
+
+export const levelScale = {
+  baseColor: '',
+  completeColor: ''
+}
+
+export const bugReport = StyleSheet.create({
+  container: {
+    width:'100%',
+    height:windowHeight
+  },
+  form: {
+    width:'92%',
+    backgroundColor:colors.white,
+    marginLeft:'4%',
+    marginRight:'4%',
+    marginBottom:25,
+    marginTop:25,
+    borderRadius:25,
+    padding:10,
+    textAlign:'center',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  title: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:28,
+    marginBottom:10
+  },
+  inputLabel: {
+    textAlign:'left',
+    width:'100%',
+    fontSize:18,
+    fontWeight:'500',
+    color:colors.darkGray
+  },
+  description: {
+    textAlign:'left',
+    width:'100%',
+    fontSize:14,
+    fontWeight:'300',
+    color:colors.darkGray,
+    marginBottom:10
+  },
+  submitButtonContainer:{
+    width:'60%',
+    marginBottom:50,
+    borderRadius:25
+  },
+  submitButton: {
+    backgroundColor:btnColors.primary,
+    padding:15
+  }
+})
+
 export const navStyles = StyleSheet.create({
   nav: {
     width:'100%',
@@ -60,6 +121,88 @@ export const navStyles = StyleSheet.create({
     alignItems:'center'
   }
 });
+
+export const clientProfileStyles = StyleSheet.create({
+  container: {
+    width:'100%',
+    height:windowHeight
+  },
+  button: {
+    backgroundColor:btnColors.danger,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  buttonContainer: {
+    marginTop:20,
+    marginLeft:'25%',
+    width:'50%',
+    borderRadius:50
+  },
+  avatarContainer: {
+    width:'96%',
+    marginLeft:'2%',
+    marginRight:'2%',
+    marginTop:25,
+    marginBottom:15,
+    backgroundColor:colors.white,
+    borderRadius:80,
+    flex:1,
+    flexDirection:'row'
+  },
+  avatarLeft: {
+    flex:2,
+    justifyContent:'center',
+    alignItems:'center',
+    marginLeft:10,
+    marginTop:10,
+    marginBottom:10
+  },
+  userInfo: {
+    flex:5,
+    marginLeft:10,
+    justifyContent:'center'
+  },
+  userName: {
+    fontSize:22,
+    fontWeight:'500'
+  },
+  userCreated: {
+    fontSize:14,
+    fontWeight:'300'
+  },
+  listItemsTitle: {
+    marginLeft:'2%',
+    fontSize:20,
+    marginBottom:10,
+    marginTop:10,
+    fontWeight:'500',
+    color:colors.darkGray,
+  },
+  trophyContainer: {
+    flex:2,
+    justifyContent:'center',
+    alignItems:'center',
+    marginRight:15
+  },
+  trophyText: {
+    color:btnColors.caution,
+    textAlign:'center',
+    fontSize:10
+  },
+  listItems: {
+    width:'100%'
+  },
+  versionContainer: {
+    marginTop:40
+  },
+  versionText: {
+    textAlign:'center',
+    fontWeight:'300'
+  }
+})
 
 export const viewConceptStyles = StyleSheet.create({
   container: {

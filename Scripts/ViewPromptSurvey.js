@@ -9,7 +9,7 @@ import { Alert, AsyncStorage, ActivityIndicator, Animated, ScrollView, StyleShee
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { viewPromptStyles, onboardingStyles, viewPromptSurveyStyles, navStyles, colors } from '../Scripts/Styles.js';
 import { updatePromptAssoc, getSurveyResponses, getSurveyArray, uploadResponses, sqlToJsDate, parseDateText } from '../Scripts/API.js';
-import { NavProfileBack } from './TopNav.js';
+import { NavBack } from './TopNav.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
 
@@ -304,7 +304,7 @@ export default class ViewPrompt extends React.Component {
 
     if (prompt === false) {
       return (<View>
-        <NavProfileBack goBack={() => this.props.navigation.navigate('Prompts')} />
+        <NavBack goBack={() => this.props.navigation.navigate('Prompts')} />
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={viewPromptStyles.promptContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
@@ -313,7 +313,7 @@ export default class ViewPrompt extends React.Component {
       </View>);
     } else {
       return (<View>
-        <NavProfileBack goBack={() => this.props.navigation.navigate('Prompts')} />
+        <NavBack goBack={() => this.props.navigation.navigate('Prompts')} />
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={viewPromptStyles.promptContainer}>
           {this.showSurvey(prompt)}

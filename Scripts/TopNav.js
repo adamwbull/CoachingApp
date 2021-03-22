@@ -57,7 +57,7 @@ export class NavProfileRight extends React.Component {
   }
 }
 
-export class NavProfileBack extends React.Component {
+export class NavBack extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
