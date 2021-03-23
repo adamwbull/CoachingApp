@@ -7,7 +7,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from './Scripts/Styles.js';
-import { LogBox } from 'react-native';
 
 // Import Scripts
 import Home from './Scripts/Home.js';                           // Working
@@ -24,7 +23,7 @@ import ClientProfile from './Scripts/ClientProfile.js';         // Working
 import UpdateAvatar from './Scripts/UpdateAvatar.js';           // Working
 import BugReport from './Scripts/BugReport.js';                 // Working
 import FeatureRequest from './Scripts/FeatureRequest.js';       // Working
-import ChangePassword from './Scripts/ChangePassword.js';       //
+import ChangePassword from './Scripts/ChangePassword.js';       // Working
 import DeleteAccount from './Scripts/DeleteAccount.js';         //
 import Trophies from './Scripts/Trophies.js';                   //
 import Schedule from './Scripts/Schedule.js';                   //
@@ -33,7 +32,7 @@ import Payment from './Scripts/Payment.js';                     //
 import Messages from './Scripts/Messages.js';                   //
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 13/23
+                                                                // Working 15/23
 
 // Create navigation controllers
 const Stack = createStackNavigator();

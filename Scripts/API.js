@@ -79,6 +79,32 @@ export async function check() {
 }
 */
 
+export async function updatePassword(id, token, password) {
+
+  var ret = false;
+  var arr = {Token:token, NewPassword:password, Id:id};
+
+  console.log('Updating password...');
+  const res = await fetch(url + '/user/update-password', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Password updated!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function refreshUser(token) {
 
   var ret = false;
