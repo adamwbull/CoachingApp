@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { clientProfileStyles, colors, btnColors } from '../Scripts/Styles.js';
 import { NavBack } from './TopNav.js';
 import { Button, ListItem, Icon } from 'react-native-elements';
-import { sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
+import { sqlToJsDate, parseSimpleDateText, refreshUser } from '../Scripts/API.js';
 
 export default class ClientProfile extends React.Component {
   constructor(props) {
@@ -18,6 +18,7 @@ export default class ClientProfile extends React.Component {
     this.state = {
       refreshing: true,
       opacity: new Animated.Value(0),
+      client: {}
     };
   }
 
@@ -44,6 +45,21 @@ export default class ClientProfile extends React.Component {
           this.props.navigation.navigate('Welcome');
         }}
       ]);
+  }
+
+  async getData() {
+    var client = this.state.client;
+    var updated = {};
+    try {
+      updated = await refreshUser(client.Token);
+      if (updated.Id != undefined) {
+        await AsyncStorage.setItem('Client', JSON.stringify(updated));
+        console.log('New user data saved.');
+      }
+    } finally {
+      this.setState({client:updated});
+    }
+
   }
 
   async componentDidMount() {
@@ -73,7 +89,7 @@ export default class ClientProfile extends React.Component {
         {
           title: 'Update Avatar',
           icon: 'image',
-          function: () => this.props.navigation.navigate('UpdateAvatar')
+          function: () => this.props.navigation.navigate('UpdateAvatar', { onGoBack: () => this.getData() })
         },
         {
           title: 'Change Password',

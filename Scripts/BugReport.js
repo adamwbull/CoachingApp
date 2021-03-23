@@ -12,7 +12,7 @@ import { NavBack } from './TopNav.js';
 import { bugReport, colors } from '../Scripts/Styles.js';
 import { createBugReport } from '../Scripts/API.js';
 
-export default class extends React.Component {
+export default class BugReport extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

@@ -36,6 +36,50 @@ export const levelScale = {
   completeColor: ''
 }
 
+export const updateAvatar = StyleSheet.create({
+  imageSelectButtonLeft: {
+    flex:1,
+    alignItems:'center',
+    backgroundColor:colors.white,
+    marginLeft:10,
+    marginRight:5,
+    marginBottom:10,
+    borderRadius:25,
+    borderWidth:2,
+    borderColor:colors.forest,
+    padding:10
+  },
+  imageSelectButtonRight: {
+    flex:1,
+    alignItems:'center',
+    backgroundColor:colors.white,
+    marginLeft:5,
+    marginRight:10,
+    marginBottom:10,
+    borderRadius:25,
+    borderWidth:2,
+    borderColor:colors.forest,
+    padding:10,
+  },
+  text: {
+    textAlign:'center',
+    fontSize:20,
+    color:colors.darkGray
+  },
+  submitButton: {
+    backgroundColor:btnColors.primary,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  submitButtonContainer: {
+    marginBottom:25,
+    width:'50%',
+    borderRadius:50
+  },
+})
 export const bugReport = StyleSheet.create({
   container: {
     width:'100%',
@@ -57,7 +101,7 @@ export const bugReport = StyleSheet.create({
   title: {
     textAlign:'center',
     color:colors.darkGray,
-    fontSize:28,
+    fontSize:35,
     marginBottom:10
   },
   inputLabel: {
@@ -77,7 +121,7 @@ export const bugReport = StyleSheet.create({
   },
   submitButtonContainer:{
     width:'60%',
-    marginBottom:50,
+    marginBottom:10,
     borderRadius:25
   },
   submitButton: {
