@@ -738,6 +738,21 @@ export const welcomeStyles = StyleSheet.create({
     width:'90%',
     height:'20%'
   },
+  refreshingContainer: {
+    backgroundColor:colors.clouds,
+    width:'100%',
+    height:windowHeight
+  },
+  refreshingImage: {
+    position: 'absolute',
+    top: '40%',
+    left: '5%',
+    bottom: 0,
+    right: 0,
+    flex:1,
+    width:'90%',
+    height:'20%'
+  },
   mainTitle: {
     fontSize:35,
     textAlign:'center',

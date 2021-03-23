@@ -12,11 +12,13 @@ import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
 import { loginCheck, getCoach } from '../Scripts/API.js';
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
 export default class Welcome extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      refreshing : false,
+      refreshing: true,
       opacity: new Animated.Value(0),
       email: '',
       password: '',
@@ -27,15 +29,20 @@ export default class Welcome extends React.Component {
   componentDidMount = () => AsyncStorage.getItem('Client').then((val) => this.handleValue(val));
 
   async handleValue(val) {
+    await delay(1000);
     if (val !== null) {
       var client = JSON.parse(val);
       if (client.OnboardingCompleted === 0) {
         this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
+        this.setState({refreshing:false});
       } else {
         var coach = await getCoach(client.CoachId, client.Token);
         await AsyncStorage.setItem('Coach', JSON.stringify(coach));
         this.props.navigation.navigate('Main');
+        this.setState({refreshing:false});
       }
+    } else {
+      this.setState({refreshing:false});
     }
   }
 
@@ -89,63 +96,88 @@ export default class Welcome extends React.Component {
 
   render() {
 
-    return (<ScrollView style={welcomeStyles.trueContainer}>
-      <Animated.Image
-        onLoad={this.onLoad}
-        source={require('../assets/coachsync-logo-dark.png')}
-        resizeMode="contain"
-        style={[
-          {
-            opacity: this.state.opacity,
-            transform: [
-              {
-                scale: this.state.opacity.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.85, 1],
-                })
-              },
-            ],
-          },
-          welcomeStyles.image
-        ]}
-      />
-      <View style={welcomeStyles.container}>
-        <Text style={welcomeStyles.mainTitle}>Sign In</Text>
-        <Text style={welcomeStyles.errorText}>{this.state.errorText}</Text>
-        <Input
-          onChangeText={text => this.onChange(0, text)}
-          label='Email Address'
-          leftIcon={{ type: 'font-awesome', name: 'envelope-square', color:colors.darkGray }}
-          placeholder='you@example.com'
-          leftIconContainerStyle={welcomeStyles.inputContainerEmail}
-          value={this.state.email}
-          keyboardType='email-address'
+    if (this.state.refreshing === true) {
+      var image = (colors.white == '#ffffff') ? require('../assets/splash.png') : require('../assets/coachsync-logo-dark.png');
+      return(<View style={welcomeStyles.refreshingContainer}>
+        <Animated.Image
+          onLoad={this.onLoad}
+          source={image}
+          resizeMode="contain"
+          style={[
+            {
+              opacity: this.state.opacity,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            },
+            welcomeStyles.refreshingImage
+          ]}
         />
-        <Input
-          onChangeText={text => this.onChange(1, text)}
-          label='Password'
-          leftIcon={{ type: 'font-awesome', name: 'lock', color:colors.darkGray }}
-          placeholder='Password...'
-          leftIconContainerStyle={welcomeStyles.inputContainer}
-          value={this.state.password}
-          secureTextEntry={true}
-          keyboardType='default'
+      </View>);
+    } else {
+      return (<ScrollView style={welcomeStyles.trueContainer}>
+        <Animated.Image
+          onLoad={this.onLoad}
+          source={require('../assets/coachsync-logo-dark.png')}
+          resizeMode="contain"
+          style={[
+            {
+              opacity: this.state.opacity,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            },
+            welcomeStyles.image
+          ]}
         />
-        <Button
-        title='Submit'
-        buttonStyle={welcomeStyles.submitButton}
-        containerStyle={welcomeStyles.submitButtonContainer}
-        onPress={() => this.handlePress()} />
-        <Text style={welcomeStyles.registerText}>
-          No account?
-        </Text>
-        <Text
-        onPress={() => this.props.navigation.navigate('Register')}
-        style={welcomeStyles.registerLink}>
-        Take onboarding survey here!
-        </Text>
-      </View>
-    </ScrollView>);
+        <View style={welcomeStyles.container}>
+          <Text style={welcomeStyles.mainTitle}>Sign In</Text>
+          <Text style={welcomeStyles.errorText}>{this.state.errorText}</Text>
+          <Input
+            onChangeText={text => this.onChange(0, text)}
+            label='Email Address'
+            leftIcon={{ type: 'font-awesome', name: 'envelope-square', color:colors.darkGray }}
+            placeholder='you@example.com'
+            leftIconContainerStyle={welcomeStyles.inputContainerEmail}
+            value={this.state.email}
+            keyboardType='email-address'
+          />
+          <Input
+            onChangeText={text => this.onChange(1, text)}
+            label='Password'
+            leftIcon={{ type: 'font-awesome', name: 'lock', color:colors.darkGray }}
+            placeholder='Password...'
+            leftIconContainerStyle={welcomeStyles.inputContainer}
+            value={this.state.password}
+            secureTextEntry={true}
+            keyboardType='default'
+          />
+          <Button
+          title='Submit'
+          buttonStyle={welcomeStyles.submitButton}
+          containerStyle={welcomeStyles.submitButtonContainer}
+          onPress={() => this.handlePress()} />
+          <Text style={welcomeStyles.registerText}>
+            No account?
+          </Text>
+          <Text
+          onPress={() => this.props.navigation.navigate('Register')}
+          style={welcomeStyles.registerLink}>
+          Take onboarding survey here!
+          </Text>
+        </View>
+      </ScrollView>);
+    }
   }
 
 }
