@@ -87,7 +87,7 @@ export default class ChangePassword extends React.Component {
           } else {
             Alert.alert(
               "Update Failed",
-              "There was an error connecting to the CoachSync servers. Please try again later.",
+              "There was an error connecting to the CoachSync servers. Please try again later, or reach out to support if this issue continues.",
               [
                 {
                   text: "OK",

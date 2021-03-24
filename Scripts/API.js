@@ -79,6 +79,32 @@ export async function check() {
 }
 */
 
+export async function deleteUser(id, token, password) {
+
+  var ret = false;
+  var arr = {Id:id, Token:token, Password:password};
+
+  console.log('Attempting user deletion...');
+  const res = await fetch(url + '/user/delete', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Deletion successful!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function updatePassword(id, token, password) {
 
   var ret = false;
@@ -589,6 +615,7 @@ export async function getCoach(coachId, token) {
   var ret = false;
 
   console.log('Getting coach info...');
+  console.log(url + '/user/coach/' + coachId + '/' + token);
   const res = await fetch(url + '/user/coach/' + coachId + '/' + token, {
     method:'GET'
   });
@@ -655,13 +682,14 @@ export async function userInPair(coachId, clientId, token) {
 
   var ret = false;
   console.log('Checking if user is in pair...');
+  console.log(url + '/user/client/pair/' + coachId + '/' + clientId + '/' + token);
   const res = await fetch(url + '/user/client/pair/' + coachId + '/' + clientId + '/' + token, {
     method:'GET'
   });
 
   const payload = await res.json();
 
-  if (payload[0]["CoachId"] === -1) {
+  if (payload.length == 0) {
     console.log('User is not in pair!');
     ret = true;
   } else {

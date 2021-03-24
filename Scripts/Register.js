@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { registerStyles, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
-import { key, createAccount, parseDateText, parseSimpleDateText, validateEmail, emailCheck, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
+import { refreshUser, key, createAccount, parseDateText, parseSimpleDateText, validateEmail, emailCheck, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -122,6 +122,14 @@ export default class Register extends React.Component {
 
       var avatar = 'https://coachsync.me/assets/img/default.png';
 
+      var pad = function(num) { return ('00'+num).slice(-2) };
+      dob = dob.getUTCFullYear()         + '-' +
+            pad(dob.getUTCMonth() + 1)  + '-' +
+            pad(dob.getUTCDate())       + ' ' +
+            pad(dob.getUTCHours())      + ':' +
+            pad(dob.getUTCMinutes())    + ':' +
+            pad(dob.getUTCSeconds());
+
       var client = {Token:token, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
 
       var passed = await createAccount(client);
@@ -131,7 +139,7 @@ export default class Register extends React.Component {
         errors.push('Server connection failed. Please try again.');
         this.setState({errors:errors});
       } else {
-        client.Id = passed;
+        client = await refreshUser(client.Token);
         await AsyncStorage.setItem('Client', JSON.stringify(client));
         console.log("Creation completed.");
         this.props.navigation.navigate('CoachIdCheck', { name: firstName, id: passed, token: token });

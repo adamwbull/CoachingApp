@@ -234,24 +234,13 @@ export default class Home extends React.Component {
 
     var coach = this.state.coach;
 
-    if (this.state.refreshing == true) {
-      return (<View>
-        <NavProfileRight />
-        <ScrollView contentContainerStyle={{alignItems: 'center',
-        justifyContent: 'center',backgroundColor:colors.clouds,paddingBottom:windowHeight}}>
-          <Text style={homeStyles.coachTitle}>Your Coach</Text>
-          <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
-        </ScrollView>
-      </View>);
-    } else {
-      return (<View>
-        <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
-        <ScrollView contentContainerStyle={homeStyles.container}>
-          <Text style={homeStyles.coachTitle}>Your Coach</Text>
-          {this.getCoach(coach)}
-        </ScrollView>
-      </View>);
-    }
+    return (<View>
+      <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
+      <ScrollView contentContainerStyle={homeStyles.container}>
+        <Text style={homeStyles.coachTitle}>Your Coach</Text>
+        {this.getCoach(coach)}
+      </ScrollView>
+    </View>);
 
   }
 

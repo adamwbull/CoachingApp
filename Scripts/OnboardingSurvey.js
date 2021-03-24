@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { onboardingStyles, colors } from '../Scripts/Styles.js';
-import { getOnboardingSurveyArray, uploadResponses, updateOnboardingCompleted, checkSurveyCompleted, getOnboardingPayment, getOnboardingContract } from '../Scripts/API.js';
+import { getOnboardingSurveyArray, uploadResponses, updateOnboardingCompleted, checkOnboardingSurveyCompleted, getOnboardingPayment, getOnboardingContract } from '../Scripts/API.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
 

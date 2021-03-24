@@ -32,6 +32,7 @@ export default class Welcome extends React.Component {
     await delay(1000);
     if (val !== null) {
       var client = JSON.parse(val);
+      console.log(client);
       if (client.OnboardingCompleted === 0) {
         this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
         this.setState({refreshing:false});

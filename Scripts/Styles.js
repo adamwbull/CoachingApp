@@ -36,6 +36,53 @@ export const levelScale = {
   completeColor: ''
 }
 
+export const deleteAccountStyles = StyleSheet.create({
+  form: {
+    marginTop:25,
+    marginLeft:'3%',
+    marginRight:'3%',
+    width:'94%',
+    backgroundColor:colors.white,
+    borderRadius:25,
+    padding:10
+  },
+  title: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:35,
+    marginBottom:10
+  },
+  errorText: {
+    marginBottom:5,
+    textAlign:'center',
+    color:btnColors.danger,
+    fontSize:16
+  },
+  lastUpdatedText: {
+    marginBottom:5,
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:16
+  },
+  submitButton: {
+    backgroundColor:btnColors.danger,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  submitButtonContainer: {
+    marginBottom:10,
+    width:'50%',
+    borderRadius:50,
+    marginLeft:'25%'
+  },
+  iconStyle: {
+    marginRight:5
+  }
+});
+
 export const changePassword = StyleSheet.create({
   form: {
     marginTop:25,
@@ -81,7 +128,8 @@ export const changePassword = StyleSheet.create({
   iconStyle: {
     marginRight:5
   }
-})
+});
+
 export const updateAvatar = StyleSheet.create({
   imageSelectButtonLeft: {
     flex:1,
