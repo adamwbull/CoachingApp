@@ -45,7 +45,7 @@ export default class CoachIdCheck extends React.Component {
       this.setState({modalVisible:false});
       var notInPair = JSON.parse(await userInPair(ret.Id, this.props.route.params.id, this.props.route.params.token));
       if (notInPair) {
-        await createPair(ret.Id, this.props.route.params.id, this.props.route.params.token);
+        var created = await createPair(ret.Id, this.props.route.params.id, this.props.route.params.token);
       }
       await AsyncStorage.setItem('Coach', JSON.stringify(ret));
       this.props.navigation.navigate('OnboardingSurvey');

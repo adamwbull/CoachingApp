@@ -71,6 +71,7 @@ export default class DeleteAccount extends React.Component {
   async delete(password, client) {
     var deleted = await deleteUser(client.Id, client.Token, password);
     if (deleted == true) {
+      await AsyncStorage.clear();
       this.props.navigation.navigate('Welcome');
     } else {
       Alert.alert(

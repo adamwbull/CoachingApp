@@ -669,9 +669,27 @@ export async function createPair(coachId, clientId, token) {
 
   const payload = await res.json();
 
-  if (payload.rowsAffected == 1) {
+  if (payload.affectedRows == 1) {
     console.log("User updated!");
-    ret = true;
+    console.log("Attempting TrophyAssocs creations...");
+
+    var trophyArr = {CoachId:coachId, ClientId:clientId, Token:token};
+    const trophyRes = await fetch(url + '/trophy-assocs/create', {
+      method:'POST',
+      body: JSON.stringify(trophyArr),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const trophyPayload = await trophyRes.json();
+
+    if (trophyPayload.Success === true) {
+      console.log('TrophyAssocs created!');
+      ret = true;
+    }
+
   }
 
   return ret;

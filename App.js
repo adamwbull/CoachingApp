@@ -24,7 +24,7 @@ import UpdateAvatar from './Scripts/UpdateAvatar.js';           // Working
 import BugReport from './Scripts/BugReport.js';                 // Working
 import FeatureRequest from './Scripts/FeatureRequest.js';       // Working
 import ChangePassword from './Scripts/ChangePassword.js';       // Working
-import DeleteAccount from './Scripts/DeleteAccount.js';         //
+import DeleteAccount from './Scripts/DeleteAccount.js';         // Working
 import Trophies from './Scripts/Trophies.js';                   //
 import Schedule from './Scripts/Schedule.js';                   //
 import Contract from './Scripts/Contract.js';                   //
@@ -32,7 +32,7 @@ import Payment from './Scripts/Payment.js';                     //
 import Messages from './Scripts/Messages.js';                   //
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 15/23
+                                                                // Working 16/23
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -48,8 +48,8 @@ function HomeStack() {
 
                 if (route.name === 'Home') {
                     iconName = focused
-                    ? 'ios-home'
-                    : 'ios-home';
+                    ? 'home'
+                    : 'home';
                 } else if (route.name === 'Prompts') {
                   iconName = focused ? 'compass' : 'compass';
                 } else if (route.name === 'Concepts') {
