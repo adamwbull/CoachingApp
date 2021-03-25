@@ -105,7 +105,7 @@ export default class Welcome extends React.Component {
         "Bending the spoon...",
         "Don't think of purple hippos...",
         "Would you like fries with that?",
-        "Go ahead -- hold your breath!",
+        "Go ahead - hold your breath!",
         "At least you're not on hold...",
         "Powering up lemons...",
         "Enjoying a code smoothie...",
