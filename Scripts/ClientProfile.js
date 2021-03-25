@@ -10,7 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { clientProfileStyles, colors, btnColors } from '../Scripts/Styles.js';
 import { NavBack } from './TopNav.js';
 import { Button, ListItem, Icon } from 'react-native-elements';
-import { sqlToJsDate, parseSimpleDateText, refreshUser } from '../Scripts/API.js';
+import { sqlToJsDate, parseSimpleDateText, refreshUser, getTrophyAssocs } from '../Scripts/API.js';
 
 export default class ClientProfile extends React.Component {
   constructor(props) {
@@ -18,7 +18,8 @@ export default class ClientProfile extends React.Component {
     this.state = {
       refreshing: true,
       opacity: new Animated.Value(0),
-      client: {}
+      client: {},
+      trophies: []
     };
   }
 
@@ -41,7 +42,7 @@ export default class ClientProfile extends React.Component {
           style: "cancel"
         },
         { text: "Yes", onPress: () => {
-          AsyncStorage.clear()
+          AsyncStorage.clear();
           this.props.navigation.navigate('Welcome');
         }}
       ]);
@@ -54,7 +55,6 @@ export default class ClientProfile extends React.Component {
       updated = await refreshUser(client.Token);
       if (updated.Id != undefined) {
         await AsyncStorage.setItem('Client', JSON.stringify(updated));
-        console.log('New user data saved.');
       }
     } finally {
       this.setState({client:updated});
@@ -64,7 +64,9 @@ export default class ClientProfile extends React.Component {
 
   async componentDidMount() {
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
-    this.setState({client:client,refreshing:false});
+    var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
+    var trophies = await getTrophyAssocs(client.Id, coach.Id, client.Token);
+    this.setState({client:client,trophies:trophies,refreshing:false});
   }
 
   render() {
@@ -80,11 +82,13 @@ export default class ClientProfile extends React.Component {
     } else {
 
       var client = this.state.client;
+      var trophies = this.state.trophies;
       var joined = parseSimpleDateText(sqlToJsDate(client.Created));
       var name = client.FirstName + ' ' + client.LastName;
       var year = new Date();
       year = year.getFullYear();
 
+      // Build Buttons.
       const generalSettings = [
         {
           title: 'Update Avatar',
@@ -116,6 +120,14 @@ export default class ClientProfile extends React.Component {
         }
       ]
 
+      // Calculate trophy values to display.
+      var trophiesCompleted = 0;
+      var totalTrophies = trophies.length;
+
+      for (var i = 0; i < totalTrophies; i++) {
+        trophiesCompleted += (trophies[i].Completed === 1) ? 1 : 0;
+      }
+
       return (<View style={clientProfileStyles.container}>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView>
@@ -146,9 +158,9 @@ export default class ClientProfile extends React.Component {
               <Text style={clientProfileStyles.userName}>{name}</Text>
               <Text style={clientProfileStyles.userCreated}>Joined {joined}</Text>
             </View>
-            <TouchableOpacity style={clientProfileStyles.trophyContainer} onPress={() => this.props.navigation.navigate('Trophies')}>
+            <TouchableOpacity style={clientProfileStyles.trophyContainer} onPress={() => this.props.navigation.navigate('Trophies', { trophies: trophies, trophiesCompleted:trophiesCompleted, totalTrophies:totalTrophies })}>
                 <IonIcon name='trophy' size={30} color={btnColors.caution} />
-                <Text style={clientProfileStyles.trophyText}>0/9 Trophies</Text>
+                <Text style={clientProfileStyles.trophyText}>{trophiesCompleted}/{totalTrophies}</Text>
             </TouchableOpacity>
           </View>
           <Text style={clientProfileStyles.listItemsTitle}>General Settings</Text>

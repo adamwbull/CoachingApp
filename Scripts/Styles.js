@@ -36,6 +36,61 @@ export const levelScale = {
   completeColor: ''
 }
 
+export const trophiesStyles = StyleSheet.create({
+  container: {
+    width:'100%',
+    height:windowHeight
+  },
+  mainContainer: {
+    marginLeft:'3%',
+    marginRight:'3%',
+    marginTop:25,
+    marginBottom:25,
+    backgroundColor:colors.white,
+    borderRadius:25,
+    width:'94%',
+    padding:10,
+  },
+  title: {
+    fontSize:30,
+    color:colors.darkGray,
+    textAlign:'center',
+  },
+  completedCount: {
+    fontSize:20,
+    color:btnColors.caution,
+    fontWeight:'500',
+    textAlign:'center'
+  },
+  trophyItem: {
+    flexDirection:'row',
+    padding:10,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  trophyImage: {
+    width:70,
+    height:70
+  },
+  trophyInfo: {
+    flex:1,
+    alignItems:'flex-start',
+    justifyContent:'center',
+    marginLeft:10
+  },
+  trophyTitle: {
+    color:colors.darkGray,
+    fontSize:18,
+    fontWeight:'700'
+  },
+  trophyDescription: {
+    color:colors.darkGray,
+    fontSize:14,
+    fontWeight:'300'
+  }
+
+})
+
 export const deleteAccountStyles = StyleSheet.create({
   form: {
     marginTop:25,
@@ -173,7 +228,8 @@ export const updateAvatar = StyleSheet.create({
     width:'50%',
     borderRadius:50
   },
-})
+});
+
 export const bugReport = StyleSheet.create({
   container: {
     width:'100%',
@@ -328,7 +384,7 @@ export const clientProfileStyles = StyleSheet.create({
   trophyText: {
     color:btnColors.caution,
     textAlign:'center',
-    fontSize:10
+    fontSize:18
   },
   listItems: {
     width:'100%'
@@ -789,17 +845,15 @@ export const welcomeStyles = StyleSheet.create({
   refreshingContainer: {
     backgroundColor:colors.clouds,
     width:'100%',
-    height:windowHeight
+    height:windowHeight,
+    justifyContent:'center',
+    alignItems:'center'
   },
-  refreshingImage: {
-    position: 'absolute',
-    top: '40%',
-    left: '5%',
-    bottom: 0,
-    right: 0,
-    flex:1,
-    width:'90%',
-    height:'20%'
+  refreshingText: {
+    fontSize:22,
+    fontWeight:'300',
+    textAlign:'center',
+    color:colors.darkGray
   },
   mainTitle: {
     fontSize:35,

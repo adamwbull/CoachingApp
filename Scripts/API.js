@@ -58,6 +58,7 @@ export function hasUpperCase(str) {
 
 // API Access Functions
 /* Example
+
 export async function check() {
 
   var ret = false;
@@ -77,7 +78,29 @@ export async function check() {
   return ret;
 
 }
+
 */
+
+export async function getTrophyAssocs(clientId, coachId, token) {
+
+  var ret = false;
+
+  console.log('Getting TrophyAssocs...');
+  console.log(url + '/trophy-assocs/' + clientId + '/' + coachId + '/' + token);
+  const res = await fetch(url + '/trophy-assocs/' + clientId + '/' + coachId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('TrophyAssocs found!');
+    ret = JSON.parse(JSON.stringify(payload));
+  }
+
+  return ret;
+
+}
 
 export async function deleteUser(id, token, password) {
 

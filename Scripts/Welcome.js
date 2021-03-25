@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { welcomeStyles, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
@@ -98,27 +98,43 @@ export default class Welcome extends React.Component {
   render() {
 
     if (this.state.refreshing === true) {
-      var image = (colors.white == '#ffffff') ? require('../assets/splash.png') : require('../assets/coachsync-logo-dark.png');
+      var items = [
+        "Generating witty dialog...",
+        "Swapping time and space...",
+        "Spinning around the y-axis...",
+        "Bending the spoon...",
+        "Don't think of purple hippos...",
+        "Would you like fries with that?",
+        "Go ahead -- hold your breath!",
+        "At least you're not on hold...",
+        "Powering up lemons...",
+        "Enjoying a code smoothie...",
+        "(Insert Quarter)",
+        "Are we there yet?",
+        "Counting backwards from infinity...",
+        "We're making you a cookie.",
+        "Let's take a second for mindfulness...",
+        "Cleaning off the cobwebs...",
+        "Making sure all the i's have dots...",
+        "Granting wishes...",
+        "Spinning the hamster...",
+        "I think, therefore I am loading...",
+        "Walking various poodles...",
+        "Dividing by zero...",
+        "Twiddling thumbs...",
+        "Searching for plot device...",
+        "Loading funny message...",
+        "Oh, are you waiting for me?",
+        "Generating positive growth...",
+        "Building motivation...",
+        "Finding independence..."
+      ];
+
+      var refreshingText = items[Math.floor(Math.random() * items.length)];
+
       return(<View style={welcomeStyles.refreshingContainer}>
-        <Animated.Image
-          onLoad={this.onLoad}
-          source={image}
-          resizeMode="contain"
-          style={[
-            {
-              opacity: this.state.opacity,
-              transform: [
-                {
-                  scale: this.state.opacity.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.85, 1],
-                  })
-                },
-              ],
-            },
-            welcomeStyles.refreshingImage
-          ]}
-        />
+        <Text style={welcomeStyles.refreshingText}>{refreshingText}</Text>
+        <ActivityIndicator size="large" color={colors.forest} style={{marginTop:10}} />
       </View>);
     } else {
       return (<ScrollView style={welcomeStyles.trueContainer}>

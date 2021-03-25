@@ -7,6 +7,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from './Scripts/Styles.js';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.',
+'YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.']);
 
 // Import Scripts
 import Home from './Scripts/Home.js';                           // Working
@@ -25,14 +28,13 @@ import BugReport from './Scripts/BugReport.js';                 // Working
 import FeatureRequest from './Scripts/FeatureRequest.js';       // Working
 import ChangePassword from './Scripts/ChangePassword.js';       // Working
 import DeleteAccount from './Scripts/DeleteAccount.js';         // Working
-import Trophies from './Scripts/Trophies.js';                   //
-import Schedule from './Scripts/Schedule.js';                   //
+import Trophies from './Scripts/Trophies.js';                   // Working
+import Schedule from './Scripts/Schedule.js';                   // Working
 import Contract from './Scripts/Contract.js';                   //
-import Payment from './Scripts/Payment.js';                     //
 import Messages from './Scripts/Messages.js';                   //
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 16/23
+                                                                // Working 18/22
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -100,7 +102,6 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='CoachIdCheck' component={CoachIdCheck} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
             <Stack.Screen name='Contract' component={Contract} />
-            <Stack.Screen name='Payment' component={Payment} />
             <Stack.Screen name='Main' component={HomeStack} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} />
