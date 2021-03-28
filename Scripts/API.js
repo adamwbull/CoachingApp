@@ -29,6 +29,28 @@ export function parseDateText(date) {
     return dateText;
 }
 
+export function getTimeSince(milliseconds) {
+  var seconds = parseInt(milliseconds/1000);
+  var ret = 'now';
+  var time = 0;
+  if (seconds > 5 && seconds <= 60) {
+    ret = (seconds > 1) ? seconds + ' secs' : seconds + ' sec';
+  } else if (seconds > 60 && seconds < 3600) {
+    time = parseInt(seconds/60);
+    ret = (time > 1) ? time + ' mins' : time + ' min';
+  } else if (seconds >= 3600 && seconds < 86400) {
+    time = parseInt(seconds/3600);
+    ret = (time > 1) ? time + ' hours' : time + ' hour';
+  } else if (seconds >= 86400 && seconds < 31536000) {
+    time = parseInt(seconds/86400);
+    ret = (time > 1) ? time + ' days' : time + ' day';
+  } else if (seconds >= 31536000) {
+    time = parseInt(seconds/31536000);
+    ret = (time > 1) ? time + ' yrs' : time + ' yr';
+  }
+  return ret;
+}
+
 export function parseSimpleDateText(date) {
 
     if (!Object.prototype.toString.call(date) === "[object Date]") {
@@ -81,12 +103,55 @@ export async function check() {
 
 */
 
+export async function getMessages(conversationId, token) {
+
+  var ret = false;
+
+  console.log('Getting chat messages...');
+  const res = await fetch(url + '/messages/' + conversationId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Messages received!');
+    ret = payload;
+  } else {
+    console.log('No messages found.');
+  }
+
+  return ret;
+
+}
+
+export async function getConversations(coachId, clientId, clientToken) {
+
+  var ret = false;
+
+  console.log('Getting conversations...');
+  const res = await fetch(url + '/conversations/' + coachId + '/' + clientId + '/' + clientToken, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Conversations retrieved!');
+    ret = payload;
+  } else {
+    console.log('Conversations not found!');
+  }
+
+  return ret;
+
+}
+
 export async function getTrophyAssocs(clientId, coachId, token) {
 
   var ret = false;
 
   console.log('Getting TrophyAssocs...');
-  console.log(url + '/trophy-assocs/' + clientId + '/' + coachId + '/' + token);
   const res = await fetch(url + '/trophy-assocs/' + clientId + '/' + coachId + '/' + token, {
     method:'GET'
   });
@@ -421,7 +486,6 @@ export async function getFeed(coachId) {
   var ret = false;
 
   console.log('Getting coach feed...');
-  console.log(url + '/feed/all/' + coachId + '/' + key);
   const res = await fetch(url + '/feed/all/' + coachId + '/' + key, {
     method:'GET'
   });
@@ -638,7 +702,6 @@ export async function getCoach(coachId, token) {
   var ret = false;
 
   console.log('Getting coach info...');
-  console.log(url + '/user/coach/' + coachId + '/' + token);
   const res = await fetch(url + '/user/coach/' + coachId + '/' + token, {
     method:'GET'
   });
@@ -723,7 +786,6 @@ export async function userInPair(coachId, clientId, token) {
 
   var ret = false;
   console.log('Checking if user is in pair...');
-  console.log(url + '/user/client/pair/' + coachId + '/' + clientId + '/' + token);
   const res = await fetch(url + '/user/client/pair/' + coachId + '/' + clientId + '/' + token, {
     method:'GET'
   });

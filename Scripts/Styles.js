@@ -36,6 +36,71 @@ export const levelScale = {
   completeColor: ''
 }
 
+export const messageThreadStyles = StyleSheet.create({
+  container: {
+    width:'100%'
+  },
+  noMessagesText: {
+    textAlign:'center',
+    marginTop:25,
+    fontSize:16,
+    fontWeight:'300',
+    color:colors.darkGray
+  }
+})
+export const messagesStyles = StyleSheet.create({
+  container: {
+    width:'100%',
+  },
+  scrollView: {
+    width:'100%',
+    height:windowHeight*0.8,
+    backgroundColor:colors.clouds,
+    marginTop:25
+  },
+  convo: {
+    width:'94%',
+    marginLeft:'3%',
+    marginRight:'3%',
+    flexDirection:'row',
+    padding:10,
+    borderRadius:25,
+    backgroundColor:colors.white,
+    height:80,
+    marginBottom:10
+  },
+  convoInfo: {
+    justifyContent:'center',
+    flex:1,
+    marginLeft:5,
+    marginRight:10,
+  },
+  convoInfoTop: {
+    flexDirection:'row',
+    flexWrap: "wrap",
+    justifyContent:'space-between',
+    alignItems:'center'
+  },
+  lastSender: {
+    fontSize:16,
+    fontWeight:'500',
+    color:colors.darkGray,
+    flex:2
+  },
+  convoTime: {
+    fontWeight:'300',
+    color:colors.darkGray,
+    textAlign:'right',
+    flex:1,
+    fontSize:16
+  },
+  lastMessage: {
+    fontSize:14,
+    fontWeight:'300',
+    fontStyle:'italic'
+  }
+})
+
 export const trophiesStyles = StyleSheet.create({
   container: {
     width:'100%',

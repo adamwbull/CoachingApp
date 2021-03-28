@@ -52,7 +52,6 @@ export default class ViewPrompt extends React.Component {
           res[index] = [-1, '', client.Id];
           if (completed) {
             responseItem = responses.filter(this.findResponse(item.Id));
-            console.log('ResponseItem:', responseItem);
             res[index][1] = responseItem[0].Response[0].Response;
           }
         } else if (item.Type == 1) {

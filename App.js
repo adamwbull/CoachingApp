@@ -30,11 +30,11 @@ import ChangePassword from './Scripts/ChangePassword.js';       // Working
 import DeleteAccount from './Scripts/DeleteAccount.js';         // Working
 import Trophies from './Scripts/Trophies.js';                   // Working
 import Schedule from './Scripts/Schedule.js';                   // Working
-import Contract from './Scripts/Contract.js';                   //
-import Messages from './Scripts/Messages.js';                   //
+import Messages from './Scripts/Messages.js';                   // Working
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
+import Contract from './Scripts/Contract.js';                   //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 18/22
+                                                                // Working 19/22
 
 // Create navigation controllers
 const Stack = createStackNavigator();
