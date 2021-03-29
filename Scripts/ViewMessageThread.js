@@ -81,7 +81,7 @@ export default class ViewMessageThread extends React.Component {
   }
 
   async sendMessage() {
-    var { text, client, conversation, uri } = this.state;
+    var { text, client, conversation, uri, messages } = this.state;
     var created = await createMessage(client.Token, conversation.Id, client.Id, text);
     if (created == 1) {
       // Check if image needs to be uploaded and associated.
@@ -91,6 +91,8 @@ export default class ViewMessageThread extends React.Component {
       // Let everyone know a new message came in.
       var socket = io("https://messages.coachsync.me/");
       socket.emit('sent-message', { conversationId:conversation.Id });
+      var newMessage = {};
+      messages.push(newMessage);
     } else {
       Alert.alert(
         "Server Error",

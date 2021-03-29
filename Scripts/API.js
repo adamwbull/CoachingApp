@@ -103,6 +103,31 @@ export async function check() {
 
 */
 
+export async function createMessage(token, conversationId, clientId, text) {
+
+  var ret = false;
+  var arr = {Token:token, Conversationid:conversationId, UserId:clientId, Text:text};
+  console.log('Uploading message...');
+  const res = await fetch(url + '/message/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload) {
+    console.log('Message uploaded!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function getMessages(conversationId, token) {
 
   var ret = false;
