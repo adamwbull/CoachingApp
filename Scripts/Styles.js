@@ -38,7 +38,9 @@ export const levelScale = {
 
 export const messageThreadStyles = StyleSheet.create({
   container: {
-    width:'100%'
+    width:'100%',
+    flexDirection:'column',
+    justifyContent:'flex-end'
   },
   noMessagesText: {
     textAlign:'center',
@@ -46,6 +48,78 @@ export const messageThreadStyles = StyleSheet.create({
     fontSize:16,
     fontWeight:'300',
     color:colors.darkGray
+  },
+  scrollView: {
+    height:windowHeight-62-60
+  },
+  scrollViewImagePicked: {
+    height:windowHeight-62-60
+  },
+  userInput: {
+    borderTopWidth:2,
+    borderTopColor:colors.forest,
+    backgroundColor:colors.white,
+    width:'100%',
+  },
+  selectedImageContainer: {
+    paddingLeft:'3%',
+    paddingRight:'3%',
+    paddingTop:10,
+    paddingBottom:10,
+    flexDirection:'row',
+  },
+  removeImage: {
+    width:30,
+    height:30,
+    alignItems:'center'
+  },
+  messageInputContainer: {
+    width:'100%',
+    backgroundColor:colors.white,
+    flexDirection:'row',
+    paddingLeft:'3%',
+    paddingRight:'3%',
+    justifyContent:'space-between',
+    alignItems:'center',
+    paddingTop:10,
+    paddingBottom:10,
+  },
+  messageInput: {
+    flex:8,
+    padding:3,
+    alignItems:'center',
+    justifyContent:'flex-end',
+    flexDirection:'row',
+  },
+  imageIcon: {
+    alignItems:'flex-start',
+    width:30
+  },
+  messageTextInput: {
+    flex:5,
+    fontSize:18,
+    paddingLeft:13,
+    paddingTop:0,
+    paddingBottom:0,
+  },
+  countdown: {
+    flex:1,
+    textAlign:'right',
+    marginRight:8,
+    fontSize:16,
+    alignItems:'flex-end',
+  },
+  messageInputSend: {
+    flex:1,
+    justifyContent:'flex-end',
+    alignItems:'center',
+    flexDirection:'row',
+    padding:3
+  },
+  messageInputSendText: {
+    color:btnColors.primary,
+    fontSize:18,
+    textAlign:'right'
   }
 })
 export const messagesStyles = StyleSheet.create({
@@ -98,7 +172,7 @@ export const messagesStyles = StyleSheet.create({
     fontSize:14,
     fontWeight:'300',
     fontStyle:'italic'
-  }
+  },
 })
 
 export const trophiesStyles = StyleSheet.create({

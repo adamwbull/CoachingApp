@@ -57,7 +57,7 @@ export default class UpdateAvatar extends React.Component {
 
   async scaleImage() {
       const { isVisible, imageHeight, imageWidth, uri } = this.state;
-      var res;;
+      var res;
       const crop = {
         originX: 0,
         originY: (imageHeight - imageWidth) / 2,
