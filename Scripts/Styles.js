@@ -25,6 +25,16 @@ export const btnColors = {
   info:'#48dbfb',
 }
 
+export const messageColors = {
+  me:'#3498db',
+  them:'#ffffff'
+}
+
+export const messageColorsDark = {
+  me:'#3498db',
+  them:'#303030'
+}
+
 export const defaultClientLevels = [
   {
     title: ''
@@ -54,6 +64,11 @@ export const messageThreadStyles = StyleSheet.create({
   },
   scrollViewImagePicked: {
     height:windowHeight-62-60
+  },
+  messagesView: {
+    paddingLeft:10,
+    paddingRight:10,
+    paddingBottom:20
   },
   userInput: {
     borderTopWidth:2,
@@ -120,7 +135,87 @@ export const messageThreadStyles = StyleSheet.create({
     color:btnColors.primary,
     fontSize:18,
     textAlign:'right'
-  }
+  },
+  time: {
+    color:colors.darkGray,
+    fontSize:14,
+    paddingBottom:15,
+    paddingTop:25,
+    fontStyle:'italic',
+    textAlign:'center'
+  },
+  myMessageGroup: {
+    flexDirection:'row',
+    justifyContent:'flex-end',
+    alignItems:'flex-start'
+  },
+  myMessageSection: {
+    width:windowWidth-80
+  },
+  myName: {
+    color:colors.darkGray,
+    fontSize:16,
+    fontWeight:'500',
+    textAlign:'right',
+    marginRight:10
+  },
+  myMessage: {
+    backgroundColor:messageColors.me,
+    borderTopLeftRadius:25,
+    borderBottomLeftRadius:25,
+    borderBottomRightRadius:25,
+    justifyContent:'center',
+    alignItems:'center',
+    alignSelf:'flex-end',
+    marginTop:1,
+    marginRight:10
+  },
+  myMessageText: {
+    color:'white',
+    margin:15
+  },
+  myAvatar: {
+    width:50,
+    height:50,
+    justifyContent:'flex-start',
+    alignItems:'center'
+  },
+  theirMessageGroup: {
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    alignItems:'flex-start'
+  },
+  theirAvatar: {
+    width:50,
+    height:50,
+    justifyContent:'flex-start',
+    alignItems:'center'
+  },
+  theirMessageSection: {
+    width:windowWidth-80
+  },
+  theirName: {
+    color:colors.darkGray,
+    fontSize:16,
+    fontWeight:'500',
+    textAlign:'left',
+    marginLeft:10
+  },
+  theirMessage: {
+    backgroundColor:messageColors.them,
+    borderTopRightRadius:25,
+    borderBottomRightRadius:25,
+    borderBottomLeftRadius:25,
+    justifyContent:'center',
+    alignItems:'center',
+    alignSelf:'flex-start',
+    marginTop:1,
+    marginLeft:10
+  },
+  theirMessageText: {
+    color:colors.darkGray,
+    margin:15
+  },
 })
 export const messagesStyles = StyleSheet.create({
   container: {
@@ -426,7 +521,7 @@ export const navStyles = StyleSheet.create({
     justifyContent:'flex-start',
     backgroundColor:colors.white,
     paddingBottom:10,
-    paddingTop:15,
+    paddingTop:10,
     borderBottomWidth:2,
     borderBottomColor:colors.forest,
     height:60
@@ -452,6 +547,11 @@ export const navStyles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems:'center'
+  },
+  navBackCenterText: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:20
   }
 });
 

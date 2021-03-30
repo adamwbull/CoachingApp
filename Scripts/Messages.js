@@ -47,10 +47,22 @@ export default class Messages extends React.Component {
   }
 
   configureSocket = () => {
+    var { conversations } = this.state;
     var socket = io("https://messages.coachsync.me/");
-    socket.on('get-conversations', () => {
-      this.refreshConversations();
+    socket.on('get-conversations', (conversationId) => {
+      for (var i = 0; i < conversations.length; i++) {
+        if (conversations[i].Id == conversationId) {
+          this.refreshConversations();
+          break;
+        }
+      }
     });
+  }
+
+  findUser(id) {
+    return function (response) {
+      return response[0].Id === id;
+    };
   }
 
   render() {
@@ -68,27 +80,27 @@ export default class Messages extends React.Component {
         <ScrollView contentContainerStyle={messagesStyles.scrollView}>
           {conversations.map((convo, i) => {
             // Build info for conversation.
-            var lastSenderId = (convo.LastSenderId == 0 || convo.LastSenderId == client.Id) ? convo.CoachId : convo.LastSenderId;
-            var lastSender = convo.Users[0].filter((lastSenderId) => { return function (response) { return response.Id === lastSenderId}});
-            lastSender = lastSender[0];
-            var lastSenderMessage = (convo.LastSenderMessage == '') ? 'No messages yet.' : lastSender.FirstName + ': ' + convo.LastSenderMessage.substring(0,10) + '...';
-            var lastSenderName = lastSender.FirstName + ' ' + lastSender.LastName;
+            var convoUserId = (convo.LastSenderId == 0 || convo.LastSenderId == client.Id) ? convo.CoachId : convo.LastSenderId;
+            var filt = JSON.parse(JSON.stringify(convo.Users));
+            var convoUser = filt.filter(this.findUser(convoUserId));
+            convoUser = convoUser[0][0];
+            var convoUserName = convoUser.FirstName + ' ' + convoUser.LastName;
             var totalMembers = convo.Users.length;
             if (totalMembers > 2) {
-              lastSenderName = convo.Users[0][0].FirstName + ', ' + convo.Users[1][0].FirstName;
+              convoUserName = convo.Users[0][0].FirstName + ', ' + convo.Users[1][0].FirstName;
               var iterator = 0;
               var usersFound = 0;
               var otherMembers = totalMembers - 3;
               while (iterator < totalMembers) {
                 if (convo.Users[iterator][0].Id != client.Id) {
                   if (usersFound == 0) {
-                    lastSenderName = convo.Users[iterator][0].FirstName + ', ';
+                    convoUserName = convo.Users[iterator][0].FirstName + ', ';
                   } else {
                     // How many extra people are there?
                     if (usersFound == 1) {
-                      lastSenderName = lastSenderName + convo.Users[iterator][0].FirstName;
+                      convoUserName = convoUserName + convo.Users[iterator][0].FirstName;
                     } else {
-                      lastSenderName = lastSenderName + ', ' + otherMembers + ' more';
+                      convoUserName = convoUserName + ', ' + otherMembers + ' more';
                       iterator = totalMembers;
                     }
                   }
@@ -99,16 +111,26 @@ export default class Messages extends React.Component {
                 }
               }
             }
+
+            // Get latest message.
+            var lastSenderMessage = 'No messages yet.';
+            if (convo.LastSenderMessage != '') {
+              var lastSender = filt.filter(this.findUser(convo.LastSenderId));
+              lastSender = lastSender[0][0];
+              var name = (lastSender.FirstName == client.FirstName) ? 'You' : lastSender.FirstName;
+              var msg = (convo.LastSenderMessage.length > 10) ? convo.LastSenderMessage.substring(0,10) + '...' : convo.LastSenderMessage;
+              lastSenderMessage = name + ': ' + msg;
+            }
             // Calculate time since last message.
             var cur = new Date();
             var created =sqlToJsDate(convo.LastSenderCreated);
             var convoTime = getTimeSince(Math.abs(cur - created));
 
-            return(<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate('ViewMessageThread', { conversation: convo })}style={messagesStyles.convo}>
+            return(<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate('ViewMessageThread', { conversation: convo, title: convoUserName })}style={messagesStyles.convo}>
               <View style={messagesStyles.convoAvatar}>
                 <Animated.Image
                   onLoad={this.onLoad}
-                  source={{ uri: lastSender.Avatar }}
+                  source={{ uri: convoUser.Avatar }}
                   resizeMode="cover"
                   style={{
                     opacity: this.state.opacity,
@@ -129,7 +151,7 @@ export default class Messages extends React.Component {
               </View>
               <View style={messagesStyles.convoInfo}>
                 <View style={messagesStyles.convoInfoTop}>
-                  <Text style={messagesStyles.lastSender}>{lastSenderName}</Text>
+                  <Text style={messagesStyles.convoUser}>{convoUserName}</Text>
                   <Text style={messagesStyles.convoTime}>{convoTime}</Text>
                 </View>
                 <Text style={messagesStyles.lastMessage}>{lastSenderMessage}</Text>

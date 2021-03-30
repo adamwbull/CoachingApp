@@ -64,6 +64,18 @@ export function parseSimpleDateText(date) {
     return dateText;
 }
 
+export function parseTime(date) {
+
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  const dateText = hours + ":" + minutes + " " + ampm;
+  return dateText;
+}
+
 export function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -106,7 +118,7 @@ export async function check() {
 export async function createMessage(token, conversationId, clientId, text) {
 
   var ret = false;
-  var arr = {Token:token, Conversationid:conversationId, UserId:clientId, Text:text};
+  var arr = {Token:token, ConversationId:conversationId, UserId:clientId, Text:text};
   console.log('Uploading message...');
   const res = await fetch(url + '/message/create', {
     method:'POST',

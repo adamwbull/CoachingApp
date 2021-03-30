@@ -106,3 +106,36 @@ export class NavBack extends React.Component {
     </View>);
   }
 }
+
+export class NavBackCenterText extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      refreshing : false,
+      opacity: new Animated.Value(0)
+    };
+  }
+
+  onLoad = () => {
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  render() {
+    return (<View style={navStyles.nav}>
+      <View style={navStyles.left}>
+        <IonIcon onPress={this.props.goBack}
+          name='chevron-back' size={35}
+          color={colors.blueGray} />
+      </View>
+      <View style={navStyles.center}>
+        <Text style={navStyles.navBackCenterText}>{this.props.text}</Text>
+      </View>
+      <View style={navStyles.right}>
+      </View>
+    </View>);
+  }
+}
