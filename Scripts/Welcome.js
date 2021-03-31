@@ -156,7 +156,7 @@ export default class Welcome extends React.Component {
             welcomeStyles.image
           ]}
         />
-        <View style={welcomeStyles.container}>
+        <View style={welcomeStyles.actualContainer}>
           <Text style={welcomeStyles.mainTitle}>Sign In</Text>
           <Text style={welcomeStyles.errorText}>{this.state.errorText}</Text>
           <Input

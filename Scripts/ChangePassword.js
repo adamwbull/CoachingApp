@@ -12,6 +12,7 @@ import { NavBack } from './TopNav.js';
 import { sqlToJsDate, parseSimpleDateText, updatePassword, loginCheck, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
 import { changePassword, colors, windowHeight } from '../Scripts/Styles.js';
 import * as Crypto from 'expo-crypto';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 //
 export default class ChangePassword extends React.Component {
@@ -115,13 +116,13 @@ export default class ChangePassword extends React.Component {
   render() {
 
     if (this.state.refreshing === true) {
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{alignItems: 'center',
         justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     } else {
 
       var { refreshing, oldPassword, newPassword, newPasswordConfirm, errorText, lastUpdated } = this.state;
@@ -149,7 +150,7 @@ export default class ChangePassword extends React.Component {
         },
       ];
 
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{height:windowHeight}}>
           <View style={changePassword.form}>
@@ -176,7 +177,7 @@ export default class ChangePassword extends React.Component {
             onPress={() => this.handlePress()}/>
           </View>
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
   }
 

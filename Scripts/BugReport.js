@@ -11,6 +11,7 @@ import { Button, Input, Icon } from 'react-native-elements';
 import { NavBack } from './TopNav.js';
 import { bugReport, colors } from '../Scripts/Styles.js';
 import { createBugReport } from '../Scripts/API.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class BugReport extends React.Component {
   constructor(props) {
@@ -62,12 +63,12 @@ export default class BugReport extends React.Component {
   render() {
 
     if (this.state.refreshing == true) {
-      return (<View style={bugReport.container}>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.navigate('ClientProfile')} />
         <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
-      </View>);
+      </SafeAreaView>);
     } else {
-      return (<View style={bugReport.container}>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.navigate('ClientProfile')} />
         <ScrollView>
           <View style={bugReport.form}>
@@ -96,7 +97,7 @@ export default class BugReport extends React.Component {
             onPress={() => this.handlePress()}/>
           </View>
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
   }
 

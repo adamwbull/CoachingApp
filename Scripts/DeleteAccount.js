@@ -96,7 +96,7 @@ export default class DeleteAccount extends React.Component {
 
     if (this.state.refreshing === true) {
 
-      return (<View>
+      return (<View style={deleteAccountStyles.container}>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{alignItems: 'center',
         justifyContent: 'center'}}>
@@ -108,7 +108,7 @@ export default class DeleteAccount extends React.Component {
 
       var { password, errorText } = this.state;
 
-      return (<View>
+      return (<View style={deleteAccountStyles.container}>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{height:windowHeight}}>
           <View style={deleteAccountStyles.form}>

@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavProfileRight } from './TopNav.js';
 import { getConcepts, sqlToJsDate, parseDateText, parseSimpleDateText } from '../Scripts/API.js';
 import { windowHeight, colors, conceptsStyles } from './Styles.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 //
 export default class Concepts extends React.Component {
@@ -102,7 +103,7 @@ export default class Concepts extends React.Component {
       width:'100%',
       marginBottom:margin};
     }
-    return (<View>
+    return (<SafeAreaView>
       <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
       <ScrollView contentContainerStyle={conceptsStyles.container}>
         <View style={mainContainerStyle}>
@@ -110,7 +111,7 @@ export default class Concepts extends React.Component {
           {this.showConcepts(concepts)}
         </View>
       </ScrollView>
-    </View>);
+    </SafeAreaView>);
   }
 
 }

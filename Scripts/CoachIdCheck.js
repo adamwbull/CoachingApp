@@ -77,7 +77,7 @@ export default class CoachIdCheck extends React.Component {
 
     const submitRef = React.createRef();
 
-    return (<View style={splashStyles.container}>
+    return (<View style={splashStyles.actualContainer}>
       <Modal
           animationType="slide"
           visible={this.state.modalVisible}

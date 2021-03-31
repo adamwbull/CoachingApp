@@ -11,6 +11,7 @@ import { clientProfileStyles, colors, btnColors } from '../Scripts/Styles.js';
 import { NavBack } from './TopNav.js';
 import { Button, ListItem, Icon } from 'react-native-elements';
 import { sqlToJsDate, parseSimpleDateText, refreshUser, getTrophyAssocs } from '../Scripts/API.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class ClientProfile extends React.Component {
   constructor(props) {
@@ -72,13 +73,13 @@ export default class ClientProfile extends React.Component {
   render() {
 
     if (this.state.refreshing == true) {
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{alignItems: 'center',
         justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     } else {
 
       var client = this.state.client;
@@ -128,7 +129,7 @@ export default class ClientProfile extends React.Component {
         trophiesCompleted += (trophies[i].Completed === 1) ? 1 : 0;
       }
 
-      return (<View style={clientProfileStyles.container}>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView>
           <View style={clientProfileStyles.avatarContainer}>
@@ -202,7 +203,7 @@ export default class ClientProfile extends React.Component {
             <Text style={clientProfileStyles.versionText}>{'\u00A9'}CoachSync {year}</Text>
           </View>
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
   }
 

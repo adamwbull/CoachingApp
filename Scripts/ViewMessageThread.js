@@ -5,15 +5,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Animated, Platform, KeyboardAvoidingView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { Modal, Alert, Animated, Platform, KeyboardAvoidingView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { colors, btnColors, messageThreadStyles, windowHeight, windowWidth } from './Styles.js';
 const io = require('socket.io-client');
 import { NavBackCenterText } from './TopNav.js';
-import { getMessages, sqlToJsDate, createMessage, parseTime, parseDateText } from './API.js';
+import { getMessages, sqlToJsDate, createMessage, uploadMessageImage, parseTime, parseDateText } from './API.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { ListItem, Icon, BottomSheet } from 'react-native-elements';
 import * as ImageManipulatorOG from 'expo-image-manipulator';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class ViewMessageThread extends React.Component {
   constructor(props) {
@@ -30,6 +31,9 @@ export default class ViewMessageThread extends React.Component {
       imageWidth:0,
       imageHeight:0,
       bsVisible: false,
+      longPressOptionsVisible:false,
+      fullImageVisible:false,
+      fullImageUri: 'https://coachsync.me/assets/img/logo.png',
       charsLeft:500,
       charsLeftStyle:[messageThreadStyles.countdown,{color:btnColors.success}],
       firstTimeInDay:''
@@ -61,9 +65,10 @@ export default class ViewMessageThread extends React.Component {
   configureSocket = () => {
     var socket = io("https://messages.coachsync.me/");
     socket.on('incoming-message', (recepients) => {
-      console.log('Socket bounced back');
+      console.log('Thread bounced back.');
       var { client } = this.state;
-      if (recepients.includes(client.Id)) {
+      recepients = JSON.parse(JSON.stringify(recepients));
+      if (recepients.includes(client.Id.toString())) {
         this.refreshMessages();
       }
     });
@@ -86,17 +91,17 @@ export default class ViewMessageThread extends React.Component {
 
   async sendMessage() {
     var { input, client, conversation, uri, messages } = this.state;
-    if (input.length > 0) {
+    if (input.length > 0 || uri != '') {
       var created = await createMessage(client.Token, conversation.Id, client.Id, input);
-      if (created == 1) {
+      if (created > 1) {
         // Check if image needs to be uploaded and associated.
         if (uri != '') {
-          var upload = await uploadMessageImage(uri, client.Token);
+          var upload = await uploadMessageImage(uri, client.Token, created);
         }
         // Let everyone know a new message came in.
         var socket = io("https://messages.coachsync.me/");
         var recepients = conversation.Clients.split(',');
-        recepients.push(conversation.CoachId);
+        recepients.push(conversation.CoachId.toString());
         socket.emit('sent-message', { recepients:recepients, conversationId:conversation.Id });
         this.setState({input:'',charsLeft:500,uri:'',charsLeftStyle:[messageThreadStyles.countdown,{color:btnColors.success}]});
         this.refreshMessages();
@@ -112,6 +117,17 @@ export default class ViewMessageThread extends React.Component {
           ]
         );
       }
+    } else {
+      Alert.alert(
+        "Incomplete Message",
+        "Type something before hitting send!",
+        [
+          {
+            text: "OK",
+            style: "OK",
+          },
+        ]
+      );
     }
   }
 
@@ -120,12 +136,21 @@ export default class ViewMessageThread extends React.Component {
     if (uri == '') {
       return (<View></View>);
     } else {
-      console.log(windowHeight);
-      console.log(imageHeight);
-      console.log(imageWidth);
       var height = windowHeight*0.3;
       var width = (height/imageHeight)*imageWidth;
+      if (width > windowWidth) {
+        width = windowWidth-90;
+        height = (width/imageWidth)*imageHeight;
+      }
       return (<View style={[messageThreadStyles.selectedImageContainer,{width:width+50,height:height+10}]}>
+        <View style={messageThreadStyles.removeImage}>
+          <Icon
+            type='ionicon'
+            color={btnColors.danger}
+            size={30}
+            name='close'
+            onPress={() => this.setState({uri:''})}/>
+        </View>
           <Animated.Image
             onLoad={this.onLoad}
             source={{ uri: uri }}
@@ -147,14 +172,6 @@ export default class ViewMessageThread extends React.Component {
               ],
             }}
           />
-          <View style={messageThreadStyles.removeImage}>
-            <Icon
-              type='ionicon'
-              color={btnColors.danger}
-              size={30}
-              name='close'
-              onPress={() => this.setState({uri:''})}/>
-          </View>
         </View>);
     }
   }
@@ -224,7 +241,7 @@ export default class ViewMessageThread extends React.Component {
         onPress: () => this.pickImage(),
         icon: 'image',
         iconColor:colors.darkGray,
-        titleStyle:{ color:colors.darkGray }
+        titleStyle:{ color:colors.darkGray },
       },
       {
         title:'Take Photo',
@@ -245,6 +262,7 @@ export default class ViewMessageThread extends React.Component {
 
     return (<BottomSheet
       isVisible={bsVisible}
+      containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
     >
       {list.map((l, i) => (
         <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
@@ -264,7 +282,7 @@ export default class ViewMessageThread extends React.Component {
         onPress: () => this.pickCameraImage(),
         icon: 'happy',
         iconColor:colors.darkGray,
-        titleStyle:{ color:colors.darkGray }
+        titleStyle:{ color:colors.darkGray },
       },
       {
         title: 'Cancel',
@@ -278,6 +296,7 @@ export default class ViewMessageThread extends React.Component {
 
     return (<BottomSheet
       isVisible={longPressOptionsVisible}
+      containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
     >
       {list.map((l, i) => (
         <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
@@ -287,7 +306,7 @@ export default class ViewMessageThread extends React.Component {
           </ListItem.Content>
         </ListItem>
       ))}
-    </BottomSheet>)
+    </BottomSheet>);
   }
 
   setTimeInfo(firstTimeInDay, cur, prev) {
@@ -339,9 +358,73 @@ export default class ViewMessageThread extends React.Component {
     };
   }
 
+  // Show image in-chat.
+  showImage(showImage, image, imageStyle) {
+    if (showImage) {
+      return (<TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={() => this.setState({fullImageVisible:true,fullImageUri:image})}>
+          <Animated.Image
+            onLoad={this.onLoad}
+            source={{ uri: image }}
+            resizeMode="cover"
+            style={[{
+              opacity: this.state.opacity,
+              flex:1,
+              backgroundColor:colors.darkGray,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            },imageStyle]}
+          />
+        </TouchableOpacity>);
+    } else {
+      return (<View></View>);
+    }
+  }
+
+  // Show fullscreen image.
+  displayFullImage(fullImageVisible, fullImageUri) {
+
+    if (fullImageVisible) {
+      return(<Modal
+        animationType="slide"
+        visible={fullImageVisible}
+        onRequestClose={() => this.setState({fullImageVisible:false,fullImageUri:'https://coachsync.me/assets/img/logo.png'})}>
+        <TouchableOpacity onPress={() => this.setState({fullImageVisible:false,fullImageUri:'https://coachsync.me/assets/img/logo.png'})} activeOpacity={0.7} style={{flex:1}}>
+          <Animated.Image
+            onLoad={this.onLoad}
+            source={{ uri: fullImageUri }}
+            resizeMode="cover"
+            style={[{
+              opacity: this.state.opacity,
+              flex:1,
+              resizeMode:'contain',
+              backgroundColor:colors.darkGray,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            }]}
+          />
+        </TouchableOpacity>
+      </Modal>);
+    } else {
+      return (<View></View>);
+    }
+
+  }
+
   render() {
 
-    var { title, conversation, messages, client, uri, bsVisible, longPressOptionsVisible } = this.state;
+    var { title, conversation, messages, client, uri, bsVisible, longPressOptionsVisible, fullImageVisible, fullImageUri } = this.state;
     var scrollViewStyle = (uri == '') ? messageThreadStyles.scrollView : messageThreadStyles.scrollViewImagePicked;
     var lastCreated = '';
     var firstTimeInDay = '';
@@ -353,7 +436,8 @@ export default class ViewMessageThread extends React.Component {
       </View>);
     } else {
       if (messages == false) {
-        return (<KeyboardAvoidingView
+        return (<SafeAreaView>
+          <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={messageThreadStyles.container}
             >
@@ -364,16 +448,18 @@ export default class ViewMessageThread extends React.Component {
           {this.showInput()}
           {this.bottomSheet(bsVisible)}
           {this.longPressOptions(longPressOptionsVisible)}
-        </KeyboardAvoidingView>);
+        </KeyboardAvoidingView>
+      </SafeAreaView>);
       } else {
-        return (<KeyboardAvoidingView
+        return (<SafeAreaView>
+          <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={messageThreadStyles.container}
-            >
+              style={messageThreadStyles.container}>
           <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} />
           <View style={scrollViewStyle}>
-            <ScrollView ref={ref => {this.scrollView = ref}}
-    onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
+            <ScrollView
+              ref={ref => {this.scrollView = ref}}
+              onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
               <View style={messageThreadStyles.messagesView}>
                 {messages.map((message, i) => {
                   var prevLastMessage = lastMessage;
@@ -392,20 +478,46 @@ export default class ViewMessageThread extends React.Component {
                     showUserDetails = true;
                     paddingTopCalc = {paddingTop:20};
                   }
-                  if (message.UserId == client.Id) {
+
+                  // Text/Image calculations.
+                  var isMe = (message.UserId == client.Id) ? true : false;
+                  var showImage = false;
+                  var showText = true;
+                  var messageStyle = (isMe) ? messageThreadStyles.myMessage : messageThreadStyles.theirMessage;
+                  var messageTextStyle = (isMe) ? messageThreadStyles.myMessageText : messageThreadStyles.theirMessageText;
+                  var imageStyle = {};
+                  // Determine if there's an image.
+                  if (message.Image != '') {
+                    // Styling for if there is related Text.
+                    showImage = true;
+                    imageStyle = (isMe) ? messageThreadStyles.myMessageAnImage : messageThreadStyles.theirMessageAnImage;
+                    messageStyle = (isMe) ? messageThreadStyles.myMessageImage : messageThreadStyles.theirMessageImage;
+                    messageTextStyle = (isMe) ? messageThreadStyles.myMessageTextImage : messageThreadStyles.theirMessageTextImage;
+                    if (message.Text == '') {
+                      // Styling for if there isn't related Text.
+                      showText = null;
+                      imageStyle = (isMe) ? messageThreadStyles.myMessageAnImageSolo : messageThreadStyles.theirMessageAnImageSolo;
+                    }
+                  }
+
+                  if (isMe) {
                     return (<View key={i}>
                       {this.showTime(timeInfo)}
                       <View style={[messageThreadStyles.myMessageGroup,paddingTopCalc]}>
                         <View style={messageThreadStyles.myMessageSection}>
-                          <View style={messageThreadStyles.myMessage}>
-                            <Text style={messageThreadStyles.myMessageText}>{message.Text}</Text>
-                          </View>
+                          {
+                            showText &&
+                            (<View style={messageStyle}>
+                              <Text style={messageTextStyle}>{message.Text}</Text>
+                            </View>)
+                          }
+                          {this.showImage(showImage, message.Image, imageStyle)}
                         </View>
                       </View>
                     </View>);
                   } else {
+                    console.log()
                     return (<View key={i}>
-                      {this.showTime(timeInfo)}
                       <View style={[messageThreadStyles.theirMessageGroup,paddingTopCalc]}>
                         <View style={messageThreadStyles.theirAvatar}>
                           {
@@ -436,9 +548,13 @@ export default class ViewMessageThread extends React.Component {
                         <View style={messageThreadStyles.theirMessageSection}>
                           { showUserDetails &&
                           (<Text style={messageThreadStyles.theirName}>{messageUser[0][0].FirstName + ' ' + messageUser[0][0].LastName}</Text>)}
-                          <View style={messageThreadStyles.theirMessage}>
-                            <Text style={messageThreadStyles.theirMessageText}>{message.Text}</Text>
-                          </View>
+                          <TouchableOpacity activeOpacity={0.7} style={messageStyle} onLongPress={() => this.setState({longPressOptionsVisible:true})}>
+                            {
+                              showText &&
+                              (<Text style={messageTextStyle}>{message.Text}</Text>)
+                            }
+                          </TouchableOpacity>
+                          {this.showImage(showImage, message.Image, imageStyle)}
                         </View>
                       </View>
                     </View>);
@@ -450,7 +566,9 @@ export default class ViewMessageThread extends React.Component {
           {this.showInput()}
           {this.bottomSheet(bsVisible)}
           {this.longPressOptions(longPressOptionsVisible)}
-        </KeyboardAvoidingView>);
+          {this.displayFullImage(fullImageVisible, fullImageUri)}
+        </KeyboardAvoidingView>
+      </SafeAreaView>);
       }
     }
 

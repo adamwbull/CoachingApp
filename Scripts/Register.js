@@ -191,7 +191,7 @@ export default class Register extends React.Component {
           registerStyles.image
         ]}
       />
-      <View style={registerStyles.container}>
+      <View style={registerStyles.actualContainer}>
         <Text style={registerStyles.mainTitle}>Register Account</Text>
         <View style={registerStyles.errorsContainer}>
         {this.state.errors.map((error, index) => {

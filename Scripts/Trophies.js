@@ -10,6 +10,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { trophiesStyles, colors } from '../Scripts/Styles.js';
 import { NavBack } from './TopNav.js';
 import LockedImage from '../assets/locked-trophy.png';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 export default class Trophies extends React.Component {
   constructor(props) {
     super(props)
@@ -39,19 +41,19 @@ export default class Trophies extends React.Component {
 
     if (this.state.refreshing == true) {
 
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{alignItems: 'center',
         justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
 
     } else {
 
       var { trophies, trophiesCompleted, totalTrophies } = this.state;
       const lockedUri = Image.resolveAssetSource(LockedImage).uri
-      return (<View style={trophiesStyles.container}>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.navigate('ClientProfile')} />
         <ScrollView>
           <View style={trophiesStyles.mainContainer}>
@@ -98,7 +100,7 @@ export default class Trophies extends React.Component {
           })}
           </View>
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
 
   }

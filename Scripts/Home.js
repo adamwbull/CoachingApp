@@ -13,6 +13,7 @@ import { NavProfileRight } from './TopNav.js';
 import { getLinkItems, getFeed, sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
 import { Header, Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -234,13 +235,13 @@ export default class Home extends React.Component {
 
     var coach = this.state.coach;
 
-    return (<View>
+    return (<SafeAreaView>
       <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
-      <ScrollView contentContainerStyle={homeStyles.container}>
+      <ScrollView contentContainerStyle={[homeStyles.container]}>
         <Text style={homeStyles.coachTitle}>Your Coach</Text>
         {this.getCoach(coach)}
       </ScrollView>
-    </View>);
+    </SafeAreaView>);
 
   }
 

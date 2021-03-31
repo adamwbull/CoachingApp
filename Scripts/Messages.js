@@ -11,6 +11,7 @@ import { colors, messagesStyles } from './Styles.js';
 import { getConversations, sqlToJsDate, getTimeSince } from './API.js';
 import { NavProfileRight } from './TopNav.js';
 const io = require('socket.io-client');
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 //
 export default class Messages extends React.Component {
@@ -50,8 +51,9 @@ export default class Messages extends React.Component {
     var { conversations } = this.state;
     var socket = io("https://messages.coachsync.me/");
     socket.on('get-conversations', (conversationId) => {
+      console.log('Messages bounced back.');
       for (var i = 0; i < conversations.length; i++) {
-        if (conversations[i].Id == conversationId) {
+        if (conversations[i].Id.toString() == conversationId.toString()) {
           this.refreshConversations();
           break;
         }
@@ -70,15 +72,16 @@ export default class Messages extends React.Component {
     var { refreshing, conversations, client } = this.state;
 
     if (conversations.length === 0) {
-      return (<View style={messagesStyles.container}>
+      return (<SafeAreaView>
         <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
         <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
-      </View>);
+      </SafeAreaView>);
     } else {
-      return (<View style={messagesStyles.container}>
+      return (<SafeAreaView>
         <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
         <ScrollView contentContainerStyle={messagesStyles.scrollView}>
           {conversations.map((convo, i) => {
+
             // Build info for conversation.
             var convoUserId = (convo.LastSenderId == 0 || convo.LastSenderId == client.Id) ? convo.CoachId : convo.LastSenderId;
             var filt = JSON.parse(JSON.stringify(convo.Users));
@@ -117,13 +120,19 @@ export default class Messages extends React.Component {
             if (convo.LastSenderMessage != '') {
               var lastSender = filt.filter(this.findUser(convo.LastSenderId));
               lastSender = lastSender[0][0];
-              var name = (lastSender.FirstName == client.FirstName) ? 'You' : lastSender.FirstName;
-              var msg = (convo.LastSenderMessage.length > 10) ? convo.LastSenderMessage.substring(0,10) + '...' : convo.LastSenderMessage;
+              var name = (lastSender.Id == client.Id) ? 'You' : lastSender.FirstName;
+              var msg = (convo.LastSenderMessage.length > 25) ? convo.LastSenderMessage.substring(0,25) + '...' : convo.LastSenderMessage;
               lastSenderMessage = name + ': ' + msg;
+            } else if (convo.LastSenderId != 0) {
+              var lastSender = filt.filter(this.findUser(convo.LastSenderId));
+              lastSender = lastSender[0][0];
+              var name = (lastSender.Id == client.Id) ? 'You' : lastSender.FirstName;
+              lastSenderMessage = name + ": Image Attachment";
             }
+
             // Calculate time since last message.
             var cur = new Date();
-            var created =sqlToJsDate(convo.LastSenderCreated);
+            var created = sqlToJsDate(convo.LastSenderCreated);
             var convoTime = getTimeSince(Math.abs(cur - created));
 
             return(<TouchableOpacity key={i} onPress={() => this.props.navigation.navigate('ViewMessageThread', { conversation: convo, title: convoUserName })}style={messagesStyles.convo}>
@@ -159,7 +168,7 @@ export default class Messages extends React.Component {
             </TouchableOpacity>);
           })}
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
   }
 

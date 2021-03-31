@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Animated, Image, Text, View } from 'react-native';
+import { Platform, Animated, Image, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navStyles, colors } from './Styles.js';
 import { useNavigation } from '@react-navigation/native';
@@ -28,7 +28,7 @@ export class NavProfileRight extends React.Component {
   }
 
   render() {
-    return (<View style={navStyles.nav}>
+    return (<View style={[navStyles.nav]}>
       <View style={navStyles.left}></View>
       <View style={navStyles.center}>
         <Animated.Image
@@ -75,7 +75,7 @@ export class NavBack extends React.Component {
   }
 
   render() {
-    return (<View style={navStyles.nav}>
+    return (<View style={[navStyles.nav]}>
       <View style={navStyles.left}>
         <IonIcon onPress={this.props.goBack}
           name='chevron-back' size={35}
@@ -125,7 +125,7 @@ export class NavBackCenterText extends React.Component {
   }
 
   render() {
-    return (<View style={navStyles.nav}>
+    return (<View style={[navStyles.nav]}>
       <View style={navStyles.left}>
         <IonIcon onPress={this.props.goBack}
           name='chevron-back' size={35}

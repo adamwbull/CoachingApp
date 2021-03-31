@@ -250,7 +250,7 @@ export default class OnboardingSurvey extends React.Component {
   render() {
 
     return (<ScrollView style={onboardingStyles.trueContainer}>
-      <View style={onboardingStyles.container}>
+      <View style={onboardingStyles.actualContainer}>
         <View style={onboardingStyles.mainTitle}>
           <Text style={onboardingStyles.mainTitleText}>Onboarding Survey</Text>
         </View>

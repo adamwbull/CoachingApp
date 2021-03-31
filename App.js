@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from './Scripts/Styles.js';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.',
@@ -69,7 +68,8 @@ function HomeStack() {
             showLabel: false,
             style: {
               borderTopWidth:2,
-              borderTopColor:colors.forest
+              borderTopColor:colors.forest,
+              backgroundColor:colors.white
             }
         }}
     >

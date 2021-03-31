@@ -18,6 +18,7 @@ import * as Permissions from 'expo-permissions';
 const noImage = require('../assets/no_photo.png');
 import * as ImageManipulatorOG from 'expo-image-manipulator';
 import { Button } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 //
 export default class UpdateAvatar extends React.Component {
@@ -140,13 +141,7 @@ export default class UpdateAvatar extends React.Component {
       const { width, height } = Dimensions.get('window');
       const dim2 = parseInt((width*0.7));
       return (
-            <View style={{
-                backgroundColor: colors.clouds,
-                alignContent: 'center',
-                alignItems: 'center',
-                height,
-            }}
-            >
+            <SafeAreaView>
             <NavBack goBack={() => this.props.navigation.navigate('ClientProfile')} />
                 {cropCompleted ? (<View style={{justifyContent:'center',alignItems:'center'}}>
                   <Image resizeMode="contain"
@@ -197,7 +192,7 @@ export default class UpdateAvatar extends React.Component {
                   />
                 )*/
               }
-            </View>
+            </SafeAreaView>
         )
   }
 

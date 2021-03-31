@@ -10,6 +10,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavProfileRight } from './TopNav.js';
 import { getPrompts, sqlToJsDate, parseDateText, parseSimpleDateText } from '../Scripts/API.js';
 import { promptsStyles, colors, windowHeight } from './Styles.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 //
 export default class Prompts extends React.Component {
@@ -122,7 +123,7 @@ export default class Prompts extends React.Component {
       width:'100%',
       marginBottom:margin};
     }
-    return (<View>
+    return (<SafeAreaView>
       <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
       <ScrollView contentContainerStyle={promptsStyles.container}>
         <View style={mainContainerStyle}>
@@ -130,7 +131,7 @@ export default class Prompts extends React.Component {
           {this.showPrompts(prompts)}
         </View>
       </ScrollView>
-    </View>);
+    </SafeAreaView>);
   }
 
 }

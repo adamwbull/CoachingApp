@@ -115,6 +115,75 @@ export async function check() {
 
 */
 
+export async function uploadAvatar(uri, token) {
+
+  var ret = false;
+  let uriParts = uri.split('.');
+  let fileType = uriParts[uriParts.length - 1];
+  let formData = new FormData();
+  var ts = Math.floor(Math.random() * (999999 - 0 + 1)) + 0;
+  ts = ts.toString();
+  formData.append('photo', {
+    uri: uri,
+    name: `${token}_${ts}.${fileType}`,
+    type: `image/${fileType}`,
+  });
+
+  console.log('Attempting avatar upload...');
+  const res = await fetch(uploadUrl + '/api/avatar', {
+    method:'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Upload complete!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function uploadMessageImage(uri, token, id) {
+
+  var ret = false;
+  let uriParts = uri.split('.');
+  let fileType = uriParts[uriParts.length - 1];
+  let formData = new FormData();
+  formData.append('photo', {
+    uri: uri,
+    name: `${token}_${id}.${fileType}`,
+    type: `image/${fileType}`,
+  });
+
+  console.log('Attempting message attachment upload...');
+  const res = await fetch(uploadUrl + '/api/message-attachment', {
+    method:'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Upload complete!');
+    ret = true;
+  }
+
+  return ret;
+
+
+}
+
 export async function createMessage(token, conversationId, clientId, text) {
 
   var ret = false;
@@ -131,9 +200,9 @@ export async function createMessage(token, conversationId, clientId, text) {
 
   const payload = await res.json();
 
-  if (payload) {
+  if (payload.insertId > 1) {
     console.log('Message uploaded!');
-    ret = true;
+    ret = payload.insertId;
   }
 
   return ret;
@@ -276,41 +345,6 @@ export async function refreshUser(token) {
 
 }
 
-export async function uploadAvatar(uri, token) {
-
-  var ret = false;
-  let uriParts = uri.split('.');
-  let fileType = uriParts[uriParts.length - 1];
-  let formData = new FormData();
-  var ts = Math.floor(Math.random() * (999999 - 0 + 1)) + 0;
-  ts = ts.toString();
-  formData.append('photo', {
-    uri: uri,
-    name: `${token}_${ts}.${fileType}`,
-    type: `image/${fileType}`,
-  });
-
-  console.log('Attempting avatar upload...');
-  const res = await fetch(uploadUrl + '/api/avatar', {
-    method:'POST',
-    body: formData,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }
-  });
-
-  const payload = await res.json();
-
-  if (payload.affectedRows == 1) {
-    console.log('Upload complete!');
-    ret = true;
-  }
-
-  return ret;
-
-}
-
 export async function createFeatureRequest(token, clientId, description) {
 
   var ret = false;
@@ -433,13 +467,14 @@ export async function getPromptResponse(id, clientId, token) {
   var ret = false;
 
   console.log('Getting prompt response...');
+  console.log(url + '/prompt-response/' + id + '/' + clientId + '/' + token);
   const res = await fetch(url + '/prompt-response/' + id + '/' + clientId + '/' + token, {
     method:'GET'
   });
 
   const payload = await res.json();
 
-  if (payload.length == 1) {
+  if (payload.length > 0) {
     console.log('Found prompt response!');
     ret = payload;
   }

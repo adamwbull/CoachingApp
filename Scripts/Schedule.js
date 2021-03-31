@@ -6,11 +6,11 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Dimensions, AsyncStorage, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { windowHeight, windowWidth, colors } from '../Scripts/Styles.js';
 import { NavBack } from './TopNav.js';
 import AutoHeightWebView from 'react-native-autoheight-webview'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class Schedule extends React.Component {
   constructor(props) {
@@ -29,19 +29,19 @@ export default class Schedule extends React.Component {
   render() {
 
     if (this.state.refreshing === true) {
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{alignItems: 'center',
         justifyContent: 'center'}}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     } else {
 
       var { calendlyLink } = this.state;
       var width = windowWidth;
       var calendly = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head><body><div class='calendly-inline-widget' style='display:block;width:100%;margin:0,padding:0;background:" + colors.white + "' data-url='" + calendlyLink + "?background_color=fbfcfd&primary_color=" + colors.forest.split('#')[1] + "&text_color=" + colors.darkGray.split('#')[1] + "'></div><script type='text/javascript' src='https://assets.calendly.com/assets/external/widget.js' async></script></body></html>";
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView contentContainerStyle={{flexDirection: 'row',justifyContent: 'center',
         backgroundColor:colors.clouds,width:windowWidth,
@@ -55,7 +55,7 @@ export default class Schedule extends React.Component {
           />
 
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
 
   }

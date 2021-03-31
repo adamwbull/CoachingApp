@@ -12,6 +12,7 @@ import { updatePromptAssoc, getSurveyResponses, getSurveyArray, uploadResponses,
 import { NavBack } from './TopNav.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class ViewPrompt extends React.Component {
   constructor(props) {
@@ -302,23 +303,23 @@ export default class ViewPrompt extends React.Component {
     var prompt = this.state.prompt;
 
     if (prompt === false) {
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.navigate('Prompts')} />
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={viewPromptStyles.promptContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </View>
       </ScrollView>
-      </View>);
+      </SafeAreaView>);
     } else {
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.navigate('Prompts')} />
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={viewPromptStyles.promptContainer}>
           {this.showSurvey(prompt)}
         </View>
       </ScrollView>
-      </View>);
+      </SafeAreaView>);
 
     }
 

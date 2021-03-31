@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const windowWidth = Dimensions.get('window').width;
 export const windowHeight = Dimensions.get('window').height;
@@ -6,6 +7,7 @@ export const logoRatio = windowWidth/1600;
 export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
 export const feedMediaWidth = parseInt(windowWidth-(windowWidth*0.1));
 export const windowHeightConceptVideo = windowHeight - (windowHeight*0.5);
+
 export const colors = {
   emerald: '#2ecc71',
   forest: '#27ae60',
@@ -139,7 +141,7 @@ export const messageThreadStyles = StyleSheet.create({
   time: {
     color:colors.darkGray,
     fontSize:14,
-    paddingBottom:15,
+    paddingBottom:0,
     paddingTop:25,
     fontStyle:'italic',
     textAlign:'center'
@@ -164,15 +166,43 @@ export const messageThreadStyles = StyleSheet.create({
     borderTopLeftRadius:25,
     borderBottomLeftRadius:25,
     borderBottomRightRadius:25,
-    justifyContent:'center',
+    justifyContent:'flex-start',
     alignItems:'center',
     alignSelf:'flex-end',
     marginTop:1,
-    marginRight:10
+  },
+  myMessageImage: {
+    backgroundColor:messageColors.me,
+    borderTopLeftRadius:25,
+    justifyContent:'flex-start',
+    alignItems:'center',
+    alignSelf:'flex-end',
+    marginTop:1,
+    width:windowWidth-80
+  },
+  myMessageAnImage: {
+    width:windowWidth-80,
+    height:200,
+    resizeMode:'cover',
+    borderBottomLeftRadius:25,
+    borderBottomRightRadius:25,
+  },
+  myMessageAnImageSolo: {
+    flex:1,
+    width:windowWidth-80,
+    height:200,
+    marginTop:1,
+    resizeMode:'cover',
+    borderRadius:25
   },
   myMessageText: {
     color:'white',
-    margin:15
+    padding:15,
+  },
+  myMessageTextImage: {
+    color:'white',
+    padding:15,
+    width:'100%'
   },
   myAvatar: {
     width:50,
@@ -188,6 +218,7 @@ export const messageThreadStyles = StyleSheet.create({
   theirAvatar: {
     width:50,
     height:50,
+    marginRight:10,
     justifyContent:'flex-start',
     alignItems:'center'
   },
@@ -198,25 +229,53 @@ export const messageThreadStyles = StyleSheet.create({
     color:colors.darkGray,
     fontSize:16,
     fontWeight:'500',
-    textAlign:'left',
-    marginLeft:10
+    textAlign:'left'
   },
   theirMessage: {
     backgroundColor:messageColors.them,
     borderTopRightRadius:25,
     borderBottomRightRadius:25,
     borderBottomLeftRadius:25,
-    justifyContent:'center',
     alignItems:'center',
     alignSelf:'flex-start',
     marginTop:1,
-    marginLeft:10
+  },
+  theirMessageImage: {
+    backgroundColor:messageColors.them,
+    borderTopRightRadius:25,
+    justifyContent:'flex-start',
+    alignItems:'center',
+    alignSelf:'flex-start',
+    marginTop:1,
+    width:windowWidth-80
   },
   theirMessageText: {
     color:colors.darkGray,
-    margin:15
+    padding:15,
   },
-})
+  theirMessageTextImage: {
+    color:colors.darkGray,
+    padding:15,
+    width:'100%'
+  },
+  theirMessageAnImage: {
+    flex:1,
+    width:windowWidth-80,
+    height:200,
+    resizeMode:'cover',
+    borderBottomLeftRadius:25,
+    borderBottomRightRadius:25,
+  },
+  theirMessageAnImageSolo: {
+    flex:1,
+    width:windowWidth-80,
+    height:200,
+    resizeMode:'cover',
+    borderRadius:25,
+    marginTop:1,
+  },
+});
+
 export const messagesStyles = StyleSheet.create({
   container: {
     width:'100%',
@@ -326,6 +385,9 @@ export const trophiesStyles = StyleSheet.create({
 })
 
 export const deleteAccountStyles = StyleSheet.create({
+  container: {
+    width:'100%'
+  },
   form: {
     marginTop:25,
     marginLeft:'3%',
@@ -373,6 +435,9 @@ export const deleteAccountStyles = StyleSheet.create({
 });
 
 export const changePassword = StyleSheet.create({
+  container: {
+    width:'100%',
+  },
   form: {
     marginTop:25,
     marginLeft:'3%',
@@ -420,6 +485,9 @@ export const changePassword = StyleSheet.create({
 });
 
 export const updateAvatar = StyleSheet.create({
+  container: {
+    width:'100%'
+  },
   imageSelectButtonLeft: {
     flex:1,
     alignItems:'center',
@@ -524,6 +592,8 @@ export const navStyles = StyleSheet.create({
     paddingTop:10,
     borderBottomWidth:2,
     borderBottomColor:colors.forest,
+    borderTopWidth:2,
+    borderTopColor:colors.forest,
     height:60
   },
   image: {
@@ -536,12 +606,12 @@ export const navStyles = StyleSheet.create({
   left: {
     flex:1,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
   },
   center: {
     flex:6,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
   },
   right: {
     flex:1,
@@ -1063,7 +1133,7 @@ export const welcomeStyles = StyleSheet.create({
     backgroundColor:colors.darkGray,
     height:'100%'
   },
-  container: {
+  actualContainer: {
     backgroundColor: colors.white,
     marginTop:windowHeight*0.23,
     marginLeft:20,
@@ -1156,7 +1226,7 @@ export const registerStyles = StyleSheet.create({
     backgroundColor:colors.darkGray,
     height:'100%'
   },
-  container: {
+  actualContainer: {
     backgroundColor: colors.white,
     marginTop:windowHeight*0.25,
     marginLeft:20,
@@ -1277,7 +1347,7 @@ export const onboardingStyles = StyleSheet.create({
   trueContainer:{
     backgroundColor:colors.darkGray
   },
-  container: {
+  actualContainer: {
     backgroundColor: colors.white,
     marginTop:30,
     marginLeft:20,
@@ -1416,7 +1486,7 @@ export const radioButtonStyles = StyleSheet.create({
 });
 
 export const splashStyles = StyleSheet.create({
-  container: {
+  actualContainer: {
     flex: 1,
     backgroundColor: colors.darkGray,
     alignItems: 'center',

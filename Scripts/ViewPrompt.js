@@ -13,6 +13,7 @@ import { Input, Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
 import { NavBack } from './TopNav.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class ViewPrompt extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ export default class ViewPrompt extends React.Component {
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     if (prompt.Completed == 1) {
       promptArr = await getPromptResponse(prompt.Id, client.Id, client.Token);
+      console.log(promptArr);
       response = promptArr[0].Text;
     }
     this.setState({prompt:prompt,promptArr:promptArr,response:response});
@@ -157,7 +159,8 @@ export default class ViewPrompt extends React.Component {
     var prompt = this.state.prompt;
 
     if (prompt === false) {
-      return (<ScrollView componentContainerStyle={viewPromptStyles.container}>
+      return (<SafeAreaView>
+        <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
             <IonIcon onPress={() => this.handleBack()}
@@ -190,7 +193,8 @@ export default class ViewPrompt extends React.Component {
         <View style={viewPromptStyles.promptContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
         </View>
-      </ScrollView>);
+      </ScrollView>
+    </SafeAreaView>);
     } else {
       var buttonTitle = '';
       if (prompt.Completed == 0) {
@@ -198,7 +202,7 @@ export default class ViewPrompt extends React.Component {
       } else {
         buttonTitle = 'Update';
       }
-      return (<View>
+      return (<SafeAreaView>
         <NavBack goBack={() => this.props.navigation.navigate('Prompts')} />
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
           <View style={viewPromptStyles.mainContainer}>
@@ -219,7 +223,7 @@ export default class ViewPrompt extends React.Component {
             onPress={() => this.handlePress(prompt)}/>
           </View>
         </ScrollView>
-      </View>);
+      </SafeAreaView>);
     }
   }
 
