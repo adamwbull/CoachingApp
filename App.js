@@ -102,7 +102,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='CoachIdCheck' component={CoachIdCheck} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
             <Stack.Screen name='Contract' component={Contract} />
-            <Stack.Screen name='Main' component={HomeStack} />
+            <Stack.Screen name='Main' component={HomeStack} options={{gestureEnabled: false}} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} />
             <Stack.Screen name='ViewPromptSurvey' component={ViewPromptSurvey} />

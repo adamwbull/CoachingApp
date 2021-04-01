@@ -62,10 +62,10 @@ export const messageThreadStyles = StyleSheet.create({
     color:colors.darkGray
   },
   scrollView: {
-    height:windowHeight-62-60
+    height:windowHeight-122
   },
   scrollViewImagePicked: {
-    height:windowHeight-62-60
+    height:windowHeight-122
   },
   messagesView: {
     paddingLeft:10,

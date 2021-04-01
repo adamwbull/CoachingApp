@@ -454,7 +454,7 @@ export async function getConcepts(coachId, clientId) {
   const payload = await res.json();
 
   if (payload.length > 0) {
-    console.log('Prompts received!');
+    console.log('Concepts received!');
     ret = payload;
   }
 

@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Animated, Image, TouchableOpacity, AsyncStorage, ScrollView, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, Animated, Image, TouchableOpacity, AsyncStorage, ScrollView, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors, messagesStyles } from './Styles.js';
 import { getConversations, sqlToJsDate, getTimeSince } from './API.js';
@@ -13,6 +13,9 @@ import { NavProfileRight } from './TopNav.js';
 const io = require('socket.io-client');
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 //
 export default class Messages extends React.Component {
   constructor(props) {
@@ -22,7 +25,8 @@ export default class Messages extends React.Component {
       opacity: new Animated.Value(0),
       conversations: [],
       socket: null,
-      client: {}
+      client: {},
+      pullRefresh:false
     };
   }
 
@@ -50,14 +54,9 @@ export default class Messages extends React.Component {
   configureSocket = () => {
     var { conversations } = this.state;
     var socket = io("https://messages.coachsync.me/");
-    socket.on('get-conversations', (conversationId) => {
+    socket.on('get-conversations', (data) => {
       console.log('Messages bounced back.');
-      for (var i = 0; i < conversations.length; i++) {
-        if (conversations[i].Id.toString() == conversationId.toString()) {
-          this.refreshConversations();
-          break;
-        }
-      }
+      this.refreshConversations();
     });
   }
 
@@ -67,9 +66,15 @@ export default class Messages extends React.Component {
     };
   }
 
+  onRefresh = () => {
+    this.setState({pullRefresh:true});
+    this.refreshConversations();
+    wait(1000).then(() => this.setState({pullRefresh:false}));
+  }
+
   render() {
 
-    var { refreshing, conversations, client } = this.state;
+    var { refreshing, pullRefresh, conversations, client } = this.state;
 
     if (conversations.length === 0) {
       return (<SafeAreaView>
@@ -79,7 +84,12 @@ export default class Messages extends React.Component {
     } else {
       return (<SafeAreaView>
         <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
-        <ScrollView contentContainerStyle={messagesStyles.scrollView}>
+        <ScrollView contentContainerStyle={messagesStyles.scrollView}
+          refreshControl={
+            <RefreshControl
+              refreshing={pullRefresh}
+              onRefresh={this.onRefresh}/>
+          }>
           {conversations.map((convo, i) => {
 
             // Build info for conversation.

@@ -14,9 +14,26 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { ListItem, Icon, BottomSheet } from 'react-native-elements';
 import * as ImageManipulatorOG from 'expo-image-manipulator';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default class ViewMessageThread extends React.Component {
+const withHooksHOC = (Component: any) => {
+ return (props: any) => {
+   const insets = useSafeAreaInsets();
+
+   return <Component insets={insets} {...props} />;
+ };
+};
+
+interface IHooksHOCProps {
+  insets: Object;
+}
+
+function AddBorderTop() {
+  const insets = useSafeAreaInsets();
+  return (<View style={{width:'100%',height:insets.top,backgroundColor:colors.clouds}}></View>)
+}
+
+class ViewMessageThread extends React.Component<IHooksHOCProps> {
   constructor(props) {
     super(props)
     this.state = {
@@ -36,7 +53,8 @@ export default class ViewMessageThread extends React.Component {
       fullImageUri: 'https://coachsync.me/assets/img/logo.png',
       charsLeft:500,
       charsLeftStyle:[messageThreadStyles.countdown,{color:btnColors.success}],
-      firstTimeInDay:''
+      firstTimeInDay:'',
+      borderHeight:0
     };
   }
 
@@ -64,13 +82,9 @@ export default class ViewMessageThread extends React.Component {
 
   configureSocket = () => {
     var socket = io("https://messages.coachsync.me/");
-    socket.on('incoming-message', (recepients) => {
+    socket.on('incoming-message', (data) => {
       console.log('Thread bounced back.');
-      var { client } = this.state;
-      recepients = JSON.parse(JSON.stringify(recepients));
-      if (recepients.includes(client.Id.toString())) {
-        this.refreshMessages();
-      }
+      this.refreshMessages();
     });
   }
 
@@ -425,7 +439,8 @@ export default class ViewMessageThread extends React.Component {
   render() {
 
     var { title, conversation, messages, client, uri, bsVisible, longPressOptionsVisible, fullImageVisible, fullImageUri } = this.state;
-    var scrollViewStyle = (uri == '') ? messageThreadStyles.scrollView : messageThreadStyles.scrollViewImagePicked;
+    var top = this.props.insets.top;
+    var scrollViewStyle = (uri == '') ? {height:windowHeight-120-top} : {height:windowHeight-120-top};
     var lastCreated = '';
     var firstTimeInDay = '';
     var lastMessage = {};
@@ -442,7 +457,7 @@ export default class ViewMessageThread extends React.Component {
               style={messageThreadStyles.container}
             >
           <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} />
-          <ScrollView contentContainerStyle={scrollViewStyle}>
+          <ScrollView contentContainerStyle={[scrollViewStyle]}>
             <Text style={messageThreadStyles.noMessagesText}>No messages to display.</Text>
           </ScrollView>
           {this.showInput()}
@@ -455,8 +470,9 @@ export default class ViewMessageThread extends React.Component {
           <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={messageThreadStyles.container}>
+          <AddBorderTop />
           <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} />
-          <View style={scrollViewStyle}>
+          <View style={[scrollViewStyle]}>
             <ScrollView
               ref={ref => {this.scrollView = ref}}
               onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
@@ -575,3 +591,5 @@ export default class ViewMessageThread extends React.Component {
   }
 
 }
+
+export default withHooksHOC(ViewMessageThread);
