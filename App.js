@@ -32,8 +32,9 @@ import Schedule from './Scripts/Schedule.js';                   // Working
 import Messages from './Scripts/Messages.js';                   // Working
 import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
 import Contract from './Scripts/Contract.js';                   //
+import Payment from './Scripts/Payment.js';                     //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 19/22
+                                                                // Working 19/23
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -116,6 +117,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='Trophies' component={Trophies} />
             <Stack.Screen name='BugReport' component={BugReport} />
             <Stack.Screen name='FeatureRequest' component={FeatureRequest} />
+            <Stack.Screen name='Payment' component={Payment} />
           </Stack.Navigator>
         </NavigationContainer>
     );

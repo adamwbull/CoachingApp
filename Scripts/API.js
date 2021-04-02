@@ -115,6 +115,58 @@ export async function check() {
 
 */
 
+export async function insertReaction(messageId, userId, emoji, token) {
+
+  var ret = false;
+  var arr = {MessageId:messageId, UserId:userId, Emoji:emoji, Token:token};
+
+  console.log('Adding reaction...');
+  const res = await fetch(url + '/reaction/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Reaction added!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function deleteReaction(id, userId, token) {
+
+  var ret = false;
+  var arr = {Id:id, UserId:userId, Token:token};
+
+  console.log('Removing reaction...');
+  const res = await fetch(url + '/reaction/delete', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Reaction removed!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function uploadAvatar(uri, token) {
 
   var ret = false;

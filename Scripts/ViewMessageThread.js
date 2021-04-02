@@ -5,16 +5,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Modal, Alert, Animated, Platform, KeyboardAvoidingView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { TouchableHighlight, TouchableOpacity, Modal, Alert, Animated, Platform, KeyboardAvoidingView, TextInput, ScrollView, ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { colors, btnColors, messageThreadStyles, windowHeight, windowWidth } from './Styles.js';
 const io = require('socket.io-client');
 import { NavBackCenterText } from './TopNav.js';
-import { getMessages, sqlToJsDate, createMessage, uploadMessageImage, parseTime, parseDateText } from './API.js';
+import { insertReaction, deleteReaction, getMessages, sqlToJsDate, createMessage, uploadMessageImage, parseTime, parseDateText } from './API.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { ListItem, Icon, BottomSheet } from 'react-native-elements';
+import { ListItem, Icon, BottomSheet, Button } from 'react-native-elements';
 import * as ImageManipulatorOG from 'expo-image-manipulator';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import EmojiSelector from 'react-native-emoji-selector';
 
 const withHooksHOC = (Component: any) => {
  return (props: any) => {
@@ -50,6 +51,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       bsVisible: false,
       longPressOptionsVisible:false,
       fullImageVisible:false,
+      emojiSelectorVisible:null,
       fullImageUri: 'https://coachsync.me/assets/img/logo.png',
       charsLeft:500,
       charsLeftStyle:[messageThreadStyles.countdown,{color:btnColors.success}],
@@ -83,7 +85,6 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
   configureSocket = () => {
     var socket = io("https://messages.coachsync.me/");
     socket.on('incoming-message', (data) => {
-      console.log('Thread bounced back.');
       this.refreshMessages();
     });
   }
@@ -289,7 +290,34 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
     </BottomSheet>)
   }
 
+  async createReaction(emoji) {
+    var { client, reactionMessageId } = this.state;
+    var created = await insertReaction(reactionMessageId, client.Id, emoji, client.Token);
+    this.setState({emojiSelectorVisible:false,reactionMessageId:0});
+    this.refreshMessages();
+  }
+
+  showEmojiSelector(emojiSelectorVisible, top) {
+    if (emojiSelectorVisible == true) {
+      console.log('made it!~')
+      return(<View style={{height:windowHeight*0.5}}>
+        <Button
+        title='Cancel Reaction'
+        buttonStyle={{width:'100%',color:'white',backgroundColor:btnColors.danger}}
+        onPress={() => this.setState({emojiSelectorVisible:false})}/>
+        <EmojiSelector
+            onEmojiSelected={emoji => this.createReaction(emoji)}
+            showSearchBar={true}
+            showTabs={false}
+            showHistory={true}
+            showSectionTitles={true}
+          />
+      </View>);
+    }
+  }
+
   longPressOptions(longPressOptionsVisible) {
+
     var list = [
       {
         title:'Add Reaction',
@@ -297,6 +325,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
         icon: 'happy',
         iconColor:colors.darkGray,
         titleStyle:{ color:colors.darkGray },
+        onPress: () => this.setState({emojiSelectorVisible:true,longPressOptionsVisible:false})
       },
       {
         title: 'Cancel',
@@ -373,28 +402,51 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
   }
 
   // Show image in-chat.
-  showImage(showImage, image, imageStyle) {
+  showImage(showImage, isMe, messageId, image, imageStyle) {
     if (showImage) {
-      return (<TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={() => this.setState({fullImageVisible:true,fullImageUri:image})}>
-          <Animated.Image
-            onLoad={this.onLoad}
-            source={{ uri: image }}
-            resizeMode="cover"
-            style={[{
-              opacity: this.state.opacity,
-              flex:1,
-              backgroundColor:colors.darkGray,
-              transform: [
-                {
-                  scale: this.state.opacity.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0.85, 1],
-                  })
-                },
-              ],
-            },imageStyle]}
-          />
-        </TouchableOpacity>);
+      if (isMe) {
+        return (<TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={() => this.setState({fullImageVisible:true,fullImageUri:image})}>
+            <Animated.Image
+              onLoad={this.onLoad}
+              source={{ uri: image }}
+              resizeMode="cover"
+              style={[{
+                opacity: this.state.opacity,
+                flex:1,
+                backgroundColor:colors.darkGray,
+                transform: [
+                  {
+                    scale: this.state.opacity.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.85, 1],
+                    })
+                  },
+                ],
+              },imageStyle]}
+            />
+          </TouchableOpacity>);
+      } else {
+        return (<TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={() => this.setState({fullImageVisible:true,fullImageUri:image})} onLongPress={() => this.setState({longPressOptionsVisible:true, reactionMessageId:messageId})}>
+            <Animated.Image
+              onLoad={this.onLoad}
+              source={{ uri: image }}
+              resizeMode="cover"
+              style={[{
+                opacity: this.state.opacity,
+                flex:1,
+                backgroundColor:colors.darkGray,
+                transform: [
+                  {
+                    scale: this.state.opacity.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.85, 1],
+                    })
+                  },
+                ],
+              },imageStyle]}
+            />
+          </TouchableOpacity>);
+      }
     } else {
       return (<View></View>);
     }
@@ -436,9 +488,96 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
 
   }
 
+  removeReaction(id, userId, token) {
+    console.log('removeReaction');
+    Alert.alert(
+      "Remove Reaction",
+      'Remove your reaction to this message?',
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Remove",
+          onPress: async () => {
+            var removed = await deleteReaction(id, userId, token);
+            if (removed) {
+              this.refreshMessages();
+            }
+          },
+          style: "OK",
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => this.props.navigation.navigate('ClientProfile'),
+      }
+    );
+  }
+
+  findMatch(emoji) {
+    return function (response) {
+      return response.Emoji === emoji;
+    };
+  }
+
+  findUserReaction(userId) {
+    return function (response) {
+      return response.UserId === userId;
+    };
+  }
+
+  showReactions(reactions) {
+    var len = reactions.length;
+    var { client } = this.state;
+    if (len > 0) {
+      // Item: { Emoji: '', Reactions:[reaction, reaction] }
+      var reactionGroups = [];
+      for (var i = 0; i < reactions.length; i++) {
+        var match = reactionGroups.filter(this.findMatch(reactions[i].Emoji));
+        if (match.length > 0) {
+          for (var j = 0; j < reactionGroups.length; j++) {
+            if (reactionGroups[j].Emoji == reactions[i].Emoji) {
+              console.log('made it here');
+              reactionGroups[j].Reactions.push(reactions[i]);
+            }
+          }
+        } else {
+          reactionGroups.push({ Emoji:reactions[i].Emoji, Reactions:[reactions[i]] });
+        }
+      }
+
+      return (<View style={messageThreadStyles.reactions}>
+        {reactionGroups.map((reactionItem, i) => {
+          var key = reactionItem.Emoji;
+          var reaction = reactionItem.Reactions.filter(this.findUserReaction(client.Id));
+          if (reaction.length > 0) {
+            reaction = reaction[0];
+            return (<TouchableHighlight onPress={() => this.removeReaction(reaction.Id, client.Id, client.Token)} key={key} style={messageThreadStyles.reactionBox}>
+              <View style={messageThreadStyles.reactionBoxInternal}>
+                <Text style={messageThreadStyles.reaction}>{reactionItem.Emoji}</Text>
+                <Text style={messageThreadStyles.reactionCounter}>{reactionItem.Reactions.length}</Text>
+              </View>
+            </TouchableHighlight>);
+          } else {
+            return (<View key={key} style={messageThreadStyles.reactionBox}>
+              <View style={messageThreadStyles.reactionBoxInternal}>
+                <Text style={messageThreadStyles.reaction}>{reactionItem.Emoji}</Text>
+                <Text style={messageThreadStyles.reactionCounter}>{reactionItem.Reactions.length}</Text>
+              </View>
+            </View>);
+          }
+        })}
+      </View>);
+    } else {
+      return (<View></View>);
+    }
+  }
+
   render() {
 
-    var { title, conversation, messages, client, uri, bsVisible, longPressOptionsVisible, fullImageVisible, fullImageUri } = this.state;
+    var { title, conversation, messages, client, uri, bsVisible, longPressOptionsVisible, emojiSelectorVisible, fullImageVisible, fullImageUri } = this.state;
     var top = this.props.insets.top;
     var scrollViewStyle = (uri == '') ? {height:windowHeight-120-top} : {height:windowHeight-120-top};
     var lastCreated = '';
@@ -462,7 +601,6 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
           </ScrollView>
           {this.showInput()}
           {this.bottomSheet(bsVisible)}
-          {this.longPressOptions(longPressOptionsVisible)}
         </KeyboardAvoidingView>
       </SafeAreaView>);
       } else {
@@ -490,7 +628,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
                   firstTimeInDay = timeInfo.firstTimeInDay;
                   var showUserDetails = null;
                   var paddingTopCalc = {};
-                  if (timeInfo.print == true || prevLastMessage.UserId != message.UserId) {
+                  if (timeInfo.print == true || prevLastMessage.UserId != message.UserId || message.Reactions.length > 0) {
                     showUserDetails = true;
                     paddingTopCalc = {paddingTop:20};
                   }
@@ -519,15 +657,16 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
                   if (isMe) {
                     return (<View key={i}>
                       {this.showTime(timeInfo)}
-                      <View style={[messageThreadStyles.myMessageGroup,paddingTopCalc]}>
-                        <View style={messageThreadStyles.myMessageSection}>
+                      <View style={[messageThreadStyles.myMessageGroup]}>
+                        <View style={[messageThreadStyles.myMessageSection,,paddingTopCalc]}>
                           {
                             showText &&
                             (<View style={messageStyle}>
                               <Text style={messageTextStyle}>{message.Text}</Text>
                             </View>)
                           }
-                          {this.showImage(showImage, message.Image, imageStyle)}
+                          {this.showImage(showImage, isMe, message.Id, message.Image, imageStyle)}
+                          {this.showReactions(message.Reactions)}
                         </View>
                       </View>
                     </View>);
@@ -564,13 +703,14 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
                         <View style={messageThreadStyles.theirMessageSection}>
                           { showUserDetails &&
                           (<Text style={messageThreadStyles.theirName}>{messageUser[0][0].FirstName + ' ' + messageUser[0][0].LastName}</Text>)}
-                          <TouchableOpacity activeOpacity={0.7} style={messageStyle} onLongPress={() => this.setState({longPressOptionsVisible:true})}>
+                          <TouchableOpacity activeOpacity={0.7} style={messageStyle} onLongPress={() => this.setState({longPressOptionsVisible:true, reactionMessageId:message.Id})}>
                             {
                               showText &&
                               (<Text style={messageTextStyle}>{message.Text}</Text>)
                             }
                           </TouchableOpacity>
-                          {this.showImage(showImage, message.Image, imageStyle)}
+                          {this.showImage(showImage, isMe, message.Id, message.Image, imageStyle)}
+                          {this.showReactions(message.Reactions)}
                         </View>
                       </View>
                     </View>);
@@ -582,6 +722,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
           {this.showInput()}
           {this.bottomSheet(bsVisible)}
           {this.longPressOptions(longPressOptionsVisible)}
+          {this.showEmojiSelector(emojiSelectorVisible, top)}
           {this.displayFullImage(fullImageVisible, fullImageUri)}
         </KeyboardAvoidingView>
       </SafeAreaView>);

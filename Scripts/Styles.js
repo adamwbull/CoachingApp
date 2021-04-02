@@ -169,7 +169,7 @@ export const messageThreadStyles = StyleSheet.create({
     justifyContent:'flex-start',
     alignItems:'center',
     alignSelf:'flex-end',
-    marginTop:1,
+    marginTop:5,
   },
   myMessageImage: {
     backgroundColor:messageColors.me,
@@ -177,7 +177,7 @@ export const messageThreadStyles = StyleSheet.create({
     justifyContent:'flex-start',
     alignItems:'center',
     alignSelf:'flex-end',
-    marginTop:1,
+    marginTop:5,
     width:windowWidth-80
   },
   myMessageAnImage: {
@@ -238,7 +238,7 @@ export const messageThreadStyles = StyleSheet.create({
     borderBottomLeftRadius:25,
     alignItems:'center',
     alignSelf:'flex-start',
-    marginTop:1,
+    marginTop:5,
   },
   theirMessageImage: {
     backgroundColor:messageColors.them,
@@ -246,7 +246,7 @@ export const messageThreadStyles = StyleSheet.create({
     justifyContent:'flex-start',
     alignItems:'center',
     alignSelf:'flex-start',
-    marginTop:1,
+    marginTop:5,
     width:windowWidth-80
   },
   theirMessageText: {
@@ -272,8 +272,38 @@ export const messageThreadStyles = StyleSheet.create({
     height:200,
     resizeMode:'cover',
     borderRadius:25,
-    marginTop:1,
+    marginTop:5,
   },
+  reactions: {
+    flexDirection:'row',
+    justifyContent:'flex-end',
+    width:windowWidth-80,
+  },
+  reactionBox: {
+    flexDirection:'row',
+    justifyContent:'center',
+    borderRadius:10,
+    paddingTop:5,
+    paddingBottom:5,
+    paddingLeft:10,
+    paddingRight:10,
+    marginRight:10,
+    marginTop:5,
+    backgroundColor:colors.white,
+  },
+  reactionBoxInternal: {
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  reaction: {
+    fontSize:20,
+  },
+  reactionCounter: {
+    fontSize:16,
+    marginLeft:3,
+    color:colors.darkGray,
+  }
 });
 
 export const messagesStyles = StyleSheet.create({
