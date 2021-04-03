@@ -112,7 +112,7 @@ export default class Messages extends React.Component {
                     if (usersFound == 1) {
                       convoUserName = convoUserName + convo.Users[iterator][0].FirstName;
                     } else {
-                      convoUserName = convoUserName + ', ' + otherMembers + ' more';
+                      convoUserName = convoUserName + ', +' + otherMembers + ' more';
                       iterator = totalMembers;
                     }
                   }
@@ -126,17 +126,26 @@ export default class Messages extends React.Component {
 
             // Get latest message.
             var lastSenderMessage = 'No messages yet.';
+            var lastSender = {};
             if (convo.LastSenderMessage != '') {
-              var lastSender = filt.filter(this.findUser(convo.LastSenderId));
+              lastSender = filt.filter(this.findUser(convo.LastSenderId));
               lastSender = lastSender[0][0];
               var name = (lastSender.Id == client.Id) ? 'You' : lastSender.FirstName;
               var msg = (convo.LastSenderMessage.length > 25) ? convo.LastSenderMessage.substring(0,25) + '...' : convo.LastSenderMessage;
               lastSenderMessage = name + ': ' + msg;
+              if (lastSender.Id == client.Id) {
+                lastSender = convoUser;
+              }
             } else if (convo.LastSenderId != 0) {
-              var lastSender = filt.filter(this.findUser(convo.LastSenderId));
+              lastSender = filt.filter(this.findUser(convo.LastSenderId));
               lastSender = lastSender[0][0];
               var name = (lastSender.Id == client.Id) ? 'You' : lastSender.FirstName;
               lastSenderMessage = name + ": Image Attachment";
+              if (lastSender.Id == client.Id) {
+                lastSender = convoUser;
+              }
+            } else {
+              lastSender = convoUser;
             }
 
             // Calculate time since last message.
@@ -148,7 +157,7 @@ export default class Messages extends React.Component {
               <View style={messagesStyles.convoAvatar}>
                 <Animated.Image
                   onLoad={this.onLoad}
-                  source={{ uri: convoUser.Avatar }}
+                  source={{ uri: lastSender.Avatar }}
                   resizeMode="cover"
                   style={{
                     opacity: this.state.opacity,

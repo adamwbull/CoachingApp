@@ -115,6 +115,27 @@ export async function check() {
 
 */
 
+export async function getPaymentCharges(coachId, clientId, token) {
+
+  var ret = false;
+
+  console.log('Getting payment charge info...');
+  console.log(url + '/payment-charges/' + coachId + '/' + clientId + '/' + token);
+  const res = await fetch(url + '/payment-charges/' + coachId + '/' + clientId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Payment charges found!');
+    ret = payload;
+  }
+
+  return ret;
+
+}
+
 export async function getPaymentCharge(paymentId, token, clientId, coachId) {
 
   var ret = false;

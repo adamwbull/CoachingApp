@@ -9,7 +9,7 @@ import { Linking, Payment, Alert, TextInput, ScrollView, Keyboard, TouchableWith
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem, Icon, Button } from 'react-native-elements';
 import { NavBack, NavSimple } from './TopNav.js';
-import { mode, windowHeight, windowWidth, colors, btnColors, paymentStyles } from '../Scripts/Styles.js';
+import { windowHeight, windowWidth, colors, btnColors, paymentStyles } from '../Scripts/Styles.js';
 import { getPaymentCharge, sqlToJsDate, parseDateText, getPayment, getStripePublicKey, createPaymentCharge, updatePromptAssoc, updateOnboardingCompleted, getOnboardingContract } from './API.js';
 import { CreditCardInput } from "react-native-credit-card-input-plus";
 import getSymbolFromCurrency from 'currency-symbol-map';
@@ -296,7 +296,7 @@ export default class ViewConcept extends React.Component {
                 <Text style={paymentStyles.amountText}>{amount}</Text>
               </View>
               <Text style={paymentStyles.dueDate}>
-                on {parseDateText(sqlToJsDate(prompt.CompletedDate))}
+                on {parseDateText(sqlToJsDate(paymentCharge.Created))}
               </Text>
               <Button
               title='View Receipt'

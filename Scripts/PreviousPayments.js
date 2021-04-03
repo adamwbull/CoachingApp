@@ -5,23 +5,62 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AsyncStorage, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NavBack } from './TopNav.js';
+import getSymbolFromCurrency from 'currency-symbol-map';
+import { Button, Icon, ListItem } from 'react-native-elements';
+import { windowHeight, windowWidth, colors, btnColors, previousPaymentsStyles } from '../Scripts/Styles.js';
+import { sqlToJsDate, parseDateText, getPaymentCharges } from './API.js';
 
-//
 export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      refreshing : false
+      refreshing: true,
+      payments: []
     };
+  }
+
+  async componentDidMount() {
+    var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
+    var client = JSON.parse(await AsyncStorage.getItem('Client'));
+    var payments = await getPaymentCharges(coach.Id, client.Id, client.Token);
+    this.setState({refreshing:false,payments:payments});
   }
 
   render() {
 
-    return (<View style={styles.container}>
-      <Text>Test!</Text>
-    </View>);
+    var { refreshing, payments } = this.state;
+    if (refreshing == true) {
+      return (<SafeAreaView>
+        <NavBack goBack={() => this.props.navigation.goBack()} />
+        <ScrollView contentContainerStyle={{alignItems: 'center',
+        justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
+        </ScrollView>
+      </SafeAreaView>);
+    } else {
+      return (<SafeAreaView>
+        <NavBack goBack={() => this.props.navigation.goBack()} />
+        <ScrollView>
+          <Text style={previousPaymentsStyles.listItemsTitle}>Previous Payments</Text>
+          <View style={previousPaymentsStyles.listItems}>
+          {payments.map((payment, i) => {
+            return (<ListItem key={i} bottomDivider onPress={() => this.props.navigation.navigate('PreviousPayment', { payment:payment })}>
+              <Icon type='ionicon' name='card' />
+              <ListItem.Content>
+                <ListItem.Title>{payment.Title}</ListItem.Title>
+                <ListItem.Subtitle>{parseDateText(sqlToJsDate(payment.Created))}</ListItem.Subtitle>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>);
+          })}
+          </View>
+        </ScrollView>
+      </SafeAreaView>);
+    }
+
   }
 
 }

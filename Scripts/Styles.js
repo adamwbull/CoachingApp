@@ -61,6 +61,20 @@ export const levelScale = {
   completeColor: ''
 }
 
+export const previousPaymentsStyles = StyleSheet.create({
+  listItemsTitle: {
+    marginLeft:'2%',
+    fontSize:25,
+    marginBottom:10,
+    marginTop:30,
+    fontWeight:'500',
+    color:colors.darkGray,
+  },
+  listItems: {
+    width:'100%'
+  }
+})
+
 export const paymentStyles = StyleSheet.create({
   container: {
     padding:10,

@@ -98,8 +98,13 @@ export default class ClientProfile extends React.Component {
         },
         {
           title: 'Change Password',
-          icon: 'lock',
+          icon: 'lock-closed',
           function: () => this.props.navigation.navigate('ChangePassword')
+        },
+        {
+          title: 'Previous Payments',
+          icon: 'wallet',
+          function: () => this.props.navigation.navigate('PreviousPayments')
         },
         {
           title: 'Delete Account',
@@ -169,7 +174,7 @@ export default class ClientProfile extends React.Component {
             {
               generalSettings.map((item, i) => (
                 <ListItem key={i} bottomDivider onPress={item.function}>
-                  <Icon name={item.icon} />
+                  <Icon type='ionicon' name={item.icon} />
                   <ListItem.Content>
                     <ListItem.Title>{item.title}</ListItem.Title>
                   </ListItem.Content>
