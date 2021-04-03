@@ -19,6 +19,19 @@ export const colors = {
   red: '#e74c3c'
 }
 
+export const colorsPerm = {
+  emerald: '#2ecc71',
+  forest: '#27ae60',
+  clouds: '#ecf0f1',
+  blueGray: '#344150',
+  darkGray: '#23272a',
+  black: '#000000',
+  white: '#ffffff',
+  red: '#e74c3c'
+}
+
+export const mode = 'light';
+
 export const btnColors = {
   primary:'#3498db',
   caution:'#f1c40f',
@@ -47,6 +60,117 @@ export const levelScale = {
   baseColor: '',
   completeColor: ''
 }
+
+export const paymentStyles = StyleSheet.create({
+  container: {
+    padding:10,
+    marginLeft:'3%',
+    marginRight:'3%',
+    width:'94%',
+    borderRadius:25,
+    marginTop:15,
+    backgroundColor:colors.white
+  },
+  title: {
+    fontSize:30,
+    color:colors.darkGray,
+    textAlign:'center',
+  },
+  memo: {
+    textAlign:'center',
+    fontSize:18,
+    color:colors.darkGray
+  },
+  amountTitle: {
+    fontSize:22,
+    textAlign:'center',
+    color:colors.darkGray,
+    marginTop:15,
+  },
+  amountContainer: {
+    backgroundColor:colors.darkGray,
+    padding:10,
+    borderRadius:25,
+    width:'60%',
+    marginLeft:'20%'
+  },
+  amountText: {
+    textAlign:'center',
+    fontSize:25,
+    color:colors.white,
+  },
+  dueDate: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:18,
+    marginBottom:15,
+    marginTop:5,
+  },
+  submitButton: {
+    backgroundColor:btnColors.success,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  submitButtonStripe: {
+    backgroundColor:'#5433ff',
+    color:'white',
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  submitButtonPayPal: {
+    backgroundColor:btnColors.primary,
+    color:'white',
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  submitButtonContainer: {
+    marginBottom:10,
+    marginTop:10,
+    width:'50%',
+    borderRadius:50,
+    marginLeft:'25%'
+  },
+  modalContainer: {
+    flex:1,
+    backgroundColor:'white',
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-between'
+  },
+  creditTitle: {
+    textAlign:'center',
+    color:colorsPerm.darkGray,
+    fontSize:25,
+    marginTop:30,
+  },
+  cardHolderLabel: {
+    fontWeight:'bold',
+    marginLeft:20,
+    marginTop:20,
+  },
+  cardHolderInput: {
+    color:'black',
+    height:40,
+    marginLeft:20,
+    borderBottomWidth:1,
+    borderBottomColor:'black',
+    width:windowWidth*0.7
+  },
+  errorText: {
+    fontSize:18,
+    textAlign:'center',
+    color:btnColors.danger
+  }
+})
 
 export const messageThreadStyles = StyleSheet.create({
   container: {

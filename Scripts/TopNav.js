@@ -139,3 +139,50 @@ export class NavBackCenterText extends React.Component {
     </View>);
   }
 }
+
+export class NavSimple extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      refreshing : false,
+      opacity: new Animated.Value(0)
+    };
+  }
+
+  onLoad = () => {
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  render() {
+    return (<View style={[navStyles.nav]}>
+      <View style={navStyles.left}>
+      </View>
+      <View style={navStyles.center}>
+        <Animated.Image
+          onLoad={this.onLoad}
+          source={require('../assets/nav-logo.png')}
+          style={[
+            {
+              opacity: this.state.opacity,
+              transform: [
+                {
+                  scale: this.state.opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1],
+                  })
+                },
+              ],
+            },
+            navStyles.image
+          ]}
+        />
+      </View>
+      <View style={navStyles.right}>
+      </View>
+    </View>);
+  }
+}

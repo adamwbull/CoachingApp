@@ -47,10 +47,10 @@ export default class OnboardingSurvey extends React.Component {
           this.props.navigation.navigate('Contract', { Contract:contract });
         } else if (coach.OnboardingType == 2) {
           var payment = await getOnboardingPayment(coach.Id);
-          this.props.navigation.navigate('Payment', { Payment:payment });
+          this.props.navigation.navigate('Payment', { paymentId:payment.Id, nav:'Onboarding' });
         } else if (coach.OnboardingType == 3) {
           var payment = await getOnboardingPayment(coach.Id);
-          this.props.navigation.navigate('Payment', { Payment:payment });
+          this.props.navigation.navigate('Payment', { paymentId:payment.Id, nav:'Onboarding', both:true });
         }
       }
     } finally {

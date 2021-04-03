@@ -115,6 +115,94 @@ export async function check() {
 
 */
 
+export async function getPaymentCharge(paymentId, token, clientId, coachId) {
+
+  var ret = false;
+
+  console.log('Getting payment charge info...');
+  const res = await fetch(url + '/payment-charge/' + paymentId + '/' + coachId + '/' + clientId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Payment charge found!');
+    ret = payload[0];
+  }
+
+  return ret;
+
+}
+
+export async function getPayment(paymentId, clientToken) {
+
+  var ret = false;
+
+  console.log('Getting payment...');
+  const res = await fetch(url + '/payment/' + paymentId + '/' + clientToken, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Payment retrieved!');
+    ret = payload[0];
+  }
+
+  return ret;
+
+}
+
+export async function createPaymentCharge(paymentId, cardToken, clientId, clientToken, coachId, title, amount, currency, memo) {
+
+  var ret = false;
+  var arr = {PaymentId:paymentId, CardToken:cardToken, ClientId:clientId, Token:clientToken, CoachId:coachId, Title:title, Amount:amount, Currency:currency, Memo:memo};
+  console.log('Sending charge...');
+  const res = await fetch(url + '/payment-charge/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Charge created!');
+    ret = true;
+  } else {
+    console.log('Charge failed!');
+    ret = false;
+  }
+
+  return ret;
+
+}
+
+export async function getStripePublicKey(coachId, clientToken) {
+
+  var ret = false;
+
+  console.log('Getting Stripe public key...');
+  const res = await fetch(url + '/stripe-info/public-key/' + coachId + '/' + clientToken, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Public key retrieved!');
+    ret = payload[0].PublicKey;
+  }
+
+  return ret;
+
+}
+
 export async function insertReaction(messageId, userId, emoji, token) {
 
   var ret = false;

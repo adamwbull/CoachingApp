@@ -34,7 +34,9 @@ export default class Prompts extends React.Component {
   }
 
   openPrompt(prompt) {
-    if (prompt.Type == 1) {
+    if (prompt.Type == 2) {
+      this.props.navigation.navigate('Payment', { prompt:prompt, nav:'Prompt', onGoBack: () => this.getData() });
+    } else if (prompt.Type == 1) {
       this.props.navigation.navigate('ViewPromptSurvey', { prompt:prompt, onGoBack: () => this.getData() });
     } else if (prompt.Type == 0) {
       this.props.navigation.navigate('ViewPrompt', { prompt:prompt, onGoBack: () => this.getData() });
@@ -83,10 +85,14 @@ export default class Prompts extends React.Component {
           } else if (prompt.Type == 1) {
             // Item is a Survey.
             prompt.IconName = 'clipboard';
+          } else if (prompt.Type == 2) {
+            // Item is a Payment.
+            prompt.IconName = 'wallet';
           }
+          var key = prompt.Id + '_' + prompt.Prompt[0][0].Id;
           return (<TouchableOpacity
             onPress={() => this.openPrompt(prompt)}
-            key={prompt.Prompt[0][0].Id}
+            key={key}
             style={promptsStyles.prompt}>
             <View style={promptsStyles.promptIconContainer}>
               <IonIcon name={prompt.IconName} size={40} color={colors.blueGray} />

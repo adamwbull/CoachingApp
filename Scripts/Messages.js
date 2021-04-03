@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
-//
+
 export default class Messages extends React.Component {
   constructor(props) {
     super(props)

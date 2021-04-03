@@ -30,11 +30,12 @@ import DeleteAccount from './Scripts/DeleteAccount.js';         // Working
 import Trophies from './Scripts/Trophies.js';                   // Working
 import Schedule from './Scripts/Schedule.js';                   // Working
 import Messages from './Scripts/Messages.js';                   // Working
-import ViewMessageThread from './Scripts/ViewMessageThread.js'; //
+import ViewMessageThread from './Scripts/ViewMessageThread.js'; // Working
+import Payment from './Scripts/Payment.js';                     // Working
+import PreviousPayments from './Scripts/PreviousPayments.js';   //
 import Contract from './Scripts/Contract.js';                   //
-import Payment from './Scripts/Payment.js';                     //
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 19/23
+                                                                // Working 21/24
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -118,6 +119,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='BugReport' component={BugReport} />
             <Stack.Screen name='FeatureRequest' component={FeatureRequest} />
             <Stack.Screen name='Payment' component={Payment} />
+            <Stack.Screen name='PreviousPayments' component={PreviousPayments} />
           </Stack.Navigator>
         </NavigationContainer>
     );
