@@ -115,6 +115,174 @@ export async function check() {
 
 */
 
+export async function getContractsSigned(clientId, clientToken) {
+
+  var ret = false;
+
+  console.log('Getting signed contracts...');
+  const res = await fetch(url + '/contracts-signed/' + clientId + '/' + clientToken, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Contracts found!');
+    ret = payload;
+  }
+
+  return ret;
+
+}
+
+export async function getContractSigned(contractId, clientId, clientToken) {
+
+  var ret = false;
+
+  console.log('Getting signed contract...');
+  console.log(url + '/contract-signed/' + contractId + '/' + clientId + '/' + clientToken);
+  const res = await fetch(url + '/contract-signed/' + contractId + '/' + clientId + '/' + clientToken, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Contract found!');
+    ret = payload[0];
+  }
+
+  return ret;
+
+}
+
+export async function optOutOfContractAndPrompt(contractSignedId, clientId, clientToken, promptId) {
+
+  var ret = false;
+  var arr = {Id:contractSignedId, ClientId:clientId, Token:clientToken, PromptAssocId:promptId};
+  console.log('Opting out of contract...');
+  const res = await fetch(url + '/contract-signed-prompt/opt-out', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload[0].affectedRows > 0) {
+    console.log('Opted out!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function optOutOfContract(contractSignedId, clientId, clientToken) {
+
+  var ret = false;
+  var arr = {Id:contractSignedId, ClientId:clientId, Token:clientToken};
+  console.log('Opting out of contract...');
+  const res = await fetch(url + '/contract-signed/opt-out', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Opted out!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function uploadSignature(token, clientId, clientName, contractId, contractFile, signature) {
+
+  var ret = false;
+  var arr = {Token:token, ClientId:clientId, ClientName:clientName, ContractId:contractId, ContractFile:contractFile, Signature:signature};
+  console.log('Uploading signature...');
+  const res = await fetch(url + '/contract-signed/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.ContractFile != undefined) {
+    console.log('ContractSigned created!');
+    const upRes = await fetch(url + '/contract-signed/update-file', {
+      method:'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const upPayload = await upRes.json();
+    if (upPayload.passed == true) {
+      console.log('Merged files!');
+      ret = true;
+    } else {
+      console.log('Merge failed!');
+      ret = false;
+    }
+  } else {
+    console.log('ContractSigned failed!');
+    ret = false;
+  }
+
+  return ret;
+
+}
+
+/*export async function uploadSignature(token, clientId, contractId, signature) {
+
+  var ret = false;
+  let uriParts = uri.split('.');
+  let fileType = uriParts[uriParts.length - 1];
+  let formData = new FormData();
+  formData.append('photo', {
+    uri: uri,
+    name: `${token}_${clientId}_${contractId}.${fileType}`,
+    type: `image/${fileType}`,
+  });
+
+  console.log('Attempting message attachment upload...');
+  const res = await fetch(uploadUrl + '/api/signature', {
+    method:'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows == 1) {
+    console.log('Upload complete!');
+    ret = true;
+  }
+
+  return ret;
+
+}*/
+
 export async function getPaymentCharges(coachId, clientId, token) {
 
   var ret = false;
@@ -342,7 +510,6 @@ export async function uploadMessageImage(uri, token, id) {
 
   return ret;
 
-
 }
 
 export async function createMessage(token, conversationId, clientId, text) {
@@ -375,6 +542,7 @@ export async function getMessages(conversationId, token) {
   var ret = false;
 
   console.log('Getting chat messages...');
+  console.log(url + '/messages/' + conversationId + '/' + token);
   const res = await fetch(url + '/messages/' + conversationId + '/' + token, {
     method:'GET'
   });

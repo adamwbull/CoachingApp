@@ -11,7 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { homeStyles, feedMediaWidth, windowHeight, colors } from './Styles.js';
 import { NavProfileRight } from './TopNav.js';
 import { getLinkItems, getFeed, sqlToJsDate, parseSimpleDateText } from '../Scripts/API.js';
-import { Header, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

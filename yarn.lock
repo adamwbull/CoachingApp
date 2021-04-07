@@ -6410,6 +6410,11 @@
   "resolved" "https://registry.npmjs.org/react-native-screens/-/react-native-screens-2.15.2.tgz"
   "version" "2.15.2"
 
+"react-native-signature-canvas@^3.6.0":
+  "integrity" "sha512-4TRdii1olBku6F6aCkPs0q3qp+zA6FEBPLRPYRlrpMX3ixVXnAI+PiZ9w4afHAXz4O4lgelh/HDyBiUBgv2GIQ=="
+  "resolved" "https://registry.npmjs.org/react-native-signature-canvas/-/react-native-signature-canvas-3.6.0.tgz"
+  "version" "3.6.0"
+
 "react-native-size-matters@^0.3.1":
   "integrity" "sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw=="
   "resolved" "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz"
@@ -6453,7 +6458,7 @@
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
 
-"react-native-webview@^11.2.5", "react-native-webview@>= 10.9.0":
+"react-native-webview@^11.0.3", "react-native-webview@^11.2.5", "react-native-webview@>= 10.9.0":
   "integrity" "sha512-j/nXFpTQffawojgecg/WeKgyCHTKwSRHSqH/HH20O99WbJz6FGSfuvlG95TO1hCuIqQh5ROtya9WOfXoJgavIA=="
   "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.2.5.tgz"
   "version" "11.2.5"

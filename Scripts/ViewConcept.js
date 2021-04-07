@@ -119,7 +119,7 @@ export default class ViewConcept extends React.Component {
               height:adjustedHeight,
               marginBottom:10}}
               originWhitelist={['*']}
-              scrollEnabled={false}
+              scrollEnabled={true}
               javaScriptEnabled={true}
               domStorageEnabled={true}
               source={{

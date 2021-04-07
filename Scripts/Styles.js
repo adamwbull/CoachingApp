@@ -61,6 +61,84 @@ export const levelScale = {
   completeColor: ''
 }
 
+export const contractStyles = StyleSheet.create({
+  container: {
+    width:'100%'
+  },
+  fileMainContainer: {
+    backgroundColor:colors.white,
+    width:'100%',
+  },
+  fileConceptContainer: {
+    backgroundColor:colors.white
+  },
+  bottomContainer:{
+    height:120,
+    justifyContent:'flex-start',
+    backgroundColor:colors.white,
+    borderTopWidth:2,
+    borderTopColor:colors.forest,
+  },
+  text: {
+    color:colors.darkGray,
+    marginTop:10,
+    fontSize:14,
+    textAlign:'center'
+  },
+  button: {
+    backgroundColor:btnColors.primary,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+  buttonContainer: {
+    marginTop:10,
+    marginLeft:'25%',
+    width:'50%',
+    borderRadius:50
+  },
+  signatureContainer: {
+    flex:1,
+    borderTopWidth:2,
+    borderTopColor:colors.forest,
+  },
+  closeButton: {
+    backgroundColor:btnColors.danger,
+    padding:10,
+    textAlign:'center',
+    width:'100%',
+    fontSize:14,
+  },
+  closeButtonContainer: {
+    width:'100%',
+    fontSize:14,
+    borderRadius:0
+  },
+  agreeTop: {
+    color:colors.darkGray,
+    fontSize:14,
+    textAlign:'center',
+    marginBottom:10,
+  },
+  bottomContainerSigned: {
+    height:60,
+    justifyContent:'center',
+    backgroundColor:colors.white,
+    borderTopWidth:2,
+    borderTopColor:colors.forest,
+  },
+  buttonOptOut: {
+    backgroundColor:btnColors.danger,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%'
+  },
+})
+
 export const previousPaymentsStyles = StyleSheet.create({
   listItemsTitle: {
     marginLeft:'2%',
@@ -205,10 +283,15 @@ export const messageThreadStyles = StyleSheet.create({
   scrollViewImagePicked: {
     height:windowHeight-122
   },
+  scrollViewStyle: {
+    flexGrow:1,
+    justifyContent:'flex-end'
+  },
   messagesView: {
     paddingLeft:10,
     paddingRight:10,
-    paddingBottom:20
+    paddingBottom:20,
+    justifyContent:'flex-end'
   },
   userInput: {
     borderTopWidth:2,
@@ -1146,6 +1229,9 @@ export const promptsStyles = StyleSheet.create({
   },
   promptInfoCompleted: {
     color:btnColors.success
+  },
+  promptInfoOptedOut: {
+    color:btnColors.caution
   },
   overdueText: {
     color:btnColors.danger,

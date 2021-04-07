@@ -34,7 +34,9 @@ export default class Prompts extends React.Component {
   }
 
   openPrompt(prompt) {
-    if (prompt.Type == 2) {
+    if (prompt.Type == 3) {
+      this.props.navigation.navigate('Contract', { prompt:prompt, nav:'Prompt', onGoBack: () => this.getData() });
+    } else if (prompt.Type == 2) {
       this.props.navigation.navigate('Payment', { prompt:prompt, nav:'Prompt', onGoBack: () => this.getData() });
     } else if (prompt.Type == 1) {
       this.props.navigation.navigate('ViewPromptSurvey', { prompt:prompt, onGoBack: () => this.getData() });
@@ -72,6 +74,10 @@ export default class Prompts extends React.Component {
             var completed = sqlToJsDate(prompt.CompletedDate);
             displayInfo = 'Completed ' + parseSimpleDateText(completed);
             displayStyle = promptsStyles.promptInfoCompleted;
+          } else if (prompt.Completed == 2) {
+            var completed = sqlToJsDate(prompt.CompletedDate);
+            displayInfo = 'Opted out ' + parseSimpleDateText(completed);
+            displayStyle = promptsStyles.promptInfoOptedOut;
           }
           if (prompt.Type == 0) {
             // Item is a Prompt.
@@ -88,6 +94,9 @@ export default class Prompts extends React.Component {
           } else if (prompt.Type == 2) {
             // Item is a Payment.
             prompt.IconName = 'wallet';
+          } else if (prompt.Type == 3) {
+            // Item is a Contract.
+            prompt.IconName = 'document-text';
           }
           var key = prompt.Id + '_' + prompt.Prompt[0][0].Id;
           return (<TouchableOpacity

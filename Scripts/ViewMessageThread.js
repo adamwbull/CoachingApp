@@ -613,7 +613,8 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
           <View style={[scrollViewStyle]}>
             <ScrollView
               ref={ref => {this.scrollView = ref}}
-              onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}>
+              onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}
+              contentContainerStyle={messageThreadStyles.scrollViewStyle}>
               <View style={messageThreadStyles.messagesView}>
                 {messages.map((message, i) => {
                   var prevLastMessage = lastMessage;

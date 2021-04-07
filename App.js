@@ -34,9 +34,10 @@ import ViewMessageThread from './Scripts/ViewMessageThread.js'; // Working
 import Payment from './Scripts/Payment.js';                     // Working
 import PreviousPayments from './Scripts/PreviousPayments.js';   // Working
 import PreviousPayment from './Scripts/PreviousPayment.js';     // Working
-import Contract from './Scripts/Contract.js';                   //
+import Contract from './Scripts/Contract.js';                   // Working
+// View Contracts in Settings...? Or add Onboarding as a Prompt.
 import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 23/25
+                                                                // Working 24/25
 
 // Create navigation controllers
 const Stack = createStackNavigator();
