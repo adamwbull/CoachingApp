@@ -45,7 +45,7 @@ export default class DeleteAccount extends React.Component {
     if (password === client.Password) {
       Alert.alert(
         "Last chance...",
-        'Tap Delete if you are 100% sure you want to delete your account. All of your data will be lost!',
+        'Tap Delete if you are 100% sure you want to delete your account. This cannot be undone!',
         [
           {
             text: "Cancel",

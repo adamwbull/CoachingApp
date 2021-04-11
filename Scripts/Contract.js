@@ -11,7 +11,7 @@ import { WebView } from 'react-native-webview';
 import { NavBackCenterText, NavBack } from './TopNav.js';
 import Signature from 'react-native-signature-canvas';
 import { Button, Icon } from 'react-native-elements';
-import { updateOnboardingCompleted, optOutOfContract, optOutOfContractAndPrompt, getContractSigned, uploadSignature, updatePromptAssoc, parseSimpleDateText, sqlToJsDate } from './API.js';
+import { createPromptAssoc, updateOnboardingCompleted, optOutOfContract, optOutOfContractAndPrompt, getContractSigned, uploadSignature, updatePromptAssoc, parseDateText, parseSimpleDateText, sqlToJsDate } from './API.js';
 
 export default class Payment extends React.Component {
   constructor(props) {
@@ -31,12 +31,16 @@ export default class Payment extends React.Component {
   }
 
   async componentDidMount() {
-    var { nav, prompt } = this.props.route.params;
-    var contract = prompt.Prompt[0][0];
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
+    var { prompt, nav } = this.props.route.params;
+    var contract = {};
+    if (nav == 'Prompt') {
+      contract = prompt.Prompt[0][0];
+      prompt = this.props.route.params.prompt;
+    }
     var contractSigned = {};
-    if (prompt.Completed > 0) {
+    if (nav == 'Prompt' && prompt.Completed > 0) {
       contractSigned = await getContractSigned(contract.Id, client.Id, client.Token);
     }
     this.setState({prompt:prompt,contract:contract,contractSigned:contractSigned,client:client,coach:coach,nav:nav,refreshing:false});
@@ -295,7 +299,7 @@ export default class Payment extends React.Component {
       } else {
         var url = 'https://drive.google.com/viewerng/viewer?embedded=true&url=' + contractSigned.File;
         var adjustedHeight = windowHeight - 25 - 1 - 22 - 15 - 80;
-        if (contract.CanBeOptedOut == 0) {
+        if (contract.CanBeOptedOut == 1) {
           adjustedHeight = windowHeight - 25 - 1 - 22 - 15 - 140;
         }
         var mTop = parseInt((adjustedHeight/2)-68);
@@ -323,7 +327,7 @@ export default class Payment extends React.Component {
                 </View>
               </View>
             </View>
-            { (contract.CanBeOptedOut == 0) ? this.showOptOutOptions(contractSigned, contract, prompt, client, nav) : (<View style={contractStyles.bottomContainerSigned}>
+            { (contract.CanBeOptedOut == 1) ? this.showOptOutOptions(contractSigned, contract, prompt, client, nav) : (<View style={contractStyles.bottomContainerSigned}>
               <Text style={[contractStyles.text,{marginTop:4,fontSize:18}]}>Signed on {parseSimpleDateText(sqlToJsDate(prompt.CompletedDate))}</Text>
             </View>)}
           </View>

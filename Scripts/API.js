@@ -7,6 +7,18 @@ export const uploadUrl = 'https://db.coachsync.me';
 export const key = 'donthackme,imjustadevelopertryingmybest!';
 
 // Helper Functions
+export function currentDate() {
+  var date = new Date();
+  var pad = function(num) { return ('00'+num).slice(-2) };
+  date = date.getUTCFullYear()         + '-' +
+        pad(date.getUTCMonth() + 1)  + '-' +
+        pad(date.getUTCDate())       + ' ' +
+        pad(date.getUTCHours())      + ':' +
+        pad(date.getUTCMinutes())    + ':' +
+        pad(date.getUTCSeconds());
+  return date;
+}
+
 export function sqlToJsDate(sqlDate){
   var t = sqlDate.split(/[-:T.Z]/);
   return new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5], t[6]));
@@ -114,6 +126,131 @@ export async function check() {
 }
 
 */
+
+export async function createConversation(coachId, clientId, token) {
+
+  var ret = false;
+  var arr = {CoachId:coachId, ClientId:clientId, Token:token};
+  console.log('Creating conversation...');
+  const res = await fetch(url + '/conversation/client-create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Conversation created!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function getOnboarding(coachId, clientToken) {
+
+  var ret = false;
+
+  console.log('Getting onboarding data...');
+  const res = await fetch(url + '/onboarding/' + coachId + '/' + clientToken, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Onboarding returned!');
+    ret = payload[0];
+  } else {
+    console.log('Onboarding doesnt exist!');
+  }
+
+  return ret;
+
+}
+
+export async function updateOnboarding(coachId, clientToken, surveyCompleted, paymentCompleted, contractCompleted) {
+
+  var ret = false;
+  var arr = {CoachId:coachId, Token:clientToken, SurveyCompleted:surveyCompleted, PaymentCompleted:paymentCompleted, ContractCompleted:contractCompleted};
+
+  console.log('Updating Onboarding...');
+  const res = await fetch(url + '/onboarding/update', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Onboarding updated!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function createOnboarding(coachId, clientToken, onboardingType) {
+
+  var ret = false;
+  var arr = {CoachId:coachId, Token:clientToken, OnboardingType:onboardingType};
+  console.log('Creating onboarding data...');
+  const res = await fetch(url + '/onboarding/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Onboarding data created!');
+    ret = {CoachId:coachId, ClientToken:clientToken, OnboardingType:onboardingType, SurveyCompleted:0, PaymentCompleted:0, ContractCompleted:0};
+  }
+
+  return ret;
+
+}
+
+export async function createPromptAssoc(token, clientId, coachId, type, promptId, dueDate) {
+
+  var ret = false;
+  var arr = {Token:token, ClientId:clientId, CoachId:coachId, Type:type, PromptId:promptId, DueDate:dueDate};
+
+  console.log('Creating prompt assoc...');
+  const res = await fetch(url + '/prompt-assoc/create', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Prompt assoc created!');
+    ret = {Id:payload.insertId, ClientId:clientId, CoachId:coachId, Type:type, PromptId:promptId, Created:currentDate(), DueDate:dueDate};
+  }
+
+  return ret;
+
+}
+
 
 export async function getContractsSigned(clientId, clientToken) {
 
@@ -926,7 +1063,7 @@ export async function getOnboardingContract(coachId) {
 
   var ret = false;
 
-  console.log('Retrieving contract info for Id: ' + contractId);
+  console.log('Retrieving contract info...');
   const res = await fetch(url + '/contract/' + coachId + '/1/' + key, {
     method:'GET'
   });
@@ -955,7 +1092,6 @@ export async function getOnboardingPayment(coachId) {
 
   var paymentId = JSON.stringify(surveyPayload[0]['PaymentId']);
 
-  console.log('Retrieving payment info for Id: ' + paymentId);
   const res = await fetch(url + '/payment/'+paymentId+'/'+key, {
     method:'GET'
   });

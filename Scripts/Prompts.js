@@ -34,6 +34,7 @@ export default class Prompts extends React.Component {
   }
 
   openPrompt(prompt) {
+    console.log(prompt);
     if (prompt.Type == 3) {
       this.props.navigation.navigate('Contract', { prompt:prompt, nav:'Prompt', onGoBack: () => this.getData() });
     } else if (prompt.Type == 2) {

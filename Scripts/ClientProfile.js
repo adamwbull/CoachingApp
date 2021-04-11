@@ -102,6 +102,11 @@ export default class ClientProfile extends React.Component {
           function: () => this.props.navigation.navigate('ChangePassword')
         },
         {
+          title: 'Signed Contracts',
+          icon: 'document-text',
+          function: () => this.props.navigation.navigate('PreviousContracts')
+        },
+        {
           title: 'Previous Payments',
           icon: 'wallet',
           function: () => this.props.navigation.navigate('PreviousPayments')

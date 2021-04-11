@@ -7,7 +7,7 @@ import { Animated, TouchableWithoutFeedback, Keyboard, TextInput, Modal, StyleSh
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { splashStyles } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
-import { checkOnboardingId, userInPair, createPair } from '../Scripts/API.js';
+import { createConversation, createOnboarding, checkOnboardingId, userInPair, createPair } from '../Scripts/API.js';
 
 // Splash screen for checking user status on app load.
 export default class CoachIdCheck extends React.Component {
@@ -41,13 +41,19 @@ export default class CoachIdCheck extends React.Component {
     // Check if valid Coach ID.
     var ret = JSON.parse(await checkOnboardingId(this.state.inputValue));
     if (ret != null) {
+      var { id, token } = this.props.route.params;
       // User entered a correct ID. Associate Coach with client.
       this.setState({modalVisible:false});
-      var notInPair = JSON.parse(await userInPair(ret.Id, this.props.route.params.id, this.props.route.params.token));
+      var notInPair = JSON.parse(await userInPair(ret.Id, id, token));
       if (notInPair) {
-        var created = await createPair(ret.Id, this.props.route.params.id, this.props.route.params.token);
+        var created = await createPair(ret.Id, id, token);
+        var onboardingCreated = await createOnboarding(ret.Id, token, ret.OnboardingType);
+        var conversationCreated = await createConversation(ret.Id, id, token);
       }
       await AsyncStorage.setItem('Coach', JSON.stringify(ret));
+      var client = JSON.parse(await AsyncStorage.getItem('Client'));
+      client.CoachId = ret.Id;
+      await AsyncStorage.setItem('Client', JSON.stringify(client));
       this.props.navigation.navigate('OnboardingSurvey');
     } else {
       this.setState({inputError:'Incorrect Coach ID!',inputStyle:splashStyles.inputError});

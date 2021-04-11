@@ -11,33 +11,36 @@ LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'
 'YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.']);
 
 // Import Scripts
-import Home from './Scripts/Home.js';                           // Working
-import Prompts from './Scripts/Prompts.js';                     // Working
-import Concepts from './Scripts/Concepts.js';                   // Working
-import CoachIdCheck from './Scripts/CoachIdCheck.js';           // Working
-import OnboardingSurvey from './Scripts/OnboardingSurvey.js';   // Working
-import ViewConcept from './Scripts/ViewConcept.js';             // Working
-import ViewPrompt from './Scripts/ViewPrompt.js';               // Working
-import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';   // Working
-import Welcome from './Scripts/Welcome.js';                     // Working
-import Register from './Scripts/Register.js';                   // Working
-import ClientProfile from './Scripts/ClientProfile.js';         // Working
-import UpdateAvatar from './Scripts/UpdateAvatar.js';           // Working
-import BugReport from './Scripts/BugReport.js';                 // Working
-import FeatureRequest from './Scripts/FeatureRequest.js';       // Working
-import ChangePassword from './Scripts/ChangePassword.js';       // Working
-import DeleteAccount from './Scripts/DeleteAccount.js';         // Working
-import Trophies from './Scripts/Trophies.js';                   // Working
-import Schedule from './Scripts/Schedule.js';                   // Working
-import Messages from './Scripts/Messages.js';                   // Working
-import ViewMessageThread from './Scripts/ViewMessageThread.js'; // Working
-import Payment from './Scripts/Payment.js';                     // Working
-import PreviousPayments from './Scripts/PreviousPayments.js';   // Working
-import PreviousPayment from './Scripts/PreviousPayment.js';     // Working
-import Contract from './Scripts/Contract.js';                   // Working
-// View Contracts in Settings...? Or add Onboarding as a Prompt.
-import VideoChat from './Scripts/VideoChat.js';                 //
-                                                                // Working 24/25
+import Home from './Scripts/Home.js';                             // Working
+import Prompts from './Scripts/Prompts.js';                       // Working
+import Concepts from './Scripts/Concepts.js';                     // Working
+import CoachIdCheck from './Scripts/CoachIdCheck.js';             // Working
+import OnboardingSurvey from './Scripts/OnboardingSurvey.js';     // Working
+import ViewConcept from './Scripts/ViewConcept.js';               // Working
+import ViewPrompt from './Scripts/ViewPrompt.js';                 // Working
+import ViewPromptSurvey from './Scripts/ViewPromptSurvey.js';     // Working
+import Welcome from './Scripts/Welcome.js';                       // Working
+import Register from './Scripts/Register.js';                     // Working
+import ClientProfile from './Scripts/ClientProfile.js';           // Working
+import UpdateAvatar from './Scripts/UpdateAvatar.js';             // Working
+import BugReport from './Scripts/BugReport.js';                   // Working
+import FeatureRequest from './Scripts/FeatureRequest.js';         // Working
+import ChangePassword from './Scripts/ChangePassword.js';         // Working
+import DeleteAccount from './Scripts/DeleteAccount.js';           // Working
+import Trophies from './Scripts/Trophies.js';                     // Working
+import Schedule from './Scripts/Schedule.js';                     // Working
+import Messages from './Scripts/Messages.js';                     // Working
+import ViewMessageThread from './Scripts/ViewMessageThread.js';   // Working
+import Payment from './Scripts/Payment.js';                       // Working
+import PreviousPayments from './Scripts/PreviousPayments.js';     // Working
+import PreviousPayment from './Scripts/PreviousPayment.js';       // Working
+import PreviousContracts from './Scripts/PreviousContracts.js';   // Working
+import PreviousContract from './Scripts/PreviousContract.js';     // Working
+import Contract from './Scripts/Contract.js';                     // Working
+import OnboardingPayment from './Scripts/OnboardingPayment.js';   // Working
+import OnboardingContract from './Scripts/OnboardingContract.js'; // Working
+import VideoChat from './Scripts/VideoChat.js';                   //
+                                                                  // Working 26/29
 
 // Create navigation controllers
 const Stack = createStackNavigator();
@@ -104,7 +107,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='Welcome' component={Welcome} />
             <Stack.Screen name='Register' component={Register} />
             <Stack.Screen name='CoachIdCheck' component={CoachIdCheck} />
-            <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} />
+            <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} options={{gestureEnabled: false}} />
             <Stack.Screen name='Contract' component={Contract} />
             <Stack.Screen name='Main' component={HomeStack} options={{gestureEnabled: false}} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
@@ -123,6 +126,10 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='Payment' component={Payment} />
             <Stack.Screen name='PreviousPayments' component={PreviousPayments} />
             <Stack.Screen name='PreviousPayment' component={PreviousPayment} />
+            <Stack.Screen name='PreviousContracts' component={PreviousContracts} />
+            <Stack.Screen name='PreviousContract' component={PreviousContract} />
+            <Stack.Screen name='OnboardingPayment' component={OnboardingPayment} options={{gestureEnabled: false}} />
+            <Stack.Screen name='OnboardingContract' component={OnboardingContract} options={{gestureEnabled: false}} />
           </Stack.Navigator>
         </NavigationContainer>
     );

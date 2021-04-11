@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { onboardingStyles, colors } from '../Scripts/Styles.js';
-import { getOnboardingSurveyArray, uploadResponses, updateOnboardingCompleted, checkOnboardingSurveyCompleted, getOnboardingPayment, getOnboardingContract } from '../Scripts/API.js';
+import { updateOnboarding, createOnboarding, getOnboarding, getOnboardingSurveyArray, uploadResponses, updateOnboardingCompleted, getOnboardingPayment } from '../Scripts/API.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
 
@@ -17,9 +17,8 @@ export default class OnboardingSurvey extends React.Component {
     super(props)
     this.state = {
       refreshing : false,
-      coach:[],
-      clientToken:'',
-      clientId:'',
+      coach:{},
+      client:{},
       errorText: '',
       surveyItems: [],
       responses: []
@@ -27,30 +26,34 @@ export default class OnboardingSurvey extends React.Component {
   }
 
   async componentDidMount() {
-    var coach, client, items, surveyCompleted;
+    var coach, client, items, onboarding;
     try {
-      // Get CoachId and Coach's Onboarding Survey.
+      // Get CoachId and Coach.
       coach = JSON.parse(await AsyncStorage.getItem('Coach'));
       client = JSON.parse(await AsyncStorage.getItem('Client'));
-      surveyCompleted = await checkOnboardingSurveyCompleted(client.Id, client.Token);
-      if (surveyCompleted) {
-        if (coach.OnboardingType == 0) {
+      // Get or create onboarding status information.
+      onboarding = await getOnboarding(coach.Id, client.Token);
+      if (onboarding == false) {
+        onboarding = await createOnboarding(coach.Id, client.Token, coach.OnboardingType);
+      }
+      // Check if this is completed already.
+      if (onboarding.SurveyCompleted == 1) {
+        var isEither = (onboarding.OnboardingType == 1 || onboarding.OnboardingType == 3) ? true: false;
+        if (onboarding.OnboardingType == 0) {
           // Update OnboardingCompleted for Client.
           if (client.OnboardingCompleted === 0) {
+            var updated = await updateOnboarding(coach.Id, client.Token, 1, onboarding.PaymentCompleted, onboarding.ContractCompleted);
             var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
             client.OnboardingCompleted = 1;
             await AsyncStorage.setItem('Client', JSON.stringify(client));
           }
           this.props.navigation.navigate('Main');
-        } else if (coach.OnboardingType == 1) {
-          var contract = await getOnboardingContract(coach.Id);
-          this.props.navigation.navigate('Contract', { Contract:contract, nav:'Onboarding' });
-        } else if (coach.OnboardingType == 2) {
-          var payment = await getOnboardingPayment(coach.Id);
-          this.props.navigation.navigate('Payment', { paymentId:payment.Id, nav:'Onboarding' });
-        } else if (coach.OnboardingType == 3) {
-          var payment = await getOnboardingPayment(coach.Id);
-          this.props.navigation.navigate('Payment', { paymentId:payment.Id, nav:'Onboarding', both:true });
+        } else if (onboarding.OnboardingType == 2 && onboarding.PaymentCompleted == 0) {
+          this.props.navigation.navigate('OnboardingPayment');
+        } else if (onboarding.OnboardingType == 3 && onboarding.PaymentCompleted == 0) {
+          this.props.navigation.navigate('OnboardingPayment');
+        } else if (isEither && onboarding.ContractCompleted == 0) {
+          this.props.navigation.navigate('OnboardingContract');
         }
       }
     } finally {
@@ -78,7 +81,7 @@ export default class OnboardingSurvey extends React.Component {
           res[index] = [-1, '', client.Id, null];
         }
       });
-      this.setState({coach:coach,surveyItems:items,responses:res,clientToken:client.Token,clientId:client.Id});
+      this.setState({coach:coach,surveyItems:items,responses:res,client:client,onboarding:onboarding});
     }
   }
 
@@ -212,32 +215,30 @@ export default class OnboardingSurvey extends React.Component {
   }
 
   async handlePress() {
-    var responses = this.state.responses;
-    var token = this.state.clientToken;
-    var id = this.state.clientId;
+
+    var { responses, client, coach, responses, onboarding } = this.state;
     var everythingFilled = this.checkResponses(responses);
     if (everythingFilled) {
-      var uploaded = await uploadResponses(responses, token);
+      var uploaded = await uploadResponses(responses, client.Token);
       if (uploaded) {
-        // Update local storage with new client.
-        var client = JSON.parse(await AsyncStorage.getItem('Client'));
-        client.OnboardingCompleted = 1;
-        await AsyncStorage.setItem('Client', JSON.stringify(client));
+        // Mark survey as completed.
+        var updated = await updateOnboarding(coach.Id, client.Token, 1, onboarding.PaymentCompleted, onboarding.ContractCompleted);
         // Decide where to go next.
-        var coach = this.state.coach;
-        if (coach.OnboardingType == 0) {
+        var isEither = (onboarding.OnboardingType == 1 || onboarding.OnboardingType == 3) ? true : false;
+        if (onboarding.OnboardingType == 0) {
           // Update OnboardingCompleted for Client.
-          var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
+          if (client.OnboardingCompleted === 0) {
+            var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
+            client.OnboardingCompleted = 1;
+            await AsyncStorage.setItem('Client', JSON.stringify(client));
+          }
           this.props.navigation.navigate('Main');
-        } else if (coach.OnboardingType == 1) {
-          var contract = await getOnboardingContract(coach.Id);
-          this.props.navigation.navigate('Contract', { Contract:contract });
-        } else if (coach.OnboardingType == 2) {
-          var payment = await getOnboardingPayment(coach.Id);
-          this.props.navigation.navigate('Payment', { Payment:payment });
-        } else if (coach.OnboardingType == 3) {
-          var payment = await getOnboardingPayment(coach.Id);
-          this.props.navigation.navigate('Payment', { Payment:payment });
+        } else if (onboarding.OnboardingType == 2 && onboarding.PaymentCompleted == 0) {
+          this.props.navigation.navigate('OnboardingPayment');
+        } else if (onboarding.OnboardingType == 3 && onboarding.PaymentCompleted == 0) {
+          this.props.navigation.navigate('OnboardingPayment', { both:true });
+        } else if (isEither && onboarding.ContractCompleted == 0) {
+          this.props.navigation.navigate('OnboardingContract');
         }
       } else {
         console.log("Error uploading!");
@@ -245,6 +246,7 @@ export default class OnboardingSurvey extends React.Component {
         this.setState({errorText:'There was an error uploading your answers. Try hitting submit again!'});
       }
     }
+
   }
 
   render() {

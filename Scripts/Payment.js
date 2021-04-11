@@ -37,11 +37,15 @@ export default class ViewConcept extends React.Component {
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     var { nav, prompt } = this.props.route.params;
-    var payment = await getPayment(prompt.PromptId, client.Token);
+    var payment = {};
     var paymentCharge = {};
-    if (prompt.Completed == 1) {
-      paymentCharge = await getPaymentCharge(prompt.PromptId, client.Token, client.Id, coach.Id);
-    }
+    if (nav == 'Prompt') {
+      var payment = await getPayment(prompt.PromptId, client.Token);
+      var paymentCharge = {};
+      if (prompt.Completed == 1) {
+        paymentCharge = await getPaymentCharge(prompt.PromptId, client.Token, client.Id, coach.Id);
+      }
+    } 
     if (Platform.OS == 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
