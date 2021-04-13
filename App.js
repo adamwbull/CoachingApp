@@ -6,10 +6,8 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from './Scripts/Styles.js';
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.',
-'YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.']);
-
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.']);
 // Import Scripts
 import Home from './Scripts/Home.js';                             // Working
 import Prompts from './Scripts/Prompts.js';                       // Working
@@ -39,9 +37,7 @@ import PreviousContract from './Scripts/PreviousContract.js';     // Working
 import Contract from './Scripts/Contract.js';                     // Working
 import OnboardingPayment from './Scripts/OnboardingPayment.js';   // Working
 import OnboardingContract from './Scripts/OnboardingContract.js'; // Working
-import VideoChat from './Scripts/VideoChat.js';                   //
-                                                                  // Working 26/29
-
+                                                                  // Working 28/28
 // Create navigation controllers
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -114,7 +110,6 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} />
             <Stack.Screen name='ViewPromptSurvey' component={ViewPromptSurvey} />
             <Stack.Screen name='ViewMessageThread' component={ViewMessageThread} />
-            <Stack.Screen name='VideoChat' component={VideoChat} />
             <Stack.Screen name='Schedule' component={Schedule} />
             <Stack.Screen name='ClientProfile' component={ClientProfile} />
             <Stack.Screen name='UpdateAvatar' component={UpdateAvatar} />

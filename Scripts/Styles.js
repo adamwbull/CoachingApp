@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Appearance, AsyncStorage, StyleSheet, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const windowWidth = Dimensions.get('window').width;
@@ -8,7 +8,9 @@ export const logoLeft = (windowWidth-(windowWidth*0.8))/4;
 export const feedMediaWidth = parseInt(windowWidth-(windowWidth*0.1));
 export const windowHeightConceptVideo = windowHeight - (windowHeight*0.5);
 
-export const colors = {
+var colorScheme = Appearance.getColorScheme();
+console.log(colorScheme);
+export const colors = (colorScheme == 'dark') ? {
   emerald: '#2ecc71',
   forest: '#27ae60',
   clouds: '#ecf0f1',
@@ -17,7 +19,16 @@ export const colors = {
   black: '#000000',
   white: '#ffffff',
   red: '#e74c3c'
-}
+} : {
+  emerald: '#2ecc71',
+  forest: '#27ae60',
+  clouds: '#000000',
+  blueGray: '#f5f6fa',
+  darkGray: '#ecf0f1',
+  black: '#ffffff',
+  white: '#23272a',
+  red: '#e74c3c'
+};
 
 export const colorsPerm = {
   emerald: '#2ecc71',
@@ -60,6 +71,48 @@ export const levelScale = {
   baseColor: '',
   completeColor: ''
 }
+
+export const videoChatStyles = StyleSheet.create({
+  max: {
+    flex: 1,
+  },
+  buttonHolder: {
+    height: 100,
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#0093E9',
+    borderRadius: 25,
+  },
+  buttonText: {
+    color: '#fff',
+  },
+  fullView: {
+    width: windowWidth,
+    height: windowHeight - 100,
+  },
+  remoteContainer: {
+    width: '100%',
+    height: 150,
+    position: 'absolute',
+    top: 5,
+  },
+  remote: {
+    width: 150,
+    height: 150,
+    marginHorizontal: 2.5,
+  },
+  noUserText: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    color: '#0093E9',
+  },
+});
 
 export const contractStyles = StyleSheet.create({
   container: {
@@ -150,7 +203,15 @@ export const previousPaymentsStyles = StyleSheet.create({
   },
   listItems: {
     width:'100%'
-  }
+  },
+  listItem: {
+    backgroundColor:colors.white,
+    borderBottomWidth:0.5,
+    borderBottomColor:colors.white
+  },
+  listItemTitle: {
+    color:colors.darkGray,
+  },
 })
 
 export const paymentStyles = StyleSheet.create({
@@ -339,6 +400,7 @@ export const messageThreadStyles = StyleSheet.create({
     paddingLeft:13,
     paddingTop:0,
     paddingBottom:0,
+    color:colors.black
   },
   countdown: {
     flex:1,
@@ -524,7 +586,15 @@ export const messageThreadStyles = StyleSheet.create({
     fontSize:16,
     marginLeft:3,
     color:colors.darkGray,
-  }
+  },
+  listItem: {
+    backgroundColor:colors.white,
+    borderBottomWidth:0.5,
+    borderBottomColor:colors.white
+  },
+  listItemTitle: {
+    color:colors.darkGray,
+  },
 });
 
 export const messagesStyles = StyleSheet.create({
@@ -573,10 +643,17 @@ export const messagesStyles = StyleSheet.create({
     flex:1,
     fontSize:16
   },
+  convoUser: {
+    color:colors.darkGray
+  },
+  convoTime: {
+    color:colors.darkGray
+  },
   lastMessage: {
     fontSize:14,
     fontWeight:'300',
-    fontStyle:'italic'
+    fontStyle:'italic',
+    color:colors.darkGray
   },
 })
 
@@ -879,7 +956,6 @@ export const navStyles = StyleSheet.create({
 export const clientProfileStyles = StyleSheet.create({
   container: {
     width:'100%',
-    height:windowHeight
   },
   button: {
     backgroundColor:btnColors.danger,
@@ -921,11 +997,13 @@ export const clientProfileStyles = StyleSheet.create({
   },
   userName: {
     fontSize:22,
-    fontWeight:'500'
+    fontWeight:'500',
+    color:colors.darkGray
   },
   userCreated: {
     fontSize:14,
-    fontWeight:'300'
+    fontWeight:'300',
+    color:colors.darkGray
   },
   listItemsTitle: {
     marginLeft:'2%',
@@ -933,6 +1011,14 @@ export const clientProfileStyles = StyleSheet.create({
     marginBottom:10,
     marginTop:10,
     fontWeight:'500',
+    color:colors.darkGray,
+  },
+  listItem: {
+    backgroundColor:colors.white,
+    borderBottomWidth:0.5,
+    borderBottomColor:colors.white
+  },
+  listItemTitle: {
     color:colors.darkGray,
   },
   trophyContainer: {
@@ -950,11 +1036,13 @@ export const clientProfileStyles = StyleSheet.create({
     width:'100%'
   },
   versionContainer: {
-    marginTop:40
+    marginTop:40,
+    marginBottom:20
   },
   versionText: {
     textAlign:'center',
-    fontWeight:'300'
+    fontWeight:'300',
+    color:colors.darkGray
   }
 })
 
@@ -1251,8 +1339,7 @@ export const homeStyles = StyleSheet.create({
     backgroundColor:colors.clouds,
     alignItems: 'center',
     justifyContent: 'center',
-    width:'100%',
-    marginBottom:75
+    width:'100%'
   },
   avatarContainer: {
     flexDirection:'column',
@@ -1299,7 +1386,8 @@ export const homeStyles = StyleSheet.create({
     width:'100%'
   },
   feed: {
-    width:'90%'
+    width: '90%',
+    paddingBottom:50,
   },
   feedPost: {
     backgroundColor:colors.white,
@@ -1345,10 +1433,12 @@ export const homeStyles = StyleSheet.create({
     justifyContent:'center'
   },
   feedCoachName: {
-    fontSize:17
+    fontSize:17,
+    color:colors.darkGray
   },
   feedPostCreated: {
-    fontWeight:'300'
+    fontWeight:'300',
+    color:colors.darkGray
   },
   feedBody: {
     paddingLeft:10,
@@ -1356,7 +1446,8 @@ export const homeStyles = StyleSheet.create({
     paddingBottom:10
   },
   feedBodyText: {
-    fontWeight:'400'
+    fontWeight:'400',
+    color:colors.darkGray
   },
   feedPhotoContainer: {
     flex: 1,

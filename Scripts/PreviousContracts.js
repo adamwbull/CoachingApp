@@ -49,11 +49,11 @@ export default class PreviousContracts extends React.Component {
           {prompts.map((prompt, i) => {
             if (prompt.Type == 3) {
               var contract = prompt.Prompt[0][0];
-              return (<ListItem key={i} bottomDivider onPress={() => this.props.navigation.navigate('PreviousContract', { prompt:prompt })}>
-                <Icon type='ionicon' name='document-text' />
+              return (<ListItem key={i}  containerStyle={previousPaymentsStyles.listItem} bottomDivider onPress={() => this.props.navigation.navigate('PreviousContract', { prompt:prompt })}>
+                <Icon type='ionicon' name='document-text' color={colors.darkGray} />
                 <ListItem.Content>
-                  <ListItem.Title>{contract.Title}</ListItem.Title>
-                  <ListItem.Subtitle>{parseDateText(sqlToJsDate(contract.Created))}</ListItem.Subtitle>
+                  <ListItem.Title style={previousPaymentsStyles.listItemTitle}>{contract.Title}</ListItem.Title>
+                  <ListItem.Subtitle style={previousPaymentsStyles.listItemTitle}>{parseDateText(sqlToJsDate(contract.Created))}</ListItem.Subtitle>
                 </ListItem.Content>
                 <ListItem.Chevron />
               </ListItem>);

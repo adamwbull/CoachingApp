@@ -15,6 +15,12 @@ import { Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+  const paddingToBottom = 60;
+  return layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom;
+};
+
 export default class Home extends React.Component {
   constructor(props) {
     super(props)
@@ -23,7 +29,8 @@ export default class Home extends React.Component {
       opacity: new Animated.Value(0),
       coach:{FirstName:'Loading',LastName:'Coach...'},
       links:[],
-      feed:[]
+      feed:[],
+      displayNum:3
     };
   }
 
@@ -108,15 +115,14 @@ export default class Home extends React.Component {
 
   feed() {
 
-    var feed = this.state.feed;
+    var { feed, coach, displayNum } = this.state;
     if (feed === false) {
       return (<View style={homeStyles.feed}>
       </View>);
     } else {
-      var coach = this.state.coach;
       return (<View style={homeStyles.feed}>
         <Text style={homeStyles.feedHeaderText}>Feed</Text>
-        {feed.map((post) => {
+        {feed.slice(0,displayNum).map((post) => {
           var date = sqlToJsDate(post.Created);
           return (<View key={post.Id} style={homeStyles.feedPost}>
             <View style={homeStyles.feedHeaderContainer}>
@@ -231,13 +237,27 @@ export default class Home extends React.Component {
 
   }
 
+  updateDisplayNum() {
+    var { displayNum } = this.state;
+    var n = displayNum + 5;
+    this.setState({displayNum:n});
+
+  }
+
   render() {
 
     var coach = this.state.coach;
 
     return (<SafeAreaView>
       <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
-      <ScrollView contentContainerStyle={[homeStyles.container]}>
+      <ScrollView contentContainerStyle={[homeStyles.container]}
+        onScroll={({nativeEvent}) => {
+          if (isCloseToBottom(nativeEvent)) {
+            this.updateDisplayNum();
+          }
+        }}
+        scrollEventThrottle={400}
+      >
         <Text style={homeStyles.coachTitle}>Your Coach</Text>
         {this.getCoach(coach)}
       </ScrollView>

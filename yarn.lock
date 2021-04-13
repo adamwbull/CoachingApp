@@ -1770,9 +1770,9 @@
   "version" "0.0.29"
 
 "@types/node@*":
-  "integrity" "sha512-EPpXLOVqDvisVxtlbvzfyqSsFeQxltFbluZNRndIb8tr9KiBnYNLzrc1N3pyKUCww2RNrfHDViqDWWE1LCJQtQ=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-14.14.25.tgz"
-  "version" "14.14.25"
+  "integrity" "sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-14.14.37.tgz"
+  "version" "14.14.37"
 
 "@types/prop-types@*":
   "integrity" "sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw=="
@@ -1788,9 +1788,9 @@
     "@types/react-native" "*"
 
 "@types/react-native@*":
-  "integrity" "sha512-jWxsHDG/AHEaOrqqcI0Cth0WdPsgyaJ1nel5pS0uCzpt2RjwtkvEUAfu39paPr4i+9oUUgbJq3vkVXaj7n8RdQ=="
-  "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.63.50.tgz"
-  "version" "0.63.50"
+  "integrity" "sha512-w2y04h+GVLY+OMlFSmq4adPuS51XtEp1yUr83OvXf+moMQ4zDG1Q07HhyvYDXdc+BSS9ANHySBqVCz0hFxli9Q=="
+  "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.64.2.tgz"
+  "version" "0.64.2"
   dependencies:
     "@types/react" "*"
 
@@ -1805,12 +1805,18 @@
     "redux" "^4.0.0"
 
 "@types/react@*":
-  "integrity" "sha512-Xt40xQsrkdvjn1EyWe1Bc0dJLcil/9x2vAuW7ya+PuQip4UYUaXyhzWmAbwRsdMgwOFHpfp7/FFZebDU6Y8VHA=="
-  "resolved" "https://registry.npmjs.org/@types/react/-/react-17.0.2.tgz"
-  "version" "17.0.2"
+  "integrity" "sha512-wYOUxIgs2HZZ0ACNiIayItyluADNbONl7kt8lkLjVK8IitMH5QMyAh75Fwhmo37r1m7L2JaFj03sIfxBVDvRAg=="
+  "resolved" "https://registry.npmjs.org/@types/react/-/react-17.0.3.tgz"
+  "version" "17.0.3"
   dependencies:
     "@types/prop-types" "*"
+    "@types/scheduler" "*"
     "csstype" "^3.0.2"
+
+"@types/scheduler@*":
+  "integrity" "sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA=="
+  "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.1.tgz"
+  "version" "0.16.1"
 
 "@types/stack-utils@^1.0.1":
   "integrity" "sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw=="
@@ -6294,6 +6300,11 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.1.tgz"
   "version" "17.0.1"
 
+"react-native-agora@^3.3.2":
+  "integrity" "sha512-jfDz8w2a0xWd/GaC+xoypt4bmie5JaH00hrEp/ODnPBX8sKGUg5TJqLZUchYG/rY2Yh32vS5F7q+CTNyBrls7g=="
+  "resolved" "https://registry.npmjs.org/react-native-agora/-/react-native-agora-3.3.2.tgz"
+  "version" "3.3.2"
+
 "react-native-android-image-polyfill@^1.0.0":
   "integrity" "sha1-8LYbrAxqkbj4+BIzqxmYYTrfZKw="
   "resolved" "https://registry.npmjs.org/react-native-android-image-polyfill/-/react-native-android-image-polyfill-1.0.0.tgz"
@@ -7523,11 +7534,6 @@
   "integrity" "sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c="
   "resolved" "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   "version" "0.0.6"
-
-"typescript@~4.0.0":
-  "integrity" "sha512-yi7M4y74SWvYbnazbn8/bmJmX4Zlej39ZOqwG/8dut/MYoSQ119GY9ZFbbGsD4PFZYWxqik/XsP3vk3+W5H3og=="
-  "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.0.7.tgz"
-  "version" "4.0.7"
 
 "ua-parser-js@^0.7.18":
   "integrity" "sha512-m4hvMLxgGHXG3O3fQVAyyAQpZzDOvwnhOTjYz5Xmr7r/+LpkNy3vJXdVRWgd1TkAb7NGROZuSy96CrlNVjA7KA=="

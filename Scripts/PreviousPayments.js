@@ -47,11 +47,11 @@ export default class extends React.Component {
           <Text style={previousPaymentsStyles.listItemsTitle}>Previous Payments</Text>
           <View style={previousPaymentsStyles.listItems}>
           {payments.map((payment, i) => {
-            return (<ListItem key={i} bottomDivider onPress={() => this.props.navigation.navigate('PreviousPayment', { payment:payment })}>
-              <Icon type='ionicon' name='card' />
+            return (<ListItem key={i} containerStyle={previousPaymentsStyles.listItem} bottomDivider onPress={() => this.props.navigation.navigate('PreviousPayment', { payment:payment })}>
+              <Icon type='ionicon' name='card' color={colors.darkGray} />
               <ListItem.Content>
-                <ListItem.Title>{payment.Title}</ListItem.Title>
-                <ListItem.Subtitle>{parseDateText(sqlToJsDate(payment.Created))}</ListItem.Subtitle>
+                <ListItem.Title style={previousPaymentsStyles.listItemTitle}>{payment.Title}</ListItem.Title>
+                <ListItem.Subtitle style={previousPaymentsStyles.listItemTitle}>{parseDateText(sqlToJsDate(payment.Created))}</ListItem.Subtitle>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem>);

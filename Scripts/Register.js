@@ -130,7 +130,10 @@ export default class Register extends React.Component {
             pad(dob.getUTCMinutes())    + ':' +
             pad(dob.getUTCSeconds());
 
-      var client = {Token:token, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
+      const scheme = useColorScheme();
+      var theme = (scheme == 'dark') ? 1 : 0;
+
+      var client = {Token:token, FirstName:firstName, LastName:lastName, Theme:theme, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
 
       var passed = await createAccount(client);
 

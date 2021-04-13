@@ -16,7 +16,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export default class Welcome extends React.Component {
   constructor(props) {
-    super(props)
+    super(props) 
     this.state = {
       refreshing: true,
       opacity: new Animated.Value(0),
@@ -32,6 +32,7 @@ export default class Welcome extends React.Component {
     await delay(1000);
     if (val !== null) {
       var client = JSON.parse(val);
+      client.Theme = 0;
       if (client.OnboardingCompleted === 0) {
         this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
         this.setState({refreshing:false});
@@ -79,7 +80,7 @@ export default class Welcome extends React.Component {
     } else {
       var client = JSON.parse(passed);
       if (client.Type == 0) {
-        await AsyncStorage.setItem('Client', passed);
+        await AsyncStorage.setItem('Client', JSON.stringify(client));
         console.log("Login completed.");
         if (client.OnboardingCompleted == 0) {
           this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token});

@@ -139,7 +139,7 @@ export default class ClientProfile extends React.Component {
         trophiesCompleted += (trophies[i].Completed === 1) ? 1 : 0;
       }
 
-      return (<SafeAreaView>
+      return (<SafeAreaView style={{flex:1}}>
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView>
           <View style={clientProfileStyles.avatarContainer}>
@@ -178,10 +178,10 @@ export default class ClientProfile extends React.Component {
           <View style={clientProfileStyles.listItems}>
             {
               generalSettings.map((item, i) => (
-                <ListItem key={i} bottomDivider onPress={item.function}>
-                  <Icon type='ionicon' name={item.icon} />
+                <ListItem key={i} bottomDivider onPress={item.function} containerStyle={clientProfileStyles.listItem}>
+                  <Icon type='ionicon' name={item.icon} color={colors.darkGray} />
                   <ListItem.Content>
-                    <ListItem.Title>{item.title}</ListItem.Title>
+                    <ListItem.Title style={clientProfileStyles.listItemTitle}>{item.title}</ListItem.Title>
                   </ListItem.Content>
                   <ListItem.Chevron />
                 </ListItem>
@@ -192,10 +192,10 @@ export default class ClientProfile extends React.Component {
           <View style={clientProfileStyles.listItems}>
             {
               alphaDev.map((item, i) => (
-                <ListItem key={i} bottomDivider onPress={item.function}>
-                  <Icon type='ionicon' name={item.icon} />
+                <ListItem key={i} bottomDivider onPress={item.function} containerStyle={clientProfileStyles.listItem}>
+                  <Icon type='ionicon' name={item.icon} color={colors.darkGray} />
                   <ListItem.Content>
-                    <ListItem.Title>{item.title}</ListItem.Title>
+                    <ListItem.Title style={clientProfileStyles.listItemTitle}>{item.title}</ListItem.Title>
                   </ListItem.Content>
                   <ListItem.Chevron />
                 </ListItem>

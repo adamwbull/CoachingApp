@@ -19,7 +19,7 @@ export function currentDate() {
   return date;
 }
 
-export function sqlToJsDate(sqlDate){
+export function sqlToJsDate(sqlDate) {
   var t = sqlDate.split(/[-:T.Z]/);
   return new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5], t[6]));
 }
@@ -126,6 +126,32 @@ export async function check() {
 }
 
 */
+
+export async function updateTheme(theme, id, token) {
+
+  var ret = false;
+  var arr = {Theme:theme, Id:id, Token:token};
+  console.log(arr);
+  console.log('Updating theme...');
+  const res = await fetch(url + '/user/update-theme', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Updated theme!');
+    ret = true;
+  }
+
+  return ret;
+
+}
 
 export async function createConversation(coachId, clientId, token) {
 

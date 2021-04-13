@@ -206,6 +206,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
               containerStyle={messageThreadStyles.imageIcon} />
             <TextInput
               style={messageThreadStyles.messageTextInput}
+              placeholderTextColor={colors.darkGray}
               onChangeText={text => this.onChangeInput(text)}
               value={input}
               placeholder='Enter message...'
@@ -253,6 +254,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
     var list = [
       {
         title:'Select Image From Gallery',
+        containerStyle: { backgroundColor: colors.white },
         onPress: () => this.pickImage(),
         icon: 'image',
         iconColor:colors.darkGray,
@@ -260,6 +262,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       },
       {
         title:'Take Photo',
+        containerStyle: { backgroundColor: colors.white },
         onPress: () => this.pickCameraImage(),
         icon: 'camera',
         iconColor:colors.darkGray,
@@ -595,7 +598,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={messageThreadStyles.container}
             >
-          <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} />
+          <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} video={() => this.openVideo()}/>
           <ScrollView contentContainerStyle={[scrollViewStyle]}>
             <Text style={messageThreadStyles.noMessagesText}>No messages to display.</Text>
           </ScrollView>
@@ -609,7 +612,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
               style={messageThreadStyles.container}>
           <AddBorderTop />
-          <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} />
+          <NavBackCenterText text={title} goBack={() => this.props.navigation.goBack()} video={() => this.openVideo()}/>
           <View style={[scrollViewStyle]}>
             <ScrollView
               ref={ref => {this.scrollView = ref}}

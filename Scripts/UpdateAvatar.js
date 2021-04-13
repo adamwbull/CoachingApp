@@ -141,7 +141,7 @@ export default class UpdateAvatar extends React.Component {
       const { width, height } = Dimensions.get('window');
       const dim2 = parseInt((width*0.7));
       return (
-            <SafeAreaView>
+            <SafeAreaView style={{height}}>
             <NavBack goBack={() => this.props.navigation.navigate('ClientProfile')} />
                 {cropCompleted ? (<View style={{justifyContent:'center',alignItems:'center'}}>
                   <Image resizeMode="contain"
@@ -156,15 +156,15 @@ export default class UpdateAvatar extends React.Component {
                   containerStyle={updateAvatar.submitButtonContainer}
                   onPress={() => this.onPress()}/>
                   <Text style={updateAvatar.text}>Or choose another photo...</Text>
-                </View>) : <View><Image source={noImage} style={{tintColor:colors.darkGray,marginTop:70,width:dim2,height:dim2}}/><Text style={updateAvatar.text}>Select an image for your avatar...</Text></View>}
+                </View>) : <View style={{alignItems:'center'}}><Image source={noImage} style={{tintColor:colors.darkGray,marginTop:70,width:dim2,height:dim2}}/><Text style={updateAvatar.text}>Select an image for your avatar...</Text></View>}
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                     backgroundColor: colors.clouds,
                     position: 'absolute',
                     bottom: 0,
-                }}
-                >
+                    left:0
+                }}>
                     <HybridTouch style={updateAvatar.imageSelectButtonLeft} onPress={() => this._pickImage()}>
                         <View style={{ alignItems: 'center' }}>
                             <Icon size={30} name="photo" color={colors.forest} />
