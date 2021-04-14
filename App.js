@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from './Scripts/Styles.js';
 import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.']);
+YellowBox.ignoreWarnings(['YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.','Non-serializable values were found in the navigation state.']);
 // Import Scripts
 import Home from './Scripts/Home.js';                             // Working
 import Prompts from './Scripts/Prompts.js';                       // Working

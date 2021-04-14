@@ -57,6 +57,37 @@ export class NavProfileRight extends React.Component {
   }
 }
 
+export class NavCenterTextProfileRight extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      refreshing : false,
+      opacity: new Animated.Value(0)
+    };
+  }
+
+  onLoad = () => {
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  render() {
+    return (<View style={[navStyles.nav]}>
+      <View style={navStyles.left}>
+      </View>
+      <View style={navStyles.center}>
+        <Text style={navStyles.navBackCenterText}>{this.props.text}</Text>
+      </View>
+      <View style={navStyles.right}>
+        <IonIcon onPress={this.props.navRight} name='person' size={25} color={colors.blueGray} />
+      </View>
+    </View>);
+  }
+}
+
 export class NavBack extends React.Component {
   constructor(props) {
     super(props)

@@ -6,8 +6,8 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { onboardingStyles, colors } from '../Scripts/Styles.js';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { onboardingStyles, colorsPerm } from '../Scripts/Styles.js';
 import { updateOnboarding, createOnboarding, getOnboarding, getOnboardingSurveyArray, uploadResponses, updateOnboardingCompleted, getOnboardingPayment } from '../Scripts/API.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
 import RadioButton from '../Components/RadioButton.js';
@@ -155,7 +155,7 @@ export default class OnboardingSurvey extends React.Component {
                   minimumValue={parseInt(range[0])}
                   maximumValue={parseInt(range[1])}
                   thumbStyle={onboardingStyles.sliderThumb}
-                  minimumTrackTintColor={colors.forest}
+                  minimumTrackTintColor={colorsPerm.forest}
                 />
               </View>
               <View style={onboardingStyles.sliderSetRange}>
@@ -174,9 +174,9 @@ export default class OnboardingSurvey extends React.Component {
                   key={box}
                   checked={this.state.responses[index][1][boxIndex]}
                   title={box}
-                  checkedColor={colors.emerald}
-                  uncheckedColor={colors.darkGray}
-                  textStyle={{color:colors.darkGray}}
+                  checkedColor={colorsPerm.emerald}
+                  uncheckedColor={colorsPerm.darkGray}
+                  textStyle={{color:colorsPerm.darkGray}}
                   containerStyle={onboardingStyles.checkBoxButtonContainer}
                   onPress={() => this.onCheckBoxChange(item.Id, index, boxIndex)}
                 />);
@@ -251,7 +251,7 @@ export default class OnboardingSurvey extends React.Component {
 
   render() {
 
-    return (<ScrollView style={onboardingStyles.trueContainer}>
+    return (<SafeAreaView><ScrollView style={onboardingStyles.trueContainer}>
       <View style={onboardingStyles.actualContainer}>
         <View style={onboardingStyles.mainTitle}>
           <Text style={onboardingStyles.mainTitleText}>Onboarding Survey</Text>
@@ -264,7 +264,7 @@ export default class OnboardingSurvey extends React.Component {
         containerStyle={onboardingStyles.submitButtonContainer}
         onPress={() => this.handlePress()}/>
       </View>
-    </ScrollView>);
+    </ScrollView></SafeAreaView>);
 
   }
 

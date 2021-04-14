@@ -170,7 +170,7 @@ export const contractStyles = StyleSheet.create({
     borderRadius:0
   },
   agreeTop: {
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     fontSize:14,
     textAlign:'center',
     marginBottom:10,
@@ -1109,17 +1109,15 @@ export const conceptsStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  conceptsTitle: {
-    marginTop:25,
-    color:colors.darkGray,
-    textAlign:'center',
-    marginBottom:15,
-    fontSize:40
-  },
   emptyText: {
     textAlign:'center',
     fontSize:20,
     color:colors.darkGray
+  },
+  mainContainer: {
+    marginTop:25,
+    width:'100%',
+    height:windowHeight
   },
   conceptsTitle: {
     marginTop:25,
@@ -1261,9 +1259,9 @@ export const promptsStyles = StyleSheet.create({
   mainContainer: {
     backgroundColor:colors.clouds,
     alignItems: 'center',
-    justifyContent: 'center',
     width:'100%',
-    marginBottom:25
+    height:windowHeight,
+    marginTop:25,
   },
   emptyText: {
     textAlign:'center',
@@ -1475,11 +1473,11 @@ export const homeStyles = StyleSheet.create({
 
 export const welcomeStyles = StyleSheet.create({
   trueContainer:{
-    backgroundColor:colors.darkGray,
+    backgroundColor:colorsPerm.darkGray,
     height:'100%'
   },
   actualContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: colorsPerm.white,
     marginTop:windowHeight*0.23,
     marginLeft:20,
     marginRight:20,
@@ -1534,7 +1532,7 @@ export const welcomeStyles = StyleSheet.create({
   },
   registerText: {
     textAlign:'center',
-    color:colors.darkGray
+    color:colorsPerm.darkGray
   },
   registerLink: {
     textDecorationLine: 'underline',
@@ -1550,7 +1548,7 @@ export const welcomeStyles = StyleSheet.create({
     width:'100%',
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:colors.lightGrey,
+    backgroundColor:colorsPerm.lightGrey,
     height:100,
     textAlign:'center'
   },
@@ -1568,11 +1566,11 @@ export const welcomeStyles = StyleSheet.create({
 
 export const registerStyles = StyleSheet.create({
   trueContainer:{
-    backgroundColor:colors.darkGray,
+    backgroundColor:colorsPerm.darkGray,
     height:'100%'
   },
   actualContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: colorsPerm.white,
     marginTop:windowHeight*0.25,
     marginLeft:20,
     marginRight:20,
@@ -1623,7 +1621,7 @@ export const registerStyles = StyleSheet.create({
   },
   registerText: {
     textAlign:'center',
-    color:colors.darkGray
+    color:colorsPerm.darkGray
   },
   registerLink: {
     textDecorationLine: 'underline',
@@ -1639,7 +1637,7 @@ export const registerStyles = StyleSheet.create({
     width:'100%',
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:colors.lightGrey,
+    backgroundColor:colorsPerm.lightGrey,
     height:100,
     textAlign:'center'
   },
@@ -1668,7 +1666,7 @@ export const registerStyles = StyleSheet.create({
     fontSize:18
   },
   dobTextMain: {
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     fontSize:18
   },
   dobLabel: {
@@ -1690,10 +1688,10 @@ export const registerStyles = StyleSheet.create({
 
 export const onboardingStyles = StyleSheet.create({
   trueContainer:{
-    backgroundColor:colors.darkGray
+    backgroundColor:colorsPerm.darkGray
   },
   actualContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: colorsPerm.white,
     marginTop:30,
     marginLeft:20,
     marginRight:20,
@@ -1707,7 +1705,7 @@ export const onboardingStyles = StyleSheet.create({
   },
   radioButton: {
     flexDirection:'row',
-    backgroundColor:colors.white,
+    backgroundColor:colorsPerm.white,
     borderRadius:5,
     marginBottom:10,
     justifyContent:'flex-start',
@@ -1717,28 +1715,28 @@ export const onboardingStyles = StyleSheet.create({
   },
   mainTitle: {
     padding:10,
-    backgroundColor:colors.emerald,
+    backgroundColor:colorsPerm.emerald,
     margin:20,
     borderRadius:10
   },
   mainTitleText: {
     fontSize:30,
     textAlign:'center',
-    color:colors.white,
+    color:colorsPerm.white,
   },
   checkBoxButtonContainer: {
     alignItems: 'flex-start',
     marginBottom: 10,
     marginLeft:10,
     marginRight:10,
-    backgroundColor:colors.white
+    backgroundColor:colorsPerm.white
   },
   radioButtonContainer: {
     alignItems: 'flex-start',
     marginBottom: 10,
     marginLeft:10,
     marginRight:10,
-    backgroundColor:colors.white,
+    backgroundColor:colorsPerm.white,
     borderRadius:5,
     borderWidth:1,
     borderColor:'#ededed'
@@ -1747,7 +1745,7 @@ export const onboardingStyles = StyleSheet.create({
     fontSize:20,
     marginBottom:10,
     textAlign:'center',
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     fontWeight:'500'
   },
   questionContainer: {
@@ -1771,7 +1769,7 @@ export const onboardingStyles = StyleSheet.create({
     justifyContent:'center'
   },
   sliderSetRangeText: {
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     fontSize:16
   },
   sliderContainer: {
@@ -1780,7 +1778,7 @@ export const onboardingStyles = StyleSheet.create({
   sliderThumb: {
     width:25,
     height:25,
-    backgroundColor:colors.emerald
+    backgroundColor:colorsPerm.emerald
   },
   submitButtonContainer:{
     width:'60%',
@@ -1833,7 +1831,7 @@ export const radioButtonStyles = StyleSheet.create({
 export const splashStyles = StyleSheet.create({
   actualContainer: {
     flex: 1,
-    backgroundColor: colors.darkGray,
+    backgroundColor: colorsPerm.darkGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1844,7 +1842,7 @@ export const splashStyles = StyleSheet.create({
     flexDirection:'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor:colors.clouds,
+    backgroundColor:colorsPerm.clouds,
     borderRadius:35
   },
   image: {
@@ -1861,7 +1859,7 @@ export const splashStyles = StyleSheet.create({
   },
   title: {
     fontSize:25,
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     width:'100%',
     justifyContent:'center',
     alignItems:'center',
@@ -1871,12 +1869,12 @@ export const splashStyles = StyleSheet.create({
   welcome: {
     marginTop:800*logoRatio+windowHeight*0.10,
     fontSize:30,
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     marginBottom:10,
     textAlign:'center'
   },
   error: {
-    color:colors.red,
+    color:colorsPerm.red,
     marginTop:4,
     height:16,
     fontSize:16
@@ -1888,7 +1886,7 @@ export const splashStyles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     textAlign:'center',
-    backgroundColor:colors.white,
+    backgroundColor:colorsPerm.white,
   },
   inputError: {
     width:'50%',
@@ -1897,8 +1895,8 @@ export const splashStyles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     textAlign:'center',
-    backgroundColor:colors.white,
-    borderColor:colors.red,
+    backgroundColor:colorsPerm.white,
+    borderColor:colorsPerm.red,
     borderWidth:1
   },
   inputContainerStyle: {
@@ -1913,6 +1911,6 @@ export const splashStyles = StyleSheet.create({
     borderRadius:50
   },
   button: {
-    backgroundColor:colors.forest,
+    backgroundColor:colorsPerm.forest,
   }
 });

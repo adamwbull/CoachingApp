@@ -86,6 +86,8 @@ export default class Messages extends React.Component {
         <ScrollView contentContainerStyle={messagesStyles.scrollView}
           refreshControl={
             <RefreshControl
+              tintColor={colors.forest}
+              colors={[colors.forest,colors.emerald]}
               refreshing={pullRefresh}
               onRefresh={this.onRefresh}/>
           }>

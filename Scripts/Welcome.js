@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ActivityIndicator, Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { welcomeStyles, colors } from '../Scripts/Styles.js';
+import { welcomeStyles, colorsPerm, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
 import { loginCheck, getCoach } from '../Scripts/API.js';
@@ -16,7 +16,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export default class Welcome extends React.Component {
   constructor(props) {
-    super(props) 
+    super(props)
     this.state = {
       refreshing: true,
       opacity: new Animated.Value(0),
@@ -163,7 +163,7 @@ export default class Welcome extends React.Component {
           <Input
             onChangeText={text => this.onChange(0, text)}
             label='Email Address'
-            leftIcon={{ type: 'font-awesome', name: 'envelope-square', color:colors.darkGray }}
+            leftIcon={{ type: 'font-awesome', name: 'envelope-square', color:colorsPerm.darkGray }}
             placeholder='you@example.com'
             leftIconContainerStyle={welcomeStyles.inputContainerEmail}
             value={this.state.email}
@@ -172,7 +172,7 @@ export default class Welcome extends React.Component {
           <Input
             onChangeText={text => this.onChange(1, text)}
             label='Password'
-            leftIcon={{ type: 'font-awesome', name: 'lock', color:colors.darkGray }}
+            leftIcon={{ type: 'font-awesome', name: 'lock', color:colorsPerm.darkGray }}
             placeholder='Password...'
             leftIconContainerStyle={welcomeStyles.inputContainer}
             value={this.state.password}

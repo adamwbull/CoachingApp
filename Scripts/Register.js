@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TouchableOpacity, Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { registerStyles, colors } from '../Scripts/Styles.js';
+import { registerStyles, colorsPerm } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
 import { refreshUser, key, createAccount, parseDateText, parseSimpleDateText, validateEmail, emailCheck, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
@@ -130,10 +130,7 @@ export default class Register extends React.Component {
             pad(dob.getUTCMinutes())    + ':' +
             pad(dob.getUTCSeconds());
 
-      const scheme = useColorScheme();
-      var theme = (scheme == 'dark') ? 1 : 0;
-
-      var client = {Token:token, FirstName:firstName, LastName:lastName, Theme:theme, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
+      var client = {Token:token, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
 
       var passed = await createAccount(client);
 
@@ -203,7 +200,7 @@ export default class Register extends React.Component {
         <Input
           onChangeText={text => this.onChange(3, text)}
           label='First Name'
-          leftIcon={{ type: 'font-awesome', name: 'user-circle', color:colors.darkGray }}
+          leftIcon={{ type: 'font-awesome', name: 'user-circle', color:colorsPerm.darkGray }}
           placeholder='First...'
           leftIconContainerStyle={registerStyles.inputContainerName}
           value={this.state.firstName}
@@ -212,7 +209,7 @@ export default class Register extends React.Component {
         <Input
           onChangeText={text => this.onChange(4, text)}
           label='Last Name'
-          leftIcon={{ type: 'font-awesome', name: 'user-circle', color:colors.darkGray }}
+          leftIcon={{ type: 'font-awesome', name: 'user-circle', color:colorsPerm.darkGray }}
           placeholder='Last...'
           leftIconContainerStyle={registerStyles.inputContainerName}
           value={this.state.lastName}
@@ -221,7 +218,7 @@ export default class Register extends React.Component {
         <Input
           onChangeText={text => this.onChange(0, text)}
           label='Email Address'
-          leftIcon={{ type: 'font-awesome', name: 'envelope-square', color:colors.darkGray }}
+          leftIcon={{ type: 'font-awesome', name: 'envelope-square', color:colorsPerm.darkGray }}
           placeholder='you@example.com'
           leftIconContainerStyle={registerStyles.inputContainerEmail}
           value={this.state.email}
@@ -230,7 +227,7 @@ export default class Register extends React.Component {
         <Input
           onChangeText={text => this.onChange(1, text)}
           label='Password'
-          leftIcon={{ type: 'font-awesome', name: 'lock', color:colors.darkGray }}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color:colorsPerm.darkGray }}
           placeholder='Password...'
           leftIconContainerStyle={registerStyles.inputContainer}
           value={this.state.password}
@@ -240,7 +237,7 @@ export default class Register extends React.Component {
         <Input
           onChangeText={text => this.onChange(2, text)}
           label='Confirm Password'
-          leftIcon={{ type: 'font-awesome', name: 'lock', color:colors.darkGray }}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color:colorsPerm.darkGray }}
           placeholder='Confirm Password...'
           leftIconContainerStyle={registerStyles.inputContainer}
           value={this.state.confirmPassword}
@@ -252,7 +249,7 @@ export default class Register extends React.Component {
           onPress={() => this.showModal()}
           style={registerStyles.dobContainer}>
           <View style={registerStyles.dobIconContainer}>
-            <Icon style={{marginLeft:10,marginRight:6}} name='calendar' size={20} color={colors.darkGray} />
+            <Icon style={{marginLeft:10,marginRight:6}} name='calendar' size={20} color={colorsPerm.darkGray} />
           </View>
           <Text style={this.state.dobTextStyle}>{this.state.dobText}</Text>
         </TouchableOpacity>

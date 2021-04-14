@@ -5,20 +5,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity, AsyncStorage, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, TouchableOpacity, AsyncStorage, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavProfileRight } from './TopNav.js';
+import { NavCenterTextProfileRight } from './TopNav.js';
 import { getConcepts, sqlToJsDate, parseDateText, parseSimpleDateText } from '../Scripts/API.js';
 import { windowHeight, colors, conceptsStyles } from './Styles.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-//
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 export default class Concepts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       refreshing : true,
-      concepts: []
+      concepts: [],
+      pullRefresh: false
     };
   }
 
@@ -26,7 +30,13 @@ export default class Concepts extends React.Component {
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     var concepts = await getConcepts(coach.Id, client.Id);
-    this.setState({concepts:concepts,refreshing:false});
+    this.setState({concepts:concepts,refreshing:false,pullRefresh:false});
+  }
+
+  onRefresh = () => {
+    this.setState({pullRefresh:true});
+    this.getData();
+    wait(1000).then(() => this.setState({pullRefresh:false}));
   }
 
   async componentDidMount() {
@@ -87,27 +97,19 @@ export default class Concepts extends React.Component {
 
   render() {
 
-    var concepts = this.state.concepts;
-    var mainContainerStyle;
-    var conceptsLength = concepts.length;
-    if (conceptsLength >= 7) {
-      mainContainerStyle = conceptsStyles.mainContainer;
-    } else {
-      if (conceptsLength == undefined) {
-        conceptsLength = 1;
-      }
-      var margin = parseInt(windowHeight-((windowHeight/5)*conceptsLength));
-      mainContainerStyle = { backgroundColor:colors.clouds,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width:'100%',
-      marginBottom:margin};
-    }
+    var { concepts, pullRefresh } = this.state;
+
     return (<SafeAreaView>
-      <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
-      <ScrollView contentContainerStyle={conceptsStyles.container}>
-        <View style={mainContainerStyle}>
-          <Text style={conceptsStyles.conceptsTitle}>Concepts</Text>
+      <NavCenterTextProfileRight text='Concepts' navRight={() => this.props.navigation.navigate('ClientProfile')} />
+      <ScrollView contentContainerStyle={conceptsStyles.container}
+      refreshControl={
+        <RefreshControl
+          tintColor={colors.forest}
+          colors={[colors.forest,colors.emerald]}
+          refreshing={pullRefresh}
+          onRefresh={this.onRefresh}/>
+      }>
+        <View style={conceptsStyles.mainContainer}>
           {this.showConcepts(concepts)}
         </View>
       </ScrollView>

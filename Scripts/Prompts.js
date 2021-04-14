@@ -5,20 +5,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, TouchableOpacity, AsyncStorage, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, ActivityIndicator, TouchableOpacity, AsyncStorage, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavProfileRight } from './TopNav.js';
+import { NavCenterTextProfileRight } from './TopNav.js';
 import { getPrompts, sqlToJsDate, parseDateText, parseSimpleDateText } from '../Scripts/API.js';
 import { promptsStyles, colors, windowHeight } from './Styles.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-//
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 export default class Prompts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       refreshing : true,
-      prompts: []
+      prompts: [],
+      pullRefresh: false,
     };
   }
 
@@ -26,7 +30,13 @@ export default class Prompts extends React.Component {
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     var prompts = await getPrompts(coach.Id, client.Id);
-    this.setState({prompts:prompts,refreshing:false});
+    this.setState({prompts:prompts,refreshing:false,pullRefresh:false});
+  }
+
+  onRefresh = () => {
+    this.setState({pullRefresh:true});
+    this.getData();
+    wait(1000).then(() => this.setState({pullRefresh:false}));
   }
 
   async componentDidMount() {
@@ -123,27 +133,19 @@ export default class Prompts extends React.Component {
 
   render() {
 
-    var prompts = this.state.prompts;
-    var mainContainerStyle;
-    var promptsLength = prompts.length;
-    if (promptsLength >= 7) {
-      mainContainerStyle = promptsStyles.mainContainer;
-    } else {
-      if (promptsLength == undefined) {
-        promptsLength = 1;
-      }
-      var margin = parseInt(windowHeight-((windowHeight/5)*promptsLength));
-      mainContainerStyle = { backgroundColor:colors.clouds,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width:'100%',
-      marginBottom:margin};
-    }
+    var { prompts, pullRefresh } = this.state;
+
     return (<SafeAreaView>
-      <NavProfileRight navRight={() => this.props.navigation.navigate('ClientProfile')} />
-      <ScrollView contentContainerStyle={promptsStyles.container}>
-        <View style={mainContainerStyle}>
-          <Text style={promptsStyles.promptsTitle}>Prompts</Text>
+      <NavCenterTextProfileRight text='Prompts' navRight={() => this.props.navigation.navigate('ClientProfile')} />
+      <ScrollView contentContainerStyle={promptsStyles.container}
+      refreshControl={
+        <RefreshControl
+          tintColor={colors.forest}
+          colors={[colors.forest,colors.emerald]}
+          refreshing={pullRefresh}
+          onRefresh={this.onRefresh}/>
+      }>
+        <View style={promptsStyles.mainContainer}>
           {this.showPrompts(prompts)}
         </View>
       </ScrollView>

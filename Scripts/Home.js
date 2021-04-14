@@ -16,7 +16,7 @@ import { Video, AVPlaybackStatus } from 'expo-av';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-  const paddingToBottom = 60;
+  const paddingToBottom = 10;
   return layoutMeasurement.height + contentOffset.y >=
     contentSize.height - paddingToBottom;
 };
@@ -30,7 +30,7 @@ export default class Home extends React.Component {
       coach:{FirstName:'Loading',LastName:'Coach...'},
       links:[],
       feed:[],
-      displayNum:3
+      displayNum:5
     };
   }
 
