@@ -50,6 +50,20 @@ export default class ViewConcept extends React.Component {
     this.setState({concept:concept,refreshing:false});
   }
 
+  handleBack() {
+    var client = JSON.parse(await AsyncStorage.getItem('Client'));
+    if (client.PromptsCompletedCnt == 0) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'4', next:'Concepts', client:client });
+    } else if (client.PromptsCompletedCnt == 4) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'5', next:'Concepts', client:client });
+    } else if (client.PromptsCompletedCnt == 9) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'4', next:'Concepts', client:client });
+    } else {
+      this.props.navigation.navigate('Concepts');
+    }
+
+  }
+
   onLoad = () => {
     Animated.timing(this.state.opacity, {
       toValue: 1,
@@ -239,7 +253,7 @@ export default class ViewConcept extends React.Component {
       </SafeAreaView>);
     } else {
       return (<SafeAreaView>
-        <NavBack goBack={() => this.props.navigation.navigate('Concepts')} />
+        <NavBack goBack={() => this.handleBack()} />
         <ScrollView contentContainerStyle={viewConceptStyles.container}>
         <View style={viewConceptStyles.mainContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />

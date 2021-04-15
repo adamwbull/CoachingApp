@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from './Scripts/Styles.js';
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.','Non-serializable values were found in the navigation state.']);
+
 // Import Scripts
 import Home from './Scripts/Home.js';                             // Working
 import Prompts from './Scripts/Prompts.js';                       // Working
@@ -37,7 +38,8 @@ import PreviousContract from './Scripts/PreviousContract.js';     // Working
 import Contract from './Scripts/Contract.js';                     // Working
 import OnboardingPayment from './Scripts/OnboardingPayment.js';   // Working
 import OnboardingContract from './Scripts/OnboardingContract.js'; // Working
-                                                                  // Working 28/28
+import AwardTrophy from './Scripts/AwardTrophy.js';               //
+                                                                  // Working 28/29
 // Create navigation controllers
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -125,6 +127,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='PreviousContract' component={PreviousContract} />
             <Stack.Screen name='OnboardingPayment' component={OnboardingPayment} options={{gestureEnabled: false}} />
             <Stack.Screen name='OnboardingContract' component={OnboardingContract} options={{gestureEnabled: false}} />
+            <Stack.Screen name='AwardTrophy' component={AwardTrophy} options={{gestureEnabled: false}} />
           </Stack.Navigator>
         </NavigationContainer>
     );
