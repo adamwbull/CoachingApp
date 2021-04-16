@@ -7,11 +7,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Alert, AsyncStorage, ActivityIndicator, Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { viewPromptStyles, onboardingStyles, viewPromptSurveyStyles, navStyles, colors } from '../Scripts/Styles.js';
-import { updatePromptAssoc, getSurveyResponses, getSurveyArray, uploadResponses, sqlToJsDate, parseDateText } from '../Scripts/API.js';
+import { viewPromptStyles, promptSurveyStyles, viewPromptSurveyStyles, navStyles, colors } from '../Scripts/Styles.js';
+import { updatePromptsCompletedCnt, updatePromptAssoc, getSurveyResponses, getSurveyArray, uploadResponses, sqlToJsDate, parseDateText } from '../Scripts/API.js';
 import { NavBack } from './TopNav.js';
 import { Slider, Button, Input, CheckBox } from 'react-native-elements';
-import RadioButton from '../Components/RadioButton.js';
+import RadioButton from '../Components/RadioButtonPrompt.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class ViewPrompt extends React.Component {
@@ -30,6 +30,7 @@ export default class ViewPrompt extends React.Component {
       return response.Id === surveyItemId;
     }
   }
+
   async componentDidMount() {
     var coach, client, items, responses, surveyCompleted, prompt;
     try {
@@ -91,13 +92,25 @@ export default class ViewPrompt extends React.Component {
           }
         }
       });
-      this.setState({prompt:prompt,coach:coach,surveyItems:items,responses:res,clientToken:client.Token,clientId:client.Id});
+      this.setState({prompt:prompt,coach:coach,surveyItems:items,responses:res,client:client, clientToken:client.Token,clientId:client.Id});
     }
   }
 
-  handleBack() {
-    this.props.route.params.onGoBack();
-    this.props.navigation.navigate('Prompts');
+  async handleBack() {
+    var { clientId, clientToken, client } = this.state;
+    var updateRemote = await updatePromptsCompletedCnt(clientId, clientToken);
+    client.PromptsCompletedCnt += 1;
+    await AsyncStorage.setItem('Client',JSON.stringify(client));
+    if (client.PromptsCompletedCnt == 1) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'1', next:'Prompts', client:client, onGoBack:this.props.route.params.onGoBack });
+    } else if (client.PromptsCompletedCnt == 5) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'2', next:'Prompts', client:client, onGoBack:this.props.route.params.onGoBack });
+    } else if (client.PromptsCompletedCnt == 10) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'3', next:'Prompts', client:client, onGoBack:this.props.route.params.onGoBack });
+    } else {
+      this.props.route.params.onGoBack();
+      this.props.navigation.navigate('Prompts');
+    }
   }
 
   onLoad = () => {
@@ -148,8 +161,8 @@ export default class ViewPrompt extends React.Component {
     if (completed == 0) {
       return (<Button
       title='Submit'
-      buttonStyle={onboardingStyles.submitButton}
-      containerStyle={onboardingStyles.submitButtonContainer}
+      buttonStyle={promptSurveyStyles.submitButton}
+      containerStyle={promptSurveyStyles.submitButtonContainer}
       onPress={() => this.handlePress()}/>);
     }
   }
@@ -182,26 +195,27 @@ export default class ViewPrompt extends React.Component {
       <Text style={addMargin}>{prompt.Prompt[0][0].Title}</Text>
       {this.state.surveyItems.map((item, index) => {
         if (item.Type == 0) {
-          return (<View key={item.Id} style={onboardingStyles.questionContainer}>
-            <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
+          return (<View key={item.Id} style={promptSurveyStyles.questionContainer}>
+            <Text style={promptSurveyStyles.itemQuestion}>{item.Question}</Text>
             <Input
               onChangeText={text => this.onChange(item.Id, index, text)}
               value={this.state.responses[index][1]}
               keyboardType={item.KeyboardType}
               multiline={true}
+              inputStyle={{color:colors.darkGray}}
               textAlign='center'
               placeholder='Enter response here...'
             />
           </View>);
         } else if (item.Type == 1) {
           var range = item.SliderRange.split(',');
-          return (<View key={item.Id} style={onboardingStyles.questionSliderContainer}>
-            <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
-            <View style={onboardingStyles.sliderSet}>
-              <View style={onboardingStyles.sliderSetRange}>
-                <Text style={onboardingStyles.sliderSetRangeText}>{range[0]}</Text>
+          return (<View key={item.Id} style={promptSurveyStyles.questionSliderContainer}>
+            <Text style={promptSurveyStyles.itemQuestion}>{item.Question}</Text>
+            <View style={promptSurveyStyles.sliderSet}>
+              <View style={promptSurveyStyles.sliderSetRange}>
+                <Text style={promptSurveyStyles.sliderSetRangeText}>{range[0]}</Text>
               </View>
-              <View style={onboardingStyles.sliderContainer}>
+              <View style={promptSurveyStyles.sliderContainer}>
                 <Slider
                   onValueChange={value => {
                     clearTimeout(this.sliderTimeoutId)
@@ -212,20 +226,20 @@ export default class ViewPrompt extends React.Component {
                   value={this.state.responses[index][1]}
                   minimumValue={parseInt(range[0])}
                   maximumValue={parseInt(range[1])}
-                  thumbStyle={onboardingStyles.sliderThumb}
+                  thumbStyle={promptSurveyStyles.sliderThumb}
                   minimumTrackTintColor={colors.forest}
                 />
               </View>
-              <View style={onboardingStyles.sliderSetRange}>
-                <Text style={onboardingStyles.sliderSetRangeText}>{range[1]}</Text>
+              <View style={promptSurveyStyles.sliderSetRange}>
+                <Text style={promptSurveyStyles.sliderSetRangeText}>{range[1]}</Text>
               </View>
             </View>
-            <Text style={onboardingStyles.sliderValue}>Value: {parseFloat(this.state.responses[index][1]).toFixed(1)}</Text>
+            <Text style={promptSurveyStyles.sliderValue}>Value: {parseFloat(this.state.responses[index][1]).toFixed(1)}</Text>
           </View>);
         } else if (item.Type == 2) {
           var boxes = item.BoxOptionsArray.split(',');
-          return (<View key={item.Id} style={onboardingStyles.questionContainer}>
-            <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
+          return (<View key={item.Id} style={promptSurveyStyles.questionContainer}>
+            <Text style={promptSurveyStyles.itemQuestion}>{item.Question}</Text>
             {
               boxes.map((box, boxIndex) => {
               return (<CheckBox
@@ -235,7 +249,7 @@ export default class ViewPrompt extends React.Component {
                   checkedColor={colors.emerald}
                   uncheckedColor={colors.darkGray}
                   textStyle={{color:colors.darkGray}}
-                  containerStyle={onboardingStyles.checkBoxButtonContainer}
+                  containerStyle={promptSurveyStyles.checkBoxButtonContainer}
                   onPress={() => this.onCheckBoxChange(item.Id, index, boxIndex)}
                 />);
             })}
@@ -247,8 +261,8 @@ export default class ViewPrompt extends React.Component {
             var text = boxes[i];
             options[i] = {key:text, text:text, index:index, id:item.Id};
           }
-          return (<View key={item.Id} style={onboardingStyles.questionContainer}>
-            <Text style={onboardingStyles.itemQuestion}>{item.Question}</Text>
+          return (<View key={item.Id} style={promptSurveyStyles.questionContainer}>
+            <Text style={promptSurveyStyles.itemQuestion}>{item.Question}</Text>
             <View>
               <RadioButton
                   selectedOption={this.state.responses[index][3]}
@@ -291,7 +305,6 @@ export default class ViewPrompt extends React.Component {
           Alert.alert('Error uploading your responses, try again!');
         }
       } else {
-        console.log("Error uploading!");
         // Let user know they need to resubmit
         this.setState({errorText:'There was an error uploading your answers. Try hitting submit again!'});
       }

@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AsyncStorage, Alert, ActivityIndicator, Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { viewPromptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
-import { sqlToJsDate, parseSimpleDateText, createPromptResponse, updatePromptResponse, getPromptResponse } from '../Scripts/API.js';
+import { updatePromptsCompletedCnt, sqlToJsDate, parseSimpleDateText, createPromptResponse, updatePromptResponse, getPromptResponse } from '../Scripts/API.js';
 import { Input, Button } from 'react-native-elements';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
@@ -36,7 +36,7 @@ export default class ViewPrompt extends React.Component {
       promptArr = await getPromptResponse(prompt.Id, client.Id, client.Token);
       response = promptArr[0].Text;
     }
-    this.setState({prompt:prompt,promptArr:promptArr,response:response});
+    this.setState({prompt:prompt,promptArr:promptArr,client:client,response:response});
   }
 
   onLoad = () => {
@@ -47,9 +47,21 @@ export default class ViewPrompt extends React.Component {
     }).start();
   }
 
-  handleBack() {
-    this.props.route.params.onGoBack();
-    this.props.navigation.navigate('Prompts');
+  async handleBack() {
+    var { client } = this.state;
+    var updateRemote = await updatePromptsCompletedCnt(client.Id, client.Token);
+    client.PromptsCompletedCnt += 1;
+    await AsyncStorage.setItem('Client',JSON.stringify(client));
+    if (client.PromptsCompletedCnt == 1) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'1', next:'Prompts', client:client, onGoBack:this.props.route.params.onGoBack });
+    } else if (client.PromptsCompletedCnt == 5) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'2', next:'Prompts', client:client, onGoBack:this.props.route.params.onGoBack });
+    } else if (client.PromptsCompletedCnt == 10) {
+      this.props.navigation.navigate('AwardTrophy', { trophyId:'3', next:'Prompts', client:client, onGoBack:this.props.route.params.onGoBack });
+    } else {
+      this.props.route.params.onGoBack();
+      this.props.navigation.navigate('Prompts');
+    }
   }
 
   showPrompt(prompt) {
@@ -162,7 +174,7 @@ export default class ViewPrompt extends React.Component {
         <ScrollView componentContainerStyle={viewPromptStyles.container}>
         <View style={navStyles.nav}>
           <View style={navStyles.left}>
-            <IonIcon onPress={() => this.handleBack()}
+            <IonIcon onPress={() => this.props.navigation.navigate('Prompts')}
               name='chevron-back' size={35}
               color={colors.blueGray} />
           </View>
@@ -212,6 +224,7 @@ export default class ViewPrompt extends React.Component {
               placeholder='Enter response here...'
               value={this.state.response}
               keyboardType='default'
+              inputStyle={{color:colors.darkGray}}
               multiline={true}
               style={viewPromptStyles.promptInput}
             />

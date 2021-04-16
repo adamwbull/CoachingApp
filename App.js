@@ -38,8 +38,8 @@ import PreviousContract from './Scripts/PreviousContract.js';     // Working
 import Contract from './Scripts/Contract.js';                     // Working
 import OnboardingPayment from './Scripts/OnboardingPayment.js';   // Working
 import OnboardingContract from './Scripts/OnboardingContract.js'; // Working
-import AwardTrophy from './Scripts/AwardTrophy.js';               //
-                                                                  // Working 28/29
+import AwardTrophy from './Scripts/AwardTrophy.js';               // Working
+                                                                  // Working 29/29
 // Create navigation controllers
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

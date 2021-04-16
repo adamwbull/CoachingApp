@@ -1237,7 +1237,121 @@ export const conceptsStyles = StyleSheet.create({
     color:colors.darkGray,
     fontWeight:'300'
   },
-})
+});
+
+export const promptSurveyStyles = StyleSheet.create({
+  trueContainer:{
+    backgroundColor:colors.darkGray
+  },
+  actualContainer: {
+    backgroundColor: colors.white,
+    marginTop:30,
+    marginLeft:20,
+    marginRight:20,
+    marginBottom:30,
+    borderRadius:10
+  },
+  survey: {
+    width:'80%',
+    marginLeft:'10%',
+    justifyContent:'center'
+  },
+  radioButton: {
+    flexDirection:'row',
+    backgroundColor:colors.white,
+    borderRadius:5,
+    marginBottom:10,
+    justifyContent:'flex-start',
+    alignItems:'center',
+    marginLeft:10,
+    marginRight:10
+  },
+  mainTitle: {
+    padding:10,
+    backgroundColor:colors.emerald,
+    margin:20,
+    borderRadius:10
+  },
+  mainTitleText: {
+    fontSize:30,
+    textAlign:'center',
+    color:colors.white,
+  },
+  checkBoxButtonContainer: {
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    marginLeft:10,
+    marginRight:10,
+    backgroundColor:colors.white
+  },
+  radioButtonContainer: {
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    marginLeft:10,
+    marginRight:10,
+    backgroundColor:colors.white,
+    borderRadius:5,
+    borderWidth:1,
+    borderColor:'#ededed'
+  },
+  itemQuestion: {
+    fontSize:20,
+    marginBottom:10,
+    textAlign:'center',
+    color:colors.darkGray,
+    fontWeight:'500'
+  },
+  questionContainer: {
+    marginBottom:25
+  },
+  questionSliderContainer: {
+    marginBottom:45
+  },
+  sliderValue: {
+    textAlign:'center',
+    color:colors.darkGray,
+    fontSize:16
+  },
+  sliderSet: {
+    flexDirection:'row',
+    width:'100%'
+  },
+  sliderSetRange: {
+    flex:1,
+    alignItems:'center',
+    textAlign:'center',
+    justifyContent:'center'
+  },
+  sliderSetRangeText: {
+    color:colors.darkGray,
+    fontSize:16
+  },
+  sliderContainer: {
+    flex:8
+  },
+  sliderThumb: {
+    width:25,
+    height:25,
+    backgroundColor:colors.emerald
+  },
+  submitButtonContainer:{
+    width:'60%',
+    marginLeft:'20%',
+    marginBottom:50,
+    borderRadius:25
+  },
+  submitButton: {
+    backgroundColor:btnColors.primary,
+    padding:15
+  },
+  errorText: {
+    textAlign:'center',
+    color:btnColors.danger,
+    width:'80%',
+    marginLeft:'10%',
+    marginBottom:25
+  }
+});
 
 export const viewPromptSurveyStyles = StyleSheet.create({
   container: {
@@ -1829,6 +1943,7 @@ export const onboardingStyles = StyleSheet.create({
   },
   sliderValue: {
     textAlign:'center',
+    color:colorsPerm.darkGray,
     fontSize:16
   },
   sliderSet: {
@@ -1884,12 +1999,43 @@ export const radioButtonStyles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 2,
+    borderColor: colorsPerm.darkGray,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  itemText: {
+    fontWeight:'bold',
+    color:colorsPerm.darkGray,
+    marginLeft:10,
+    marginRight:10
+  },
+  checkedCircle: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: colorsPerm.emerald,
+  }
+});
+
+export const radioButtonPromptStyles = StyleSheet.create({
+  touchableArea: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width:'100%',
+    padding:10
+  },
+  circle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
     borderColor: colors.darkGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
   itemText: {
     fontWeight:'bold',
+    color:colors.darkGray,
     marginLeft:10,
     marginRight:10
   },
