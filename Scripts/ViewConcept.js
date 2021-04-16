@@ -5,13 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Appearance, ActivityIndicator, ScrollView, Animated, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, Appearance, ActivityIndicator, ScrollView, Animated, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { windowWidth, windowHeight, viewConceptStyles, navStyles, colors, feedMediaWidth } from '../Scripts/Styles.js';
 import { WebView } from 'react-native-webview';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { NavBack } from './TopNav.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { updateConceptVisited, updateConceptsCompletedCnt } from '../Scripts/API.js';
 
 var colorScheme = Appearance.getColorScheme();
 
@@ -46,22 +47,32 @@ export default class ViewConcept extends React.Component {
   }
 
   async componentDidMount() {
-    var concept = this.props.route.params.concept;
-    this.setState({concept:concept,refreshing:false});
+    var { concept, onGoBack } = this.props.route.params;
+    this.setState({concept:concept,onGoBack:onGoBack,refreshing:false});
   }
 
-  handleBack() {
+  async handleBack() {
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
-    if (client.PromptsCompletedCnt == 0) {
-      this.props.navigation.navigate('AwardTrophy', { trophyId:'4', next:'Concepts', client:client });
-    } else if (client.PromptsCompletedCnt == 4) {
-      this.props.navigation.navigate('AwardTrophy', { trophyId:'5', next:'Concepts', client:client });
-    } else if (client.PromptsCompletedCnt == 9) {
-      this.props.navigation.navigate('AwardTrophy', { trophyId:'4', next:'Concepts', client:client });
+    var { concept } = this.state;
+    if (concept.Visited == 0) {
+      var update = await updateConceptVisited(concept.Id, client.Id, client.Token);
+      var updateRemote = await updateConceptsCompletedCnt(client.Id, client.Token);
+      client.ConceptsCompletedCnt += 1;
+      await AsyncStorage.setItem('Client',JSON.stringify(client));
+      if (client.ConceptsCompletedCnt == 1) {
+        this.props.navigation.navigate('AwardTrophy', { trophyId:'4', next:'Concepts', client:client, onGoBack:this.props.route.params.onGoBack });
+      } else if (client.ConceptsCompletedCnt ==5) {
+        this.props.navigation.navigate('AwardTrophy', { trophyId:'5', next:'Concepts', client:client, onGoBack:this.props.route.params.onGoBack });
+      } else if (client.ConceptsCompletedCnt == 10) {
+        this.props.navigation.navigate('AwardTrophy', { trophyId:'6', next:'Concepts', client:client, onGoBack:this.props.route.params.onGoBack });
+      } else {
+        this.props.route.params.onGoBack();
+        this.props.navigation.navigate('Concepts');
+      }
     } else {
+      this.props.route.params.onGoBack();
       this.props.navigation.navigate('Concepts');
     }
-
   }
 
   onLoad = () => {
@@ -246,14 +257,14 @@ export default class ViewConcept extends React.Component {
         scrollStyle = viewConceptStyles.container;
       }
       return (<SafeAreaView>
-        <NavBack goBack={() => this.props.navigation.navigate('Concepts')} />
+        <NavBack goBack={() => this.handleBack()} />
         <ScrollView contentContainerStyle={viewConceptStyles.container}>
         {this.showConcept(concept)}
       </ScrollView>
       </SafeAreaView>);
     } else {
       return (<SafeAreaView>
-        <NavBack goBack={() => this.handleBack()} />
+        <NavBack goBack={() => this.props.navigation.navigate('Concepts')} />
         <ScrollView contentContainerStyle={viewConceptStyles.container}>
         <View style={viewConceptStyles.mainContainer}>
           <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />

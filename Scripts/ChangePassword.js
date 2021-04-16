@@ -162,6 +162,7 @@ export default class ChangePassword extends React.Component {
                 <Input
                   onChangeText={text => this.onChange(item.stateItem, text)}
                   value={item.value}
+                  inputStyle={{color:colors.darkGray}}
                   keyboardType='default'
                   secureTextEntry={true}
                   placeholder={item.placeholder}

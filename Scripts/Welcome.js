@@ -122,7 +122,7 @@ export default class Welcome extends React.Component {
         "Walking various poodles...",
         "Dividing by zero...",
         "Twiddling thumbs...",
-        "Searching for plot device...",
+        "Assisting development...",
         "Loading funny message...",
         "Oh, are you waiting for me?",
         "Generating positive growth...",

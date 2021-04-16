@@ -18,7 +18,7 @@ export const colors = (colorScheme == 'dark') ? {
   darkGray: '#23272a',
   black: '#000000',
   white: '#ffffff',
-  red: '#e74c3c'
+  red: '#e74c3c',
 } : {
   emerald: '#2ecc71',
   forest: '#27ae60',
@@ -27,7 +27,7 @@ export const colors = (colorScheme == 'dark') ? {
   darkGray: '#ecf0f1',
   black: '#ffffff',
   white: '#23272a',
-  red: '#e74c3c'
+  red: '#e74c3c',
 };
 
 export const colorsPerm = {
@@ -71,6 +71,79 @@ export const levelScale = {
   baseColor: '',
   completeColor: ''
 }
+
+export const adjustedTrophyBottomContainerHeight = parseInt(windowHeight*0.5);
+export const trophyImageDim = parseInt(windowWidth/2);
+export const trophyImageDim2 = parseInt(trophyImageDim/2);
+export const awardTrophyStyles = StyleSheet.create({
+  refreshingContainer: {
+    justifyContent:'center',
+    alignItems:'center',
+    width:'100%',
+    height:'100%'
+  },
+  container: {
+    width:'100%',
+    flexDirection:'column',
+    justifyContent:'flex-end',
+    width:'100%',
+    height:'100%'
+  },
+  newAchievement: {
+    color:colors.darkGray,
+    textAlign:'center',
+    fontSize:38,
+    marginBottom:trophyImageDim2+15,
+  },
+  bottomContainer: {
+    width:windowWidth,
+    height:adjustedTrophyBottomContainerHeight,
+    backgroundColor:colors.white,
+    borderTopLeftRadius:50,
+    borderTopRightRadius:50
+  },
+  trophyImage: {
+    position:'absolute',
+    top:-trophyImageDim2,
+    left:trophyImageDim2,
+    width: trophyImageDim,
+    height: trophyImageDim,
+    resizeMode: 'contain'
+  },
+  trophyTitle: {
+    color:colors.darkGray,
+    fontSize:32,
+    textAlign:'center',
+    fontWeight:'700',
+    marginTop:trophyImageDim2+25,
+  },
+  trophyDescription: {
+    color:colors.darkGray,
+    fontSize:18,
+    textAlign:'center',
+    marginBottom:25
+  },
+  button: {
+    backgroundColor:btnColors.primary,
+    padding:15,
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+    width:'100%',
+  },
+  buttonContainer: {
+    marginTop:10,
+    marginLeft:'25%',
+    width:'50%',
+    borderRadius:50
+  },
+  happyText: {
+    color:colors.darkGray,
+    textAlign:'center',
+    fontSize:18,
+    marginTop:25,
+  }
+});
 
 export const videoChatStyles = StyleSheet.create({
   max: {

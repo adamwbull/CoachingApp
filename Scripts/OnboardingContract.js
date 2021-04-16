@@ -148,7 +148,7 @@ export default class OnboardingContract extends React.Component {
 
     if (refreshing == true) {
       return (<SafeAreaView>
-        <NavSimple goBack={() => this.props.navigation.goBack()} />
+        <NavSimple />
         <ActivityIndicator size="large" color={colors.forest} style={{marginTop:25}} />
       </SafeAreaView>);
     } else {

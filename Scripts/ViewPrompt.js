@@ -34,7 +34,6 @@ export default class ViewPrompt extends React.Component {
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     if (prompt.Completed == 1) {
       promptArr = await getPromptResponse(prompt.Id, client.Id, client.Token);
-      console.log(promptArr);
       response = promptArr[0].Text;
     }
     this.setState({prompt:prompt,promptArr:promptArr,response:response});

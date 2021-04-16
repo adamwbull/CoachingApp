@@ -121,6 +121,7 @@ export default class DeleteAccount extends React.Component {
               keyboardType='default'
               secureTextEntry={true}
               placeholder='Enter current password to confirm...'
+              inputStyle={{color:colors.darkGray}}
               leftIcon={{ type: 'font-awesome', name: 'lock', color:colors.darkGray, size:20 }}
               leftIconContainerStyle={deleteAccountStyles.iconStyle}
             />

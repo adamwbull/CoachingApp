@@ -127,6 +127,130 @@ export async function check() {
 
 */
 
+export async function updatePromptsCompletedCnt(id, token) {
+
+  var ret = false;
+  var arr = {Id:id, Token:token};
+
+  console.log('Updating PromptsCompletedCnt...');
+  const res = await fetch(url + '/user/update-prompts-completed-count', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('PromptsCompletedCnt incremented!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function updateConceptsCompletedCnt(id, token) {
+
+  var ret = false;
+  var arr = {Id:id, Token:token};
+
+  console.log('Updating ConceptsCompletedCnt...');
+  const res = await fetch(url + '/user/update-concepts-completed-count', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('ConceptsCompletedCnt incremented!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function updateConceptVisited(conceptId, clientId, clientToken) {
+
+  var ret = false;
+  var arr = {Id:conceptId, ClientId:clientId, Token:clientToken};
+
+  console.log('Marking concept as visited...');
+  const res = await fetch(url + '/concept-assoc/mark-as-visited', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('Concept updated!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
+export async function getTrophy(trophyId, token) {
+
+  var ret = false;
+
+  console.log('Getting trophy...');
+  const res = await fetch(url + '/trophy/' + trophyId + '/' + token, {
+    method:'GET'
+  });
+
+  const payload = await res.json();
+
+  if (payload.length > 0) {
+    console.log('Trophy received!');
+    ret = payload[0];
+  }
+
+  return ret;
+
+}
+
+export async function updateTrophyAssoc(clientId, clientToken, trophyId) {
+
+  var ret = false;
+  var arr = {ClientId:clientId, Token:clientToken, TrophyId:trophyId};
+
+  console.log('Updating trophy assoc...');
+  const res = await fetch(url + '/trophy-assoc/complete', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('TrophyAssoc updated!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function updateTheme(theme, id, token) {
 
   var ret = false;

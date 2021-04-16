@@ -79,6 +79,7 @@ export default class BugReport extends React.Component {
               onChangeText={text => this.onChange(0, text)}
               value={this.state.pageText}
               keyboardType='default'
+              inputStyle={{color:colors.darkGray}}
               placeholder='Enter response here...'
             />
             <Text style={bugReport.inputLabel}>Bug Description</Text>
@@ -88,6 +89,7 @@ export default class BugReport extends React.Component {
               value={this.state.description}
               keyboardType='default'
               multiline={true}
+              inputStyle={{color:colors.darkGray}}
               placeholder='Enter response here...'
             />
             <Button

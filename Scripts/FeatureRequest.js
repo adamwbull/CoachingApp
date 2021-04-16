@@ -73,6 +73,7 @@ export default class FeatureRequest extends React.Component {
               onChangeText={text => this.onChange(text)}
               value={this.state.description}
               keyboardType='default'
+              inputStyle={{color:colors.darkGray}}
               multiline={true}
               placeholder='Enter response here...'
             />
