@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity, Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { Platform, TouchableOpacity, Animated, Image, ScrollView, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { registerStyles, colorsPerm } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
@@ -13,6 +13,39 @@ import * as Crypto from 'expo-crypto';
 import { refreshUser, key, createAccount, parseDateText, parseSimpleDateText, validateEmail, emailCheck, containsSpecialCharacters, hasUpperCase } from '../Scripts/API.js';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
 
 export default class Register extends React.Component {
   constructor(props) {
@@ -130,7 +163,9 @@ export default class Register extends React.Component {
             pad(dob.getUTCMinutes())    + ':' +
             pad(dob.getUTCSeconds());
 
-      var client = {Token:token, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
+      var expoPushToken = await registerForPushNotificationsAsync();
+
+      var client = {Token:token, ExpoPushToken:expoPushToken, FirstName:firstName, LastName:lastName, Email:email, Avatar:avatar, Password:password, DoB:dob, APIKey:key}
 
       var passed = await createAccount(client);
 

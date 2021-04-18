@@ -42,8 +42,9 @@ export default class ClientProfile extends React.Component {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "Yes", onPress: () => {
-          AsyncStorage.clear();
+        {
+          text: "Yes", onPress: async () => {
+          await AsyncStorage.clear();
           this.props.navigation.navigate('Welcome');
         }}
       ]);

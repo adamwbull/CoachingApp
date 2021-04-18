@@ -10,7 +10,40 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { welcomeStyles, colorsPerm, colors } from '../Scripts/Styles.js';
 import { Button, Input } from 'react-native-elements';
 import * as Crypto from 'expo-crypto';
-import { loginCheck, getCoach } from '../Scripts/API.js';
+import { loginCheck, getCoach, updateExpoPushToken } from '../Scripts/API.js';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
@@ -26,12 +59,18 @@ export default class Welcome extends React.Component {
     };
   }
 
+  handleNotificationResponse = response => {
+    this.props.navigation.navigate(response.notification.request.content.data.screen);
+  };
+
   componentDidMount = () => AsyncStorage.getItem('Client').then((val) => this.handleValue(val));
 
   async handleValue(val) {
     await delay(1000);
     if (val !== null) {
+      Notifications.addNotificationResponseReceivedListener(this.handleNotificationResponse);
       var client = JSON.parse(val);
+      console.log(client);
       client.Theme = 0;
       if (client.OnboardingCompleted === 0) {
         this.props.navigation.navigate('CoachIdCheck', { name: client.FirstName, id: client.Id, token: client.Token });
@@ -40,7 +79,6 @@ export default class Welcome extends React.Component {
         var coach = await getCoach(client.CoachId, client.Token);
         await AsyncStorage.setItem('Coach', JSON.stringify(coach));
         this.props.navigation.navigate('Main');
-        this.setState({refreshing:false});
       }
     } else {
       this.setState({refreshing:false});
@@ -79,6 +117,9 @@ export default class Welcome extends React.Component {
       this.setState({errorText:'Incorrect email or password.'});
     } else {
       var client = JSON.parse(passed);
+      var expoPushToken = await registerForPushNotificationsAsync();
+      var update = await updateExpoPushToken(client.Id, client.Token, expoPushToken);
+      client.ExpoPushToken = expoPushToken;
       if (client.Type == 0) {
         await AsyncStorage.setItem('Client', JSON.stringify(client));
         console.log("Login completed.");

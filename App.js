@@ -1,13 +1,23 @@
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, Component } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from './Scripts/Styles.js';
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.','Non-serializable values were found in the navigation state.']);
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 // Import Scripts
 import Home from './Scripts/Home.js';                             // Working
@@ -65,7 +75,8 @@ function HomeStack() {
                 }
 
                 return <IonIcon name={iconName} size={size} color={color} />;
-            }
+            },
+            path: 'main'
         })}
         tabBarOptions={{
             activeTintColor: colors.forest,
@@ -79,9 +90,9 @@ function HomeStack() {
         }}
     >
         <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Prompts" component={Prompts} />
-        <Tab.Screen name="Concepts" component={Concepts} />
-        <Tab.Screen name="Messages" component={Messages} />
+        <Tab.Screen name="Prompts" component={Prompts} path="prompts" />
+        <Tab.Screen name="Concepts" component={Concepts} path="concepts" />
+        <Tab.Screen name="Messages" component={Messages} path="messages" />
     </Tab.Navigator>
   );
 }
@@ -93,11 +104,8 @@ const MyTheme = {
 };
 
 // Main class for app. Responsible for rendering app container.
-export default class AppContainer extends React.Component {
+export default class App extends React.Component {
 
-  // Main rendering function. Always begins on the SplashScreen.
-  // Note: The Login and Privacy screens have been added to the Stack Navigator.
-  //        I found that React Navigation creates problems when trying to pass along state.
   render() {
     return (
         <NavigationContainer theme={MyTheme}>
@@ -106,7 +114,7 @@ export default class AppContainer extends React.Component {
             <Stack.Screen name='Register' component={Register} />
             <Stack.Screen name='CoachIdCheck' component={CoachIdCheck} />
             <Stack.Screen name='OnboardingSurvey' component={OnboardingSurvey} options={{gestureEnabled: false}} />
-            <Stack.Screen name='Contract' component={Contract} />
+            <Stack.Screen name='Contract' component={Contract} path='main' />
             <Stack.Screen name='Main' component={HomeStack} options={{gestureEnabled: false}} />
             <Stack.Screen name='ViewConcept' component={ViewConcept} />
             <Stack.Screen name='ViewPrompt' component={ViewPrompt} />

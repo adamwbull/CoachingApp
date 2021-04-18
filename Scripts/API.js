@@ -127,6 +127,32 @@ export async function check() {
 
 */
 
+export async function updateExpoPushToken(id, token, expoPushToken) {
+
+  var ret = false;
+  var arr = {Id:id, Token:token, ExpoPushToken:expoPushToken};
+
+  console.log('Updating ExpoPushToken...');
+  const res = await fetch(url + '/user/client/update-expo-push-token', {
+    method:'POST',
+    body: JSON.stringify(arr),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const payload = await res.json();
+
+  if (payload.affectedRows > 0) {
+    console.log('ExpoPushToken updated!');
+    ret = true;
+  }
+
+  return ret;
+
+}
+
 export async function updatePromptsCompletedCnt(id, token) {
 
   var ret = false;
