@@ -13,6 +13,8 @@ import * as Crypto from 'expo-crypto';
 import { loginCheck, getCoach, updateExpoPushToken } from '../Scripts/API.js';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+import { showMessage } from "react-native-flash-message";
 
 async function registerForPushNotificationsAsync() {
   let token;
@@ -59,6 +61,22 @@ export default class Welcome extends React.Component {
     };
   }
 
+  handleNotification = notification => {
+    console.log(notification);
+    var { content } = notification.request;
+    showMessage({
+      message: content.title,
+      description: content.body,
+      type: "default",
+      backgroundColor: colors.black, // background color
+      color: colors.white, // text color
+      onPress: () => {
+        this.props.navigation.navigate(content.data.screen);
+      }
+    });
+  };
+
+
   handleNotificationResponse = response => {
     this.props.navigation.navigate(response.notification.request.content.data.screen);
   };
@@ -69,6 +87,7 @@ export default class Welcome extends React.Component {
     await delay(1000);
     if (val !== null) {
       Notifications.addNotificationResponseReceivedListener(this.handleNotificationResponse);
+      Notifications.addNotificationReceivedListener(this.handleNotification);
       var client = JSON.parse(val);
       console.log(client);
       client.Theme = 0;
@@ -117,8 +136,12 @@ export default class Welcome extends React.Component {
       this.setState({errorText:'Incorrect email or password.'});
     } else {
       var client = JSON.parse(passed);
-      var expoPushToken = await registerForPushNotificationsAsync();
-      var update = await updateExpoPushToken(client.Id, client.Token, expoPushToken);
+      var expoPushToken = false;
+      client.ExpoPushToken = expoPushToken;
+      if (Device.isDevice) {
+        expoPushToken = await registerForPushNotificationsAsync();
+        update = await updateExpoPushToken(client.Id, client.Token, expoPushToken);
+      }
       client.ExpoPushToken = expoPushToken;
       if (client.Type == 0) {
         await AsyncStorage.setItem('Client', JSON.stringify(client));

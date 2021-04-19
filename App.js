@@ -8,15 +8,18 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors } from './Scripts/Styles.js';
-import { YellowBox } from 'react-native';
+import { View, YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['YellowBox has been replaced with LogBox. Please call LogBox.ignoreLogs() instead.','Non-serializable values were found in the navigation state.']);
+import FlashMessage from "react-native-flash-message";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowAlert: false,
     shouldPlaySound: true,
-    shouldSetBadge: false,
+    shouldSetBadge: true,
   }),
+  handleSuccess: (string) => console.log(string),
+  handleError: (error) => console.log(error),
 });
 
 // Import Scripts
@@ -103,11 +106,14 @@ const MyTheme = {
   }
 };
 
+class Nav extends React.Component {
+
+}
 // Main class for app. Responsible for rendering app container.
 export default class App extends React.Component {
 
   render() {
-    return (
+    return (<>
         <NavigationContainer theme={MyTheme}>
           <Stack.Navigator headerMode='none' initialRouteName='Welcome'>
             <Stack.Screen name='Welcome' component={Welcome} />
@@ -138,7 +144,8 @@ export default class App extends React.Component {
             <Stack.Screen name='AwardTrophy' component={AwardTrophy} options={{gestureEnabled: false}} />
           </Stack.Navigator>
         </NavigationContainer>
-    );
+        <FlashMessage position="top" duration={3000} titleStyle={{fontSize:18}} textStyle={{fontSize:18}} />
+    </>);
   }
 
 };

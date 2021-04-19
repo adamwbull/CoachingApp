@@ -606,7 +606,7 @@ export const messageThreadStyles = StyleSheet.create({
     width:windowWidth-80
   },
   theirMessageText: {
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     padding:15,
   },
   theirMessageTextImage: {
@@ -632,7 +632,7 @@ export const messageThreadStyles = StyleSheet.create({
   },
   reactions: {
     flexDirection:'row',
-    justifyContent:'flex-end',
+    justifyContent:'flex-start',
     width:windowWidth-80,
   },
   reactionBox: {
@@ -694,7 +694,7 @@ export const messagesStyles = StyleSheet.create({
   convoInfo: {
     justifyContent:'center',
     flex:1,
-    marginLeft:5,
+    marginLeft:10,
     marginRight:10,
   },
   convoInfoTop: {
@@ -1322,9 +1322,31 @@ export const promptSurveyStyles = StyleSheet.create({
     textAlign:'center',
     justifyContent:'center'
   },
+  sliderDetails: {
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  sliderLeft: {
+    textAlign:'left',
+    alignSelf:'flex-start',
+    color:colors.darkGray,
+    marginTop:2,
+    fontSize:12,
+    flex:1
+  },
+  sliderRight: {
+    textAlign:'right',
+    alignSelf:'flex-start',
+    color:colors.darkGray,
+    marginTop:2,
+    fontSize:12,
+    flex:1
+  },
   sliderSetRangeText: {
     color:colors.darkGray,
-    fontSize:16
+    fontSize:16,
+    flex:1
   },
   sliderContainer: {
     flex:8
@@ -1960,6 +1982,7 @@ export const onboardingStyles = StyleSheet.create({
     color:colorsPerm.darkGray,
     fontSize:16
   },
+
   sliderContainer: {
     flex:8
   },

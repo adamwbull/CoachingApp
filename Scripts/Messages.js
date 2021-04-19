@@ -100,28 +100,32 @@ export default class Messages extends React.Component {
             convoUser = convoUser[0][0];
             var convoUserName = convoUser.FirstName + ' ' + convoUser.LastName;
             var totalMembers = convo.Users.length;
+            console.log('totalMembers:',totalMembers);
             if (totalMembers > 2) {
-              convoUserName = convo.Users[0][0].FirstName + ', ' + convo.Users[1][0].FirstName;
+              convoUserName = convo.Users[0][0].FirstName + ' and ' + convo.Users[1][0].FirstName;
               var iterator = 0;
               var usersFound = 0;
               var otherMembers = totalMembers - 3;
-              while (iterator < totalMembers) {
-                if (convo.Users[iterator][0].Id != client.Id) {
-                  if (usersFound == 0) {
-                    convoUserName = convo.Users[iterator][0].FirstName + ', ';
-                  } else {
-                    // How many extra people are there?
-                    if (usersFound == 1) {
-                      convoUserName = convoUserName + convo.Users[iterator][0].FirstName;
+              console.log('otherMembers:',otherMembers);
+              if (totalMembers > 3) {
+                while (iterator < totalMembers) {
+                  if (convo.Users[iterator][0].Id != client.Id) {
+                    if (usersFound == 0) {
+                      convoUserName = convo.Users[iterator][0].FirstName + ', ';
                     } else {
-                      convoUserName = convoUserName + ', +' + otherMembers + ' more';
-                      iterator = totalMembers;
+                      // How many extra people are there?
+                      if (usersFound == 1) {
+                        convoUserName = convoUserName + convo.Users[iterator][0].FirstName;
+                      } else {
+                        convoUserName = convoUserName + ', +' + otherMembers + ' more';
+                        iterator = totalMembers;
+                      }
                     }
+                    iterator++;
+                    usersFound++;
+                  } else {
+                    iterator++;
                   }
-                  iterator++;
-                  usersFound++;
-                } else {
-                  iterator++;
                 }
               }
             }

@@ -105,9 +105,9 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
   }
 
   async sendMessage() {
-    var { input, client, conversation, uri, messages } = this.state;
+    var { input, client, conversation, uri, messages, title } = this.state;
     if (input.length > 0 || uri != '') {
-      var created = await createMessage(client.Token, conversation.Id, client.Id, input);
+      var created = await createMessage(client.Token, conversation.Id, client.Id, input, title);
       if (created > 1) {
         // Check if image needs to be uploaded and associated.
         if (uri != '') {

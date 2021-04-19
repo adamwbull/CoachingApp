@@ -189,9 +189,9 @@ export default class ViewPrompt extends React.Component {
     }
     var completedDate = parseDateText(sqlToJsDate(prompt.CompletedDate));
     return (<View style={viewPromptSurveyStyles.survey} pointerEvents={trackEvents}>
-      <View style={viewPromptSurveyStyles.completedTextView}>
-        <Text style={viewPromptSurveyStyles.completedText}>{(prompt.Completed === 1) ? 'Completed on ' + completedDate : ''}</Text>
-      </View>
+      {(prompt.Completed === 1) && (<View style={viewPromptSurveyStyles.completedTextView}>
+        <Text style={viewPromptSurveyStyles.completedText}>{'Completed on ' + completedDate}</Text>
+      </View>)}
       <Text style={addMargin}>{prompt.Prompt[0][0].Title}</Text>
       {this.state.surveyItems.map((item, index) => {
         if (item.Type == 0) {
@@ -234,7 +234,11 @@ export default class ViewPrompt extends React.Component {
                 <Text style={promptSurveyStyles.sliderSetRangeText}>{range[1]}</Text>
               </View>
             </View>
-            <Text style={promptSurveyStyles.sliderValue}>Value: {parseFloat(this.state.responses[index][1]).toFixed(1)}</Text>
+            <View style={promptSurveyStyles.sliderDetails}>
+              <Text style={promptSurveyStyles.sliderLeft}>{item.SliderLeft}</Text>
+              <Text style={promptSurveyStyles.sliderValue}>Value: {parseFloat(this.state.responses[index][1]).toFixed(1)}</Text>
+              <Text style={promptSurveyStyles.sliderRight}>{item.SliderRight}</Text>
+            </View>
           </View>);
         } else if (item.Type == 2) {
           var boxes = item.BoxOptionsArray.split(',');

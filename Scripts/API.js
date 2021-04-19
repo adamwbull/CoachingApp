@@ -825,10 +825,10 @@ export async function uploadMessageImage(uri, token, id) {
 
 }
 
-export async function createMessage(token, conversationId, clientId, text) {
+export async function createMessage(token, conversationId, clientId, text, title) {
 
   var ret = false;
-  var arr = {Token:token, ConversationId:conversationId, UserId:clientId, Text:text};
+  var arr = {Token:token, ConversationId:conversationId, UserId:clientId, Text:text, Title:title};
   console.log('Uploading message...');
   const res = await fetch(url + '/message/create', {
     method:'POST',
