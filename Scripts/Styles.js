@@ -999,7 +999,7 @@ export const navStyles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 100,
+    width: '100%',
     height: 50,
     resizeMode: 'contain',
     tintColor:colors.forest
