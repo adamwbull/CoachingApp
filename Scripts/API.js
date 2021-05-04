@@ -1436,12 +1436,13 @@ export async function loginCheck(email, password) {
   var ret = null;
 
   console.log('Attempting login...');
+  console.log('em:',email,'\npw:',password)
   const res = await fetch(url + '/user/login-check/' + email + '/' + password + '/' + key, {
     method:'GET'
   });
 
   const payload = await res.json();
-
+  console.log(payload)
   if (payload.length == 1) {
     console.log('Login check passed!');
     ret = JSON.stringify(payload[0]);

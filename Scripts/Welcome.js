@@ -137,10 +137,9 @@ export default class Welcome extends React.Component {
     } else {
       var client = JSON.parse(passed);
       var expoPushToken = false;
-      client.ExpoPushToken = expoPushToken;
       if (Device.isDevice) {
         expoPushToken = await registerForPushNotificationsAsync();
-        update = await updateExpoPushToken(client.Id, client.Token, expoPushToken);
+        var update = await updateExpoPushToken(client.Id, client.Token, expoPushToken);
       }
       client.ExpoPushToken = expoPushToken;
       if (client.Type == 0) {
@@ -161,7 +160,7 @@ export default class Welcome extends React.Component {
 
   render() {
 
-    if (this.state.refreshing === true) {
+    if (this.state.refreshing === true && this.props.route.params == undefined) {
       var items = [
         "Generating witty dialog...",
         "Swapping time and space...",

@@ -45,7 +45,7 @@ export default class ClientProfile extends React.Component {
         {
           text: "Yes", onPress: async () => {
           await AsyncStorage.clear();
-          this.props.navigation.navigate('Welcome');
+          this.props.navigation.navigate('Welcome', {refresh:true});
         }}
       ]);
   }
