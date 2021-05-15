@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem, Icon, Button } from 'react-native-elements';
 import { NavSimple } from './TopNav.js';
 import { windowHeight, windowWidth, colors, btnColors, paymentStyles } from '../Scripts/Styles.js';
-import { getOnboarding, updateOnboarding, updateOnboardingCompleted, getOnboardingPayment, sqlToJsDate, parseDateText, getPayment, getStripePublicKey, createPaymentCharge, updatePromptAssoc, getOnboardingContract } from './API.js';
+import { getOnboarding, updateOnboarding, updateOnboardingCompleted, getOnboardingPayment, sqlToJsDate, parseDateText, getPayment, createPaymentCharge, updatePromptAssoc, getOnboardingContract } from './API.js';
 import { CreditCardInput } from "react-native-credit-card-input-plus";
 import getSymbolFromCurrency from 'currency-symbol-map';
 
@@ -86,7 +86,7 @@ export default class OnboardingPayment extends React.Component {
 
   async onSubmitStripe() {
     var { form, payment, client, coach, nav, name } = this.state;
-    var stripePublicKey = await getStripePublicKey(coach.Id, client.Token);
+    var stripePublicKey = coach.StripePublicKey
     var stripe = require('stripe-client')(stripePublicKey);
     var card = {};
     card.number = form.values.number;

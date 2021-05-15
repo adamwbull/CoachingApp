@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem, Icon, Button } from 'react-native-elements';
 import { NavBack, NavSimple } from './TopNav.js';
 import { windowHeight, windowWidth, colors, btnColors, paymentStyles } from '../Scripts/Styles.js';
-import { getPaymentCharge, sqlToJsDate, parseDateText, getPayment, getStripePublicKey, createPaymentCharge, updatePromptAssoc, updateOnboardingCompleted, getOnboardingContract } from './API.js';
+import { getPaymentCharge, sqlToJsDate, parseDateText, getPayment, createPaymentCharge, updatePromptAssoc, updateOnboardingCompleted, getOnboardingContract } from './API.js';
 import { CreditCardInput } from "react-native-credit-card-input-plus";
 import getSymbolFromCurrency from 'currency-symbol-map';
 
@@ -45,7 +45,7 @@ export default class ViewConcept extends React.Component {
       if (prompt.Completed == 1) {
         paymentCharge = await getPaymentCharge(prompt.PromptId, client.Token, client.Id, coach.Id);
       }
-    } 
+    }
     if (Platform.OS == 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
@@ -77,7 +77,7 @@ export default class ViewConcept extends React.Component {
 
   async onSubmitStripe() {
     var { form, payment, client, coach, nav, name, prompt } = this.state;
-    var stripePublicKey = await getStripePublicKey(coach.Id, client.Token);
+    var stripePublicKey = coach.StripePublicKey
     var stripe = require('stripe-client')(stripePublicKey);
     var card = {};
     card.number = form.values.number;

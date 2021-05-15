@@ -685,26 +685,6 @@ export async function createPaymentCharge(paymentId, cardToken, clientId, client
 
 }
 
-export async function getStripePublicKey(coachId, clientToken) {
-
-  var ret = false;
-
-  console.log('Getting Stripe public key...');
-  const res = await fetch(url + '/stripe-info/public-key/' + coachId + '/' + clientToken, {
-    method:'GET'
-  });
-
-  const payload = await res.json();
-
-  if (payload.length > 0) {
-    console.log('Public key retrieved!');
-    ret = payload[0].PublicKey;
-  }
-
-  return ret;
-
-}
-
 export async function insertReaction(messageId, userId, emoji, token) {
 
   var ret = false;
