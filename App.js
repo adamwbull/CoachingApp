@@ -15,8 +15,8 @@ import FlashMessage from "react-native-flash-message";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: false,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
   }),
   handleSuccess: (string) => console.log(string),
   handleError: (error) => console.log(error),

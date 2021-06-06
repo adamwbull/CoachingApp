@@ -61,10 +61,12 @@ export default class Welcome extends React.Component {
     };
   }
 
-  handleNotification = notification => {
+  handleNotification = async notification => {
     console.log(notification);
+    var client = JSON.parse(await AsyncStorage.getItem('Client'));
     var { content } = notification.request;
-    showMessage({
+    if (content.data.sender != client.Id) {
+      showMessage({
       message: content.title,
       description: content.body,
       type: "default",
@@ -74,6 +76,7 @@ export default class Welcome extends React.Component {
         this.props.navigation.navigate(content.data.screen);
       }
     });
+    }
   };
 
 
