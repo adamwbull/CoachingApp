@@ -657,10 +657,10 @@ export async function getPayment(paymentId, clientToken) {
 
 }
 
-export async function createPaymentCharge(paymentId, cardToken, clientId, clientToken, coachId, title, amount, currency, memo) {
+export async function createPaymentCharge(paymentId, promptAssocId, cardToken, clientId, clientToken, coachId, title, amount, currency, memo) {
 
   var ret = false;
-  var arr = {PromptAssocId:paymentId, CardToken:cardToken, ClientId:clientId, Token:clientToken, CoachId:coachId, Title:title, Amount:amount, Currency:currency, Memo:memo};
+  var arr = {PaymentId:paymentId, PromptAssocId:promptAssocId, CardToken:cardToken, ClientId:clientId, Token:clientToken, CoachId:coachId, Title:title, Amount:amount, Currency:currency, Memo:memo};
   console.log('Sending charge...');
   const res = await fetch(url + '/payment-charge/create', {
     method:'POST',

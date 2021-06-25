@@ -97,7 +97,7 @@ export default class OnboardingPayment extends React.Component {
     card = {card:card};
     var createToken = await stripe.createToken(card);
     var token = createToken.id;
-    var chargeCompleted = await createPaymentCharge(payment.Id, token, client.Id, client.Token, coach.Id, payment.Title, payment.Amount, payment.Currency, payment.Memo);
+    var chargeCompleted = await createPaymentCharge(payment.Id, 0, token, client.Id, client.Token, coach.Id, payment.Title, payment.Amount, payment.Currency, payment.Memo);
     if (chargeCompleted) {
       Alert.alert(
         "Thank you!",
