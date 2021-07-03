@@ -33,11 +33,12 @@ export default class OnboardingSurvey extends React.Component {
       client = JSON.parse(await AsyncStorage.getItem('Client'));
       // Get or create onboarding status information.
       onboarding = await getOnboarding(coach.Id, client.Token);
+      console.log('onboarding:',onboarding)
       if (onboarding == false) {
         onboarding = await createOnboarding(coach.Id, client.Token, coach.OnboardingType);
       }
       // Check if this is completed already.
-      if (onboarding.SurveyCompleted == 1) {
+      if (onboarding.SurveyCompleted == 1 || onboarding.OnboardingType == 0) {
         var isEither = (onboarding.OnboardingType == 1 || onboarding.OnboardingType == 3) ? true: false;
         if (onboarding.OnboardingType == 0) {
           // Update OnboardingCompleted for Client.

@@ -1552,15 +1552,19 @@ export async function getOnboardingSurveyArray(coachId) {
 
   const surveyPayload = await surveyRes.json();
 
-  var surveyId = JSON.stringify(surveyPayload[0]['Id']);
+  var items = []
+  
+  if (surveyPayload.length > 0) {
+    var surveyId = JSON.stringify(surveyPayload[0]['Id']);
 
-  const itemsRes = await fetch(url + '/survey-items/' + surveyId + '/' + key, {
-    method:'GET'
-  });
+    const itemsRes = await fetch(url + '/survey-items/' + surveyId + '/' + key, {
+      method:'GET'
+    });
 
-  const itemsPayload = await itemsRes.json();
+    const itemsPayload = await itemsRes.json();
 
-  var items = JSON.parse(JSON.stringify(itemsPayload));
+    items = JSON.parse(JSON.stringify(itemsPayload));
+  }
 
   return items;
 

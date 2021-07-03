@@ -54,9 +54,12 @@ export default class Messages extends React.Component {
   configureSocket = () => {
     var { conversations } = this.state;
     var socket = io("https://messages.coachsync.me/");
+    socket.on('connect', () => {
+      console.log()
+    })
     socket.on('get-conversations', (data) => {
       this.refreshConversations();
-    });
+    })
   }
 
   findUser(id) {
