@@ -610,7 +610,7 @@ export const messageThreadStyles = StyleSheet.create({
     padding:15,
   },
   theirMessageTextImage: {
-    color:colors.darkGray,
+    color:colorsPerm.darkGray,
     padding:15,
     width:'100%'
   },

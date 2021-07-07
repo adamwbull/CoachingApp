@@ -234,6 +234,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === 'granted') {
       const result = await ImagePicker.launchImageLibraryAsync();
+      this.setState({bsVisible:false})
       if (!result.cancelled) {
         this.scaleImage(result.height, result.width, result.uri);
       }
@@ -244,6 +245,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     if (status === 'granted') {
       const result = await ImagePicker.launchCameraAsync();
+      this.setState({bsVisible:false})
       if (!result.cancelled) {
         this.scaleImage(result.height, result.width, result.uri);
       }
@@ -255,7 +257,10 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       {
         title:'Select Image From Gallery',
         containerStyle: { backgroundColor: colors.white },
-        onPress: () => this.pickImage(),
+        onPress: () => {
+          //this.setState({bsVisible:false})
+          this.pickImage()
+        },
         icon: 'image',
         iconColor:colors.darkGray,
         titleStyle:{ color:colors.darkGray },
@@ -263,7 +268,9 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       {
         title:'Take Photo',
         containerStyle: { backgroundColor: colors.white },
-        onPress: () => this.pickCameraImage(),
+        onPress: () => {
+          this.pickCameraImage()
+        },
         icon: 'camera',
         iconColor:colors.darkGray,
         titleStyle:{ color:colors.darkGray }
@@ -280,7 +287,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
 
     return (<BottomSheet
       isVisible={bsVisible}
-      containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)' }}
+      containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)', }}
     >
       {list.map((l, i) => (
         <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
