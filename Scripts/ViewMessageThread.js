@@ -56,7 +56,8 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       charsLeft:500,
       charsLeftStyle:[messageThreadStyles.countdown,{color:btnColors.success}],
       firstTimeInDay:'',
-      borderHeight:0
+      borderHeight:0,
+      bottomSheetTop:0,
     };
   }
 
@@ -193,6 +194,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
 
   showInput() {
     var { charsLeftStyle, charsLeft, input } = this.state;
+    // onPress={() => this.setState({bsVisible:true})}
     return (<View style={messageThreadStyles.userInput}>
       {this.showSelectedImage()}
       <View style={messageThreadStyles.messageInputContainer}>
@@ -201,7 +203,7 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
               name='image'
               type='ionicon'
               color={colors.darkGray}
-              onPress={() => this.setState({bsVisible:true})}
+              onPress={() => this.pickImage()}
               size={30}
               containerStyle={messageThreadStyles.imageIcon} />
             <TextInput
@@ -227,27 +229,31 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       var newWidth = 800;
       var newHeight = parseInt((newWidth/imageWidth)*imageHeight);
       var res = await ImageManipulatorOG.manipulateAsync(uri, [{resize:{width:newWidth,height:newHeight}}]);
-      this.setState({ uri:res.uri, imageHeight:res.height, imageWidth:res.width, bsVisible:false })
+      this.setState({ uri:res.uri, imageHeight:res.height, imageWidth:res.width, bsVisible:false, bottomSheetTop:0 })
   }
 
   pickImage = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === 'granted') {
+      this.setState({bottomSheetTop:10000})
       const result = await ImagePicker.launchImageLibraryAsync();
-      this.setState({bsVisible:false})
       if (!result.cancelled) {
         this.scaleImage(result.height, result.width, result.uri);
-      }
+      } else {
+      this.setState({bottomSheetTop:0,bsVisible:false})
+    }
     }
   };
 
   pickCameraImage = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA)
     if (status === 'granted') {
+      this.setState({bottomSheetTop:20000})
       const result = await ImagePicker.launchCameraAsync();
-      this.setState({bsVisible:false})
       if (!result.cancelled) {
         this.scaleImage(result.height, result.width, result.uri);
+      } else {
+        this.setState({bottomSheetTop:0,bsVisible:false})
       }
     }
   };
@@ -285,9 +291,11 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
       },
     ];
 
+    var { bottomSheetTop } = this.state
+
     return (<BottomSheet
       isVisible={bsVisible}
-      containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)', }}
+      containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)',marginTop:bottomSheetTop }}
     >
       {list.map((l, i) => (
         <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
