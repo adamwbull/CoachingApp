@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem, Icon, Button } from 'react-native-elements';
 import { NavSimple } from './TopNav.js';
 import { windowHeight, windowWidth, colors, btnColors, paymentStyles } from '../Scripts/Styles.js';
-import { getOnboarding, updateOnboarding, updateOnboardingCompleted, getOnboardingPayment, sqlToJsDate, parseDateText, getPayment, createPaymentCharge, updatePromptAssoc, getOnboardingContract } from './API.js';
+import { stripePublicKey, getOnboarding, updateOnboarding, updateOnboardingCompleted, getOnboardingPayment, sqlToJsDate, parseDateText, getPayment, createPaymentCharge, updatePromptAssoc, getOnboardingContract } from './API.js';
 import { CreditCardInput } from "react-native-credit-card-input-plus";
 import getSymbolFromCurrency from 'currency-symbol-map';
 
@@ -28,8 +28,20 @@ export default class OnboardingPayment extends React.Component {
       disabled: true,
       opacity: new Animated.Value(0),
       errorText:'',
-      name:''
+      name:'',
     };
+  }
+
+  async updateClientOnboarding(client, onboarding, coach) {
+    // Update client if necessary.
+    if (client.OnboardingCompleted === 0) {
+      var updated = await updateOnboarding(coach.Id, client.Token, 1, onboarding.PaymentCompleted, onboarding.ContractCompleted);
+      var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
+      client.OnboardingCompleted = 1;
+      await AsyncStorage.setItem('Client', JSON.stringify(client));
+    }
+    // Send to main.
+    this.props.navigation.navigate('Main');
   }
 
   async componentDidMount() {
@@ -46,6 +58,21 @@ export default class OnboardingPayment extends React.Component {
       this.props.navigation.navigate('Main');
     } else {
       payment = await getOnboardingPayment(coach.Id);
+    }
+
+    // Check whether we need to do this payment.
+    var type = onboarding.OnboardingType
+    if (onboarding.PaymentCompleted == 0 && (type == 2 || type == 4 || type == 6 || type == 7)) {
+      console.log('made it here')
+      payment = await getOnboardingPayment(coach.Id);
+    } else {
+      // Check if a contract is necessary.
+      if (onboarding.ContractCompleted == 0 && (type == 6 || type == 7)) {
+        this.props.navigation.navigate('OnboardingContract');
+      } else {
+        // Everything is finished, go to main.
+        this.props.navigation.navigate('Main');
+      }
     }
     if (Platform.OS == 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -74,19 +101,22 @@ export default class OnboardingPayment extends React.Component {
   async handleLeave() {
     var { onboarding, coach, client } = this.state;
     this.setState({visible:false});
-    if (onboarding.OnboardingType == 3) {
-      var updated = await updateOnboarding(coach.Id, client.Token, onboarding.SurveyCompleted, 1, onboarding.ContractCompleted);
+    // Update onboarding.
+    var type = onboarding.OnboardingType
+    var updated = await updateOnboarding(coach.Id, client.Token, onboarding.SurveyCompleted, 1, onboarding.ContractCompleted);
+    // Check if a contract is necessary.
+    if (onboarding.ContractCompleted == 0 && (type == 6 || type == 7)) {
       this.props.navigation.navigate('OnboardingContract');
-    } else if (onboarding.OnboardingType == 2) {
-      var updated = await updateOnboarding(coach.Id, client.Token, onboarding.SurveyCompleted, 1, onboarding.ContractCompleted);
+    } else {
+      // Everything is finished, go to main.
       var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
       this.props.navigation.navigate('Main');
     }
   }
 
   async onSubmitStripe() {
-    var { form, payment, client, coach, nav, name } = this.state;
-    var stripePublicKey = coach.StripePublicKey
+    var { form, payment, client, coach, nav, name, onboarding } = this.state;
+    this.setState({disabled:true})
     var stripe = require('stripe-client')(stripePublicKey);
     var card = {};
     card.number = form.values.number;
@@ -95,10 +125,14 @@ export default class OnboardingPayment extends React.Component {
     card.cvc = form.values.cvc;
     card.name = name;
     card = {card:card};
+    console.log('card:',card)
     var createToken = await stripe.createToken(card);
+    console.log('createToken:',createToken)
     var token = createToken.id;
+    console.log('token:',token)
     var chargeCompleted = await createPaymentCharge(payment.Id, 0, token, client.Id, client.Token, coach.Id, payment.Title, payment.Amount, payment.Currency, payment.Memo);
     if (chargeCompleted) {
+      var updated = await updateOnboarding(coach.Id, client.Token, onboarding.SurveyCompleted, 1, onboarding.ContractCompleted);
       Alert.alert(
         "Thank you!",
         'Payment accepted. Your card will be charged shortly.',
@@ -115,7 +149,20 @@ export default class OnboardingPayment extends React.Component {
         }
       );
     } else {
-      this.setState({errorText:'Error processing card information. Try again!'})
+      this.setState({disabled:false})
+      Alert.alert(
+        "Card Problem",
+        'Error processing card information. Try again or use a different card!',
+        [
+          {
+            text: "OK",
+            style: "OK",
+          },
+        ],
+        {
+          cancelable: true,
+        }
+      );
     }
   }
 
@@ -231,6 +278,7 @@ export default class OnboardingPayment extends React.Component {
         {this.showModal(visible, payment, disabled, coach, client, amount, errorText)}
       </SafeAreaView>);
     }
+
   }
 
 }

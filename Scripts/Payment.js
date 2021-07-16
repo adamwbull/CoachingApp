@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListItem, Icon, Button } from 'react-native-elements';
 import { NavBack, NavSimple } from './TopNav.js';
 import { windowHeight, windowWidth, colors, btnColors, paymentStyles } from '../Scripts/Styles.js';
-import { getPaymentCharge, sqlToJsDate, parseDateText, getPayment, createPaymentCharge, updatePromptAssoc, updateOnboardingCompleted, getOnboardingContract } from './API.js';
+import { stripePublicKey, getPaymentCharge, sqlToJsDate, parseDateText, getPayment, createPaymentCharge, updatePromptAssoc, updateOnboardingCompleted, getOnboardingContract } from './API.js';
 import { CreditCardInput } from "react-native-credit-card-input-plus";
 import getSymbolFromCurrency from 'currency-symbol-map';
 
@@ -138,7 +138,19 @@ export default class ViewConcept extends React.Component {
         }
       );
     } else {
-      this.setState({errorText:'Error processing card information. Try again!'})
+      Alert.alert(
+        "Card Problem",
+        'Error processing card information. Try again or use a different card!',
+        [
+          {
+            text: "OK",
+            style: "OK",
+          },
+        ],
+        {
+          cancelable: true,
+        }
+      );
     }
   }
 

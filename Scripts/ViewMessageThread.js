@@ -71,14 +71,14 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
 
   async refreshMessages() {
     var { conversation, client } = this.state;
-    var messages = await getMessages(conversation.Id, client.Token);
+    var messages = await getMessages(conversation.Id, client.Id, client.Token);
     this.setState({messages:messages});
   }
 
   async componentDidMount() {
     var conversation = this.props.route.params.conversation;
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
-    var messages = await getMessages(conversation.Id, client.Token);
+    var messages = await getMessages(conversation.Id, client.Id, client.Token);
     this.setState({conversation:conversation,messages:messages,client:client,refreshing:false});
     this.configureSocket();
   }
@@ -116,8 +116,12 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
         }
         // Let everyone know a new message came in.
         var socket = io("https://messages.coachsync.me/");
-        var recepients = conversation.Clients.split(',');
+        var recepients = [];
+        for (var i = 0; i < conversation.Users.length; i++) {
+          recepients.push(conversation.Users[i][0].Id.toString())
+        }
         recepients.push(conversation.CoachId.toString());
+        console.log('recepients:',recepients)
         socket.emit('sent-message', { recepients:recepients, conversationId:conversation.Id });
         this.setState({input:'',charsLeft:500,uri:'',charsLeftStyle:[messageThreadStyles.countdown,{color:btnColors.success}]});
         this.refreshMessages();
@@ -690,7 +694,6 @@ class ViewMessageThread extends React.Component<IHooksHOCProps> {
                       </View>
                     </View>);
                   } else {
-                    console.log()
                     return (<View key={i}>
                       <View style={[messageThreadStyles.theirMessageGroup,paddingTopCalc]}>
                         <View style={messageThreadStyles.theirAvatar}>

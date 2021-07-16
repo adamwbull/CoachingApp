@@ -45,18 +45,20 @@ export default class extends React.Component {
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView>
           <Text style={previousPaymentsStyles.listItemsTitle}>Previous Payments</Text>
-          <View style={previousPaymentsStyles.listItems}>
-          {payments.map((payment, i) => {
-            return (<ListItem key={i} containerStyle={previousPaymentsStyles.listItem} bottomDivider onPress={() => this.props.navigation.navigate('PreviousPayment', { payment:payment })}>
-              <Icon type='ionicon' name='card' color={colors.darkGray} />
-              <ListItem.Content>
-                <ListItem.Title style={previousPaymentsStyles.listItemTitle}>{payment.Title}</ListItem.Title>
-                <ListItem.Subtitle style={previousPaymentsStyles.listItemTitle}>{parseDateText(sqlToJsDate(payment.Created))}</ListItem.Subtitle>
-              </ListItem.Content>
-              <ListItem.Chevron />
-            </ListItem>);
-          })}
-          </View>
+          {payments.length > 0 && (<View style={previousPaymentsStyles.listItems}>
+            {payments.map((payment, i) => {
+              return (<ListItem key={i} containerStyle={previousPaymentsStyles.listItem} bottomDivider onPress={() => this.props.navigation.navigate('PreviousPayment', { payment:payment })}>
+                <Icon type='ionicon' name='card' color={colors.darkGray} />
+                <ListItem.Content>
+                  <ListItem.Title style={previousPaymentsStyles.listItemTitle}>{payment.Title}</ListItem.Title>
+                  <ListItem.Subtitle style={previousPaymentsStyles.listItemTitle}>{parseDateText(sqlToJsDate(payment.Created))}</ListItem.Subtitle>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>);
+            })}
+          </View>) || (<View>
+            <Text style={previousPaymentsStyles.listItemsNone}>No payments made yet!</Text>
+          </View>)}
         </ScrollView>
       </SafeAreaView>);
     }

@@ -29,7 +29,7 @@ export default class Prompts extends React.Component {
   async getData() {
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
-    var prompts = await getPrompts(coach.Id, client.Id);
+    var prompts = await getPrompts(coach.Id, client.Id, client.Token);
     this.setState({prompts:prompts,refreshing:false,pullRefresh:false});
   }
 

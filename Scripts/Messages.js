@@ -29,7 +29,7 @@ export default class Messages extends React.Component {
       pullRefresh:false
     };
   }
-
+  
   onLoad = () => {
     Animated.timing(this.state.opacity, {
       toValue: 1,

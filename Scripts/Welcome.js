@@ -256,7 +256,7 @@ export default class Welcome extends React.Component {
           <Text
           onPress={() => this.props.navigation.navigate('Register')}
           style={welcomeStyles.registerLink}>
-          Take onboarding survey here!
+          Get started here!
           </Text>
         </View>
       </ScrollView>);

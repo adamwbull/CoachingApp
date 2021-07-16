@@ -274,6 +274,11 @@ export const previousPaymentsStyles = StyleSheet.create({
     fontWeight:'500',
     color:colors.darkGray,
   },
+  listItemsNone: {
+    color:colors.darkGray,
+    fontSize:16,
+    marginLeft:'2%'
+  },
   listItems: {
     width:'100%'
   },
@@ -284,6 +289,11 @@ export const previousPaymentsStyles = StyleSheet.create({
   },
   listItemTitle: {
     color:colors.darkGray,
+  },
+  listItemsNone: {
+    color:colors.darkGray,
+    fontSize:16,
+    marginLeft:'2%'
   },
 })
 

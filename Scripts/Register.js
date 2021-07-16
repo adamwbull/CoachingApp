@@ -289,7 +289,7 @@ export default class Register extends React.Component {
           <Text style={this.state.dobTextStyle}>{this.state.dobText}</Text>
         </TouchableOpacity>
         <Button
-        title='Create & Take Survey'
+        title='Create Account'
         buttonStyle={registerStyles.submitButton}
         containerStyle={registerStyles.submitButtonContainer}
         onPress={() => this.handlePress()} />

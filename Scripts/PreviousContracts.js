@@ -18,14 +18,14 @@ export default class PreviousContracts extends React.Component {
     super(props)
     this.state = {
       refreshing: true,
-      contracts: []
+      prompts: []
     };
   }
 
   async componentDidMount() {
     var client = JSON.parse(await AsyncStorage.getItem('Client'));
     var coach = JSON.parse(await AsyncStorage.getItem('Coach'));
-    var prompts = await getPrompts(coach.Id, client.Id);
+    var prompts = await getPrompts(coach.Id, client.Id, client.Token);
     this.setState({refreshing:false,prompts:prompts});
   }
 
@@ -45,21 +45,23 @@ export default class PreviousContracts extends React.Component {
         <NavBack goBack={() => this.props.navigation.goBack()} />
         <ScrollView>
           <Text style={previousPaymentsStyles.listItemsTitle}>Signed Contracts</Text>
-          <View style={previousPaymentsStyles.listItems}>
-          {prompts.map((prompt, i) => {
-            if (prompt.Type == 3) {
-              var contract = prompt.Prompt[0][0];
-              return (<ListItem key={i}  containerStyle={previousPaymentsStyles.listItem} bottomDivider onPress={() => this.props.navigation.navigate('PreviousContract', { prompt:prompt })}>
-                <Icon type='ionicon' name='document-text' color={colors.darkGray} />
-                <ListItem.Content>
-                  <ListItem.Title style={previousPaymentsStyles.listItemTitle}>{contract.Title}</ListItem.Title>
-                  <ListItem.Subtitle style={previousPaymentsStyles.listItemTitle}>{parseDateText(sqlToJsDate(contract.Created))}</ListItem.Subtitle>
-                </ListItem.Content>
-                <ListItem.Chevron />
-              </ListItem>);
-            }
-          })}
-          </View>
+          {prompts.length > 0 && (<View style={previousPaymentsStyles.listItems}>
+            {prompts.map((prompt, i) => {
+              if (prompt.Type == 3) {
+                var contract = prompt.Prompt[0][0];
+                return (<ListItem key={i}  containerStyle={previousPaymentsStyles.listItem} bottomDivider onPress={() => this.props.navigation.navigate('PreviousContract', { prompt:prompt })}>
+                  <Icon type='ionicon' name='document-text' color={colors.darkGray} />
+                  <ListItem.Content>
+                    <ListItem.Title style={previousPaymentsStyles.listItemTitle}>{contract.Title}</ListItem.Title>
+                    <ListItem.Subtitle style={previousPaymentsStyles.listItemTitle}>{parseDateText(sqlToJsDate(contract.Created))}</ListItem.Subtitle>
+                  </ListItem.Content>
+                  <ListItem.Chevron />
+                </ListItem>);
+              }
+            })}
+          </View>) || (<View>
+            <Text style={previousPaymentsStyles.listItemsNone}>No signed contracts yet!</Text>
+          </View>)}
         </ScrollView>
       </SafeAreaView>);
     }

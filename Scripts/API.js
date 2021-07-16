@@ -5,7 +5,7 @@ import { AsyncStorage } from 'react-native';
 export const url = 'https://api.coachsync.me';
 export const uploadUrl = 'https://db.coachsync.me';
 export const key = 'donthackme,imjustadevelopertryingmybest!';
-
+export const stripePublicKey = 'pk_test_51Ibda0Doo38J0s0VtHeC0WxsqtMWNxu6xy9FcAwt9Tch77641I6LeIAmWHcbzVSeiFh6m2smQt3C9OgSYIlo4RAK00ZPlZhqub';
 // Helper Functions
 export function currentDate() {
   var date = new Date();
@@ -598,7 +598,7 @@ export async function uploadSignature(token, clientId, clientName, contractId, c
 
 export async function getPaymentCharges(coachId, clientId, token) {
 
-  var ret = false;
+  var ret = [];
 
   console.log('Getting payment charge info...');
   console.log(url + '/payment-charges/' + coachId + '/' + clientId + '/' + token);
@@ -661,7 +661,7 @@ export async function createPaymentCharge(paymentId, promptAssocId, cardToken, c
 
   var ret = false;
   var arr = {PaymentId:paymentId, PromptAssocId:promptAssocId, CardToken:cardToken, ClientId:clientId, Token:clientToken, CoachId:coachId, Title:title, Amount:amount, Currency:currency, Memo:memo};
-  console.log('Sending charge...');
+  console.log('Sending charge...',arr);
   const res = await fetch(url + '/payment-charge/create', {
     method:'POST',
     body: JSON.stringify(arr),
@@ -830,18 +830,18 @@ export async function createMessage(token, conversationId, clientId, text, title
 
 }
 
-export async function getMessages(conversationId, token) {
+export async function getMessages(conversationId, clientId, token) {
 
   var ret = false;
 
   console.log('Getting chat messages...');
-  console.log(url + '/messages/' + conversationId + '/' + token);
-  const res = await fetch(url + '/messages/' + conversationId + '/' + token, {
+  console.log(url + '/messages/' + conversationId + '/' + clientId + '/' + token);
+  const res = await fetch(url + '/messages/' + conversationId + '/' + clientId + '/' + token, {
     method:'GET'
   });
 
   const payload = await res.json();
-
+  console.log(payload)
   if (payload.length > 0) {
     console.log('Messages received!');
     ret = payload;
@@ -863,7 +863,7 @@ export async function getConversations(coachId, clientId, clientToken) {
   });
 
   const payload = await res.json();
-
+  console.log('convos:',payload)
   if (payload.length > 0) {
     console.log('Conversations retrieved!');
     ret = payload;
@@ -1155,12 +1155,12 @@ export async function createPromptResponse(promptAssocId, text) {
 
 }
 
-export async function getPrompts(coachId, clientId) {
+export async function getPrompts(coachId, clientId, clientToken) {
 
-  var ret = false;
+  var ret = [];
 
   console.log('Getting prompts for client...');
-  const res = await fetch(url + '/prompt-assoc/both/' + clientId + '/' + coachId + '/' + key, {
+  const res = await fetch(url + '/prompt-assoc/both/' + clientId + '/' + coachId + '/' + clientToken, {
     method:'GET'
   });
 
@@ -1240,15 +1240,7 @@ export async function getOnboardingPayment(coachId) {
 
   var ret = false;
 
-  const surveyRes = await fetch(url + '/survey/onboarding/' + coachId + '/' + key, {
-    method:'GET'
-  });
-
-  const surveyPayload = await surveyRes.json();
-
-  var paymentId = JSON.stringify(surveyPayload[0]['PaymentId']);
-
-  const res = await fetch(url + '/payment/'+paymentId+'/'+key, {
+  const res = await fetch(url + '/payment/onboarding/'+ coachId + '/'+  key, {
     method:'GET'
   });
 
@@ -1288,6 +1280,8 @@ export async function updateOnboardingCompleted(id, token) {
 
   var ret = false;
   var arr = {Id:id, Token:token};
+
+  console.log('completing:',arr)
 
   console.log('Updating OnboardingCompleted...');
   const res = await fetch(url + '/user/client/complete-onboarding', {

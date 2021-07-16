@@ -25,39 +25,64 @@ export default class OnboardingSurvey extends React.Component {
     };
   }
 
+  async updateClientOnboarding(client, onboarding, coach) {
+    // Update client if necessary.
+    if (client.OnboardingCompleted == 0) {
+      var updated = await updateOnboarding(coach.Id, client.Token, 1, onboarding.PaymentCompleted, onboarding.ContractCompleted);
+      var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
+      client.OnboardingCompleted = 1;
+      await AsyncStorage.setItem('Client', JSON.stringify(client));
+    }
+    // Send to main.
+    this.props.navigation.navigate('Main');
+  }
+
   async componentDidMount() {
     var coach, client, items, onboarding;
     try {
+
       // Get CoachId and Coach.
       coach = JSON.parse(await AsyncStorage.getItem('Coach'));
       client = JSON.parse(await AsyncStorage.getItem('Client'));
+
       // Get or create onboarding status information.
       onboarding = await getOnboarding(coach.Id, client.Token);
       console.log('onboarding:',onboarding)
       if (onboarding == false) {
         onboarding = await createOnboarding(coach.Id, client.Token, coach.OnboardingType);
       }
-      // Check if this is completed already.
-      if (onboarding.SurveyCompleted == 1 || onboarding.OnboardingType == 0) {
-        var isEither = (onboarding.OnboardingType == 1 || onboarding.OnboardingType == 3) ? true: false;
-        if (onboarding.OnboardingType == 0) {
-          // Update OnboardingCompleted for Client.
-          if (client.OnboardingCompleted === 0) {
-            var updated = await updateOnboarding(coach.Id, client.Token, 1, onboarding.PaymentCompleted, onboarding.ContractCompleted);
-            var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
-            client.OnboardingCompleted = 1;
-            await AsyncStorage.setItem('Client', JSON.stringify(client));
+
+      // Check if onboarding is unnecessary.
+      var type = onboarding.OnboardingType 
+
+      if (type == 0) {
+        // Update OnboardingCompleted if necessary and send to main.
+        this.updateClientOnboarding(client, onboarding, coach)
+      } else {
+        // Check if the user needs to complete the survey.
+        if (onboarding.SurveyCompleted == 0 && (type == 1 || type == 4 || type == 5 || type == 7)) {
+          // Let component mount and show survey.
+        } else {
+          // Check if onboarding payment is necessary.
+          if (onboarding.PaymentCompleted == 0 && (type == 2 || type == 4 || type == 6 || type == 7)) {
+            // Send user to payment.
+            this.props.navigation.navigate('OnboardingPayment');
+          } else {
+            // Check if contract is necessary.
+            if (onboarding.ContractCompleted == 0 && (type == 3 || type == 5 || type == 6 || type == 7)) {
+              // Send user to contract.
+              this.props.navigation.navigate('OnboardingContract');
+            } else {
+              // If we made it here, onboarding is completed.
+              // Update OnboardingCompleted if necessary and send to main.
+              this.updateClientOnboarding(client, onboarding, coach)
+            }
           }
-          this.props.navigation.navigate('Main');
-        } else if (onboarding.OnboardingType == 2 && onboarding.PaymentCompleted == 0) {
-          this.props.navigation.navigate('OnboardingPayment');
-        } else if (onboarding.OnboardingType == 3 && onboarding.PaymentCompleted == 0) {
-          this.props.navigation.navigate('OnboardingPayment');
-        } else if (isEither && onboarding.ContractCompleted == 0) {
-          this.props.navigation.navigate('OnboardingContract');
         }
       }
+
     } finally {
+      
       items = await getOnboardingSurveyArray(coach.Id);
       var res = [];
       // Build responses array.
@@ -83,7 +108,9 @@ export default class OnboardingSurvey extends React.Component {
         }
       });
       this.setState({coach:coach,surveyItems:items,responses:res,client:client,onboarding:onboarding});
+      
     }
+
   }
 
   // These methods add responses as a SurveyItem Id and the response value pairs.
@@ -219,33 +246,41 @@ export default class OnboardingSurvey extends React.Component {
 
     var { responses, client, coach, responses, onboarding } = this.state;
     var everythingFilled = this.checkResponses(responses);
+
     if (everythingFilled) {
       var uploaded = await uploadResponses(responses, client.Token);
+
       if (uploaded) {
+
         // Mark survey as completed.
         var updated = await updateOnboarding(coach.Id, client.Token, 1, onboarding.PaymentCompleted, onboarding.ContractCompleted);
+        var type = onboarding.OnboardingType 
+
         // Decide where to go next.
-        var isEither = (onboarding.OnboardingType == 1 || onboarding.OnboardingType == 3) ? true : false;
-        if (onboarding.OnboardingType == 0) {
-          // Update OnboardingCompleted for Client.
-          if (client.OnboardingCompleted === 0) {
-            var updateSuccess = await updateOnboardingCompleted(client.Id, client.Token);
-            client.OnboardingCompleted = 1;
-            await AsyncStorage.setItem('Client', JSON.stringify(client));
-          }
-          this.props.navigation.navigate('Main');
-        } else if (onboarding.OnboardingType == 2 && onboarding.PaymentCompleted == 0) {
+        // Check if onboarding payment is necessary.
+        if (onboarding.PaymentCompleted == 0 && (type == 2 || type == 4 || type == 6 || type == 7)) {
+          // Send user to payment.
           this.props.navigation.navigate('OnboardingPayment');
-        } else if (onboarding.OnboardingType == 3 && onboarding.PaymentCompleted == 0) {
-          this.props.navigation.navigate('OnboardingPayment', { both:true });
-        } else if (isEither && onboarding.ContractCompleted == 0) {
-          this.props.navigation.navigate('OnboardingContract');
+        } else {
+          // Check if contract is necessary.
+          if (onboarding.ContractCompleted == 0 && (type == 3 || type == 5 || type == 6 || type == 7)) {
+            // Send user to contract.
+            this.props.navigation.navigate('OnboardingContract');
+          } else {
+            // If we made it here, onboarding is completed.
+            // Update OnboardingCompleted if necessary and send to main.
+            this.updateClientOnboarding(client, onboarding, coach)
+          }
         }
+
       } else {
+
         console.log("Error uploading!");
         // Let user know they need to resubmit
         this.setState({errorText:'There was an error uploading your answers. Try hitting submit again!'});
+      
       }
+
     }
 
   }
