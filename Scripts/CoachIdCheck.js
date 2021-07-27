@@ -40,6 +40,7 @@ export default class CoachIdCheck extends React.Component {
 
     // Check if valid Coach ID.
     var ret = JSON.parse(await checkOnboardingId(this.state.inputValue));
+    var client = JSON.parse(await AsyncStorage.getItem('Client'));
     if (ret != null) {
       var { id, token } = this.props.route.params;
       // User entered a correct ID. Associate Coach with client.
@@ -47,11 +48,10 @@ export default class CoachIdCheck extends React.Component {
       var notInPair = JSON.parse(await userInPair(ret.Id, id, token));
       if (notInPair) {
         var created = await createPair(ret.Id, id, token);
-        var onboardingCreated = await createOnboarding(ret.Id, token, ret.OnboardingType);
+        var onboardingCreated = await createOnboarding(ret.Id, client.Id, token, ret.OnboardingType);
         var conversationCreated = await createConversation(ret.Id, id, token);
       }
       await AsyncStorage.setItem('Coach', JSON.stringify(ret));
-      var client = JSON.parse(await AsyncStorage.getItem('Client'));
       client.CoachId = ret.Id;
       await AsyncStorage.setItem('Client', JSON.stringify(client));
       this.props.navigation.navigate('OnboardingSurvey');

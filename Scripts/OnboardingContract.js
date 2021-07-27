@@ -72,8 +72,6 @@ export default class OnboardingContract extends React.Component {
     if (upload) {
       var updated = await updateOnboarding(coach.Id, client.Token, onboarding.SurveyCompleted, onboarding.PaymentCompleted, 1);
       var dueDate = currentDate();
-      var createPrompt = await createPromptAssoc(client.Token, client.Id, coach.Id, 3, contract.Id, dueDate);
-      var updatePrompt = updatePromptAssoc(client.Token, client.Id, coach.Id, createPrompt.Id);
       this.setState({refreshing:false});
       if (updated) {
         Alert.alert(

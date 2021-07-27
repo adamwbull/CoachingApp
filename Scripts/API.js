@@ -376,10 +376,10 @@ export async function updateOnboarding(coachId, clientToken, surveyCompleted, pa
 
 }
 
-export async function createOnboarding(coachId, clientToken, onboardingType) {
+export async function createOnboarding(coachId, clientId, clientToken, onboardingType) {
 
   var ret = false;
-  var arr = {CoachId:coachId, Token:clientToken, OnboardingType:onboardingType};
+  var arr = {CoachId:coachId, Id:clientId, Token:clientToken, OnboardingType:onboardingType};
   console.log('Creating onboarding data...');
   const res = await fetch(url + '/onboarding/create', {
     method:'POST',
