@@ -519,10 +519,10 @@ export async function optOutOfContract(contractSignedId, clientId, clientToken) 
 
 }
 
-export async function uploadSignature(token, clientId, clientName, contractId, contractFile, signature) {
+export async function uploadSignature(token, clientId, clientName, contractId, contractFile, signature, promptAssocId) {
 
   var ret = false;
-  var arr = {Token:token, ClientId:clientId, ClientName:clientName, ContractId:contractId, ContractFile:contractFile, Signature:signature};
+  var arr = {PromptAssocId:promptAssocId, Token:token, ClientId:clientId, ClientName:clientName, ContractId:contractId, ContractFile:contractFile, Signature:signature};
   console.log('Uploading signature...');
   const res = await fetch(url + '/contract-signed/create', {
     method:'POST',
@@ -1292,7 +1292,7 @@ export async function updateOnboardingCompleted(id, token) {
       'Content-Type': 'application/json',
     }
   });
-
+  
   const payload = await res.json();
 
   if (payload.affectedRows === 1) {
@@ -1305,11 +1305,11 @@ export async function updateOnboardingCompleted(id, token) {
 }
 
 // Upload survey responses.
-export async function uploadResponses(responses, token) {
+export async function uploadResponses(responses, token, promptAssocId) {
 
   var ret = false;
 
-  var body = {Token:token, Responses:responses};
+  var body = {Token:token, Responses:responses, PromptAssocId:promptAssocId};
 
   console.log('Uploading survey responses...')
   const res = await fetch(url + '/survey-item-responses/create', {

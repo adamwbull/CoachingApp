@@ -66,7 +66,7 @@ export default class Payment extends React.Component {
     // Upload signature to DB.
     var clientName = client.FirstName + ' ' + client.LastName;
     this.setState({visible:false,refreshing:true});
-    var upload = await uploadSignature(client.Token, client.Id, clientName, contract.Id, contract.File, signature);
+    var upload = await uploadSignature(client.Token, client.Id, clientName, contract.Id, contract.File, signature, prompt.Id);
     if (upload) {
       var updated = await updatePromptAssoc(client.Token, client.Id, coach.Id, prompt.Id);
       this.setState({refreshing:true});

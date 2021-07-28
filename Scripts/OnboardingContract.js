@@ -23,7 +23,7 @@ export default class OnboardingContract extends React.Component {
       client: {},
       coach: {},
       visible:false,
-      sig:'',
+      sig:'', 
       httpError: false,
       uploading:false
     };
@@ -68,7 +68,7 @@ export default class OnboardingContract extends React.Component {
     // Upload signature to DB.
     var clientName = client.FirstName + ' ' + client.LastName;
     this.setState({visible:false,refreshing:true});
-    var upload = await uploadSignature(client.Token, client.Id, clientName, contract.Id, contract.File, signature);
+    var upload = await uploadSignature(client.Token, client.Id, clientName, contract.Id, contract.File, signature, 0);
     if (upload) {
       var updated = await updateOnboarding(coach.Id, client.Token, onboarding.SurveyCompleted, onboarding.PaymentCompleted, 1);
       var dueDate = currentDate();

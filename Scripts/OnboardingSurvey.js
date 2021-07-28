@@ -248,7 +248,7 @@ export default class OnboardingSurvey extends React.Component {
     var everythingFilled = this.checkResponses(responses);
 
     if (everythingFilled) {
-      var uploaded = await uploadResponses(responses, client.Token);
+      var uploaded = await uploadResponses(responses, client.Token, 0);
 
       if (uploaded) {
 

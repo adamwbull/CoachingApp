@@ -299,7 +299,7 @@ export default class ViewPrompt extends React.Component {
     var coach = this.state.coach;
     var everythingFilled = this.checkResponses(responses);
     if (everythingFilled) {
-      var uploaded = await uploadResponses(responses, token);
+      var uploaded = await uploadResponses(responses, token, prompt.Id);
       if (uploaded) {
         // Update PromptAssoc Completed.
         var updated = await updatePromptAssoc(token, id, coach.Id, prompt.Id);
