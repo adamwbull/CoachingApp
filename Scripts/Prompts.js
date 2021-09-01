@@ -68,8 +68,12 @@ export default class Prompts extends React.Component {
       }
     } else {
       return(<View style={promptsStyles.promptsContainer}>
-        {prompts.map((prompt) => {
+        {prompts.map((prompt, promptIndex) => {
           var due = sqlToJsDate(prompt.DueDate);
+          if (promptIndex == 0) {
+            console.log('\ndb due date:',prompt.DueDate)
+            console.log('\ndb created:',prompt.Created)
+          }
           var overdueText = '';
           var overdueStyle = {height:0};
           var displayInfo, displayStyle;
