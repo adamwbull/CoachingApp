@@ -77,7 +77,7 @@ export default class ViewConcept extends React.Component {
 
   async onSubmitStripe() {
     var { form, payment, client, coach, nav, name, prompt } = this.state;
-    var stripePublicKey = coach.StripePublicKey
+    this.setState({disabled:true})
     var stripe = require('stripe-client')(stripePublicKey);
     var card = {};
     card.number = form.values.number;
@@ -86,8 +86,11 @@ export default class ViewConcept extends React.Component {
     card.cvc = form.values.cvc;
     card.name = name;
     card = {card:card};
+    console.log('card:',card)
     var createToken = await stripe.createToken(card);
+    console.log('createToken:',createToken)
     var token = createToken.id;
+    console.log('prompt',prompt)
     var chargeCompleted = await createPaymentCharge(payment.Id, prompt.Id, token, client.Id, client.Token, coach.Id, payment.Title, payment.Amount, payment.Currency, payment.Memo);
     if (chargeCompleted) {
       Alert.alert(
